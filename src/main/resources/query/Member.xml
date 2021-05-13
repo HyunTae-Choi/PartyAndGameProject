@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.pag.client.member.dao.MemberDao">
+
+<!-- 	<select id="securitySelect" parameterType="String"  resultType="security">
+		select userid, salt from security 
+		where userId=#{userId}
+	</select>
+	
+	<insert id="securityInsert" parameterType="security">
+		insert into security(userid, salt) 
+		values(#{userId}, #{salt}) 
+	</insert>
+
+	<delete id="securityDelete" parameterType="String">
+		delete from security where userId = #{userId}
+	</delete>
+	
+	
+	<select id="memberSelect" parameterType="String" resultType="member">
+		select idx, userid, userpw, username, pinno, email, phone 
+		from spring_member
+		where userid = #{userId}
+	</select> -->
+
+	
+	<!-- 회원가입 sql문 -->
+	<insert id="memberInsert" parameterType="member">
+		<selectKey keyProperty="m_Number" resultType="int" order="BEFORE">
+			select member_tbl_seq.nextval from dual
+		</selectKey>
+		insert into member_tbl(m_id, m_pw, m_number, m_name, m_birth, m_gender, m_email, m_email_marketing, m_phone)
+		values(#{m_Id}, #{m_Pw}, #{m_Number}, #{m_Name}, #{m_Birth}, #{m_Gender}, #{m_Email}, #{m_Email_Marketing}, #{m_Phone})
+	</insert>
+	
+<!-- 	
+	<update id="memberUpdate" parameterType="member">
+		update spring_member set 
+		<if test="userPw != null and userPw != ''">
+			userPw=#{userPw}, 
+		</if>
+			phone=#{phone}, email=#{email} 
+		where userId=#{userId}
+	</update>	-->
+	
+	<delete id="memberDelete" parameterType="String">
+		delete from member_tbl where m_id = #{m_Id}
+	</delete>	 
+</mapper>

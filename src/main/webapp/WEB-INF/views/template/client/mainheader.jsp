@@ -2,7 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@ page trimDirectiveWhitespaces="true" %>    
 <div id="logo">
-	<a href="/mypage" class="logo">Party&Game</a>
+	<a href="/" class="logo">Party&Game</a>
 </div>
 <div id="header_menu">
 	<ul>
@@ -245,7 +245,7 @@
 						서비스와 관련된 소식, 이벤트 안내, 고객 혜택 등 다양한 정보를 제공합니다.	
 					</div>
 					<div class="form-label mb-2">
-						<input class="modal_checkbox terms_nomal" type="checkbox" value='1'  id="m_email_margetring_register_term" name="m_Email_Marketring" value="ok">
+						<input class="modal_checkbox terms_nomal" type="checkbox" value='1'  id="m_email_margetring_register_term" name="m_Email_Marketing" value="ok">
 						<label class="agree_tit" for="m_email_margetring_register_term" >E-Mail 수신 동의 (선택)</label>
 					</div>
 				</div>
@@ -302,7 +302,7 @@
 				<div class="form-group mb-3">
 					<label class="form-label" style="width: 100%"> E-mail <strong class="emphasis">(필수)</strong>
 						<input class="modal_input" type="email" id="m_email_register" name="m_Email" placeholder="E-mail">
-						<input class="modal_input" type="hidden" value='0' id="m_email_margetring_register" name="m_Email_Marketring">
+						<input class="modal_input" type="hidden" value='0' id="m_email_margetring_register" name="m_Email_Marketing">
 					</label>
 				</div>
 

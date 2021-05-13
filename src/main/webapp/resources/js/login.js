@@ -153,10 +153,13 @@ function findIdPw(find){
 		else if (!checkboxBlankCheck("input:checkbox[id='privacy_agree_privacy_term']", '개인정보 수집 및 이용에')) return;
 		else {
 			/*회원 가입- 약관동의 - 회원정보 입력폼 modal 열기*/
-			$("#open_register_form_modal").click(function(){
-				$('#terms_modal').attr("style", "display:none");
-				$('#register_form_modal').attr("style", "display:block");
-			});
+			$('#terms_modal').attr("style", "display:none");
+			$('#register_form_modal').attr("style", "display:block");
+			
+			if($('input:checkbox[id="m_email_margetring_register_term"]').is(":checked")){
+				$("#m_email_margetring_register").val('1');	
+			} 
+			
 
 		}			
 	}	
@@ -180,9 +183,7 @@ function findIdPw(find){
 	else if (!formBlankCheck($('#m_birth_register'), "생년월일을")) return;
 	else {
 		// 이메일 광고 수신 동의 여부에 체크되어 있으면 1(true)로 변경 (기본값은 0)
-		if($('input:checkbox[id="m_email_margetring_register_term"]').is(":checked")){
-			$("#m_email_margetring_register").val('1');	
-		} 
+		
 		
 		$("#memberInsertForm").attr({
 			"method" : "post",
