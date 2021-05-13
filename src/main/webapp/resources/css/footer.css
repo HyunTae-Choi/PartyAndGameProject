@@ -1,0 +1,76 @@
+/* footer */
+#footer {
+	width: 100%;
+	height: 130px;
+	background: #333;
+	padding: 30px 0 40px;
+}
+#footer #container {
+	position: relative;
+}
+#footer #footer_link {
+	width: 100%;
+	height: 40px;
+}
+#footer #footer_link ul li {
+	margin: 0 30px 20px 0;
+	float: left;
+}
+#footer #footer_link ul li button {
+	display: block;
+	font-size: 15px;
+	line-height: 40px;
+	color: #fff;
+	background: none;
+	border: 0;
+	cursor: pointer;
+}
+#footer address {
+	font-size: 14px;
+	color: #fff;
+	line-height: 1.7em;
+	letter-spacing: 0;
+	opacity: .7;
+	font-style: normal;
+}
+#footer address span {
+	margin-right: 20px;
+}
+#footer .sns {
+	position: absolute;
+	top: 0;
+	right: 0;
+}
+#footer .sns li {
+	float: left;
+	margin-left: 4px;
+	background: #4c4c4c;
+}
+#footer .sns li img {
+	border: 0;
+	margin: 0;
+	padding: 0;
+	vertical-align: middle;
+}
+#footer .copyright {
+	position: absolute;
+	top: 60px;
+	right: 0;			
+}
+#footer .copyright small {
+	font-size: 14px;
+	color: #fff;
+	opacity: .5;
+	font-family: 'Open Sans', sans-serif;
+}
+#footer .btn_top a {
+	z-index: 50;
+	position: fixed;
+	bottom: 0;
+	right: 0;
+	display: none;
+	border: 0;
+	margin: 0;
+	padding: 0;
+	height: 80px;
+}
