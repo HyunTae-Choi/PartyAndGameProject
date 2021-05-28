@@ -4,29 +4,27 @@
 
 <mapper namespace="com.pag.client.member.dao.MemberDao">
 
-<!-- 	<select id="securitySelect" parameterType="String"  resultType="security">
-		select userid, salt from security 
-		where userId=#{userId}
+	<!-- 회원정보 조회 -->
+	<select id="memberSelect" parameterType="member" resultType="member">
+		select m_id, m_name, m_birth, m_gender, m_email, m_phone, m_pw, m_availabled
+		from member_tbl 
+		where 
+			<if test="m_Id != null and m_Id != ''" >
+				m_id = #{m_Id}				
+			</if>
+			<if test="m_Email != null and m_Email != ''" >
+				m_email = #{m_Email}				
+			</if>		
+	</select> 
+	
+	<!-- 비밀번호확인 -->
+	<select id="memberPwSelect" parameterType="string" resultType="string">
+		select m_pw 
+		from member_tbl 
+		where m_id = #{m_Id}				
 	</select>
 	
-	<insert id="securityInsert" parameterType="security">
-		insert into security(userid, salt) 
-		values(#{userId}, #{salt}) 
-	</insert>
-
-	<delete id="securityDelete" parameterType="String">
-		delete from security where userId = #{userId}
-	</delete>
-	
-	
-	<select id="memberSelect" parameterType="String" resultType="member">
-		select idx, userid, userpw, username, pinno, email, phone 
-		from spring_member
-		where userid = #{userId}
-	</select> -->
-
-	
-	<!-- 회원가입 sql문 -->
+	<!-- 회원 가입 -->
 	<insert id="memberInsert" parameterType="member">
 		<selectKey keyProperty="m_Number" resultType="int" order="BEFORE">
 			select member_tbl_seq.nextval from dual
@@ -35,17 +33,31 @@
 		values(#{m_Id}, #{m_Pw}, #{m_Number}, #{m_Name}, #{m_Birth}, #{m_Gender}, #{m_Email}, #{m_Email_Marketing}, #{m_Phone})
 	</insert>
 	
-<!-- 	
+	<!-- 회원 정보 수정 -->
 	<update id="memberUpdate" parameterType="member">
-		update spring_member set 
-		<if test="userPw != null and userPw != ''">
-			userPw=#{userPw}, 
-		</if>
-			phone=#{phone}, email=#{email} 
-		where userId=#{userId}
-	</update>	-->
+		update member_tbl set
+			<if test="m_Pw != null and m_Pw != ''" >
+				m_pw = #{m_Pw}				
+			</if>
+			<if test="m_Phone != null and m_Phone != ''">
+				<if test="m_Pw != null and m_Pw != ''">
+					, 
+				</if>
+				m_phone = #{m_Phone}
+			</if> 
+			<if test="m_Email != null and m_Email != ''">
+				<if test="(m_Phone != null and m_Phone != '') or (m_Pw != null and m_Pw != '') ">
+					, 
+				</if>
+				m_email = #{m_Email} 
+			</if>  
+		where m_id = #{m_Id}
+	</update>
 	
-	<delete id="memberDelete" parameterType="String">
-		delete from member_tbl where m_id = #{m_Id}
-	</delete>	 
+	<!-- 회원탈퇴 -->
+	<delete id="memberUpdateLeave" parameterType="String">
+		update member_tbl
+		set m_availabled = '0'
+		where m_id = #{m_Id} 
+	</delete>	 	 
 </mapper>

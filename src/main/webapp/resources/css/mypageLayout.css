@@ -33,4 +33,5 @@
 	width: 84%;
 	height: 100%;
 	float: left;
+	overflow-y: auto;
 }

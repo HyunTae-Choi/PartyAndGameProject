@@ -6,7 +6,10 @@
 	<typeAliases>
 		<typeAlias type="com.pag.client.login.vo.LoginVO" alias="login"/>
 		<typeAlias type="com.pag.client.member.vo.MemberVO" alias="member"/>
-		<typeAlias type="com.pag.client.member.vo.MemberSecurity" alias="security" />
+		<typeAlias type="com.pag.client.notice.vo.NoticeVO" alias="notice"/>
+		<typeAlias type="com.pag.client.question.vo.QuestionVO" alias="question"/>
+		<typeAlias type="com.pag.client.rooms.vo.RoomsVO" alias="rooms" />
+		<typeAlias type="com.pag.client.booking.vo.BookingVO" alias="booking" />
 	</typeAliases>
 <!-- 
 	<properties resource="db.properties" />

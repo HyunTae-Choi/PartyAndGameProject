@@ -24,7 +24,7 @@
 		<beans:property name="definitions">
 			<beans:list>
 				<beans:value>/WEB-INF/tiles/tiles-setting.xml</beans:value>
-				<!-- <beans:value>/WEB-INF/tiles/admin-setting.xml</beans:value> -->
+				<beans:value>/WEB-INF/tiles/admin-setting.xml</beans:value>
 			</beans:list>
 		</beans:property>
 	</beans:bean>

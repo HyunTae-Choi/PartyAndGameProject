@@ -13,12 +13,14 @@ public class LoginDaoImpl implements LoginDao{
 	private SqlSession session;
 	
 	@Override
-	public LoginVO loginSelect(LoginVO lvo) {
-		return (LoginVO) session.selectOne("loginSelect");
+	public LoginVO loginSelect(String m_ID) { // 로그인, 비밀번호, 회원상태 반환
+		return (LoginVO) session.selectOne("loginSelect", m_ID);
 	}
 
+	@Override
+	public LoginVO idSelect(String m_Email) { // 아이디 찾기
+		return (LoginVO) session.selectOne("idSelect", m_Email);
+	}
 
-
-
-
+	
 }

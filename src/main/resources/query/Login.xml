@@ -5,11 +5,18 @@
 <mapper namespace="com.pag.client.login.dao.LoginDao">
 	
 	<!--  로그인 처리 쿼리 --> 
-	<select id="loginSelect" parameterType="login" resultType="login">	
-		select m_id, m_pw
+	<select id="loginSelect" parameterType="string" resultType="login">	
+		select m_id, m_pw, m_email, m_name, m_availabled
 		from member_tbl
-		where m_id = #{m_Id} and m_pw = #{m_Pw}
+		where m_id = #{m_Id}
 	</select>
+	
+	<!--  아이디 찾기 처리 쿼리 -->
+	<select id="idSelect" parameterType="string" resultType="login">	
+		select m_id, m_availabled
+		from member_tbl
+		where m_email = #{m_Email}
+	</select>	
 
 </mapper>
 

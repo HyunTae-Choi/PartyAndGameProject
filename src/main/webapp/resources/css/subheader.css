@@ -6,6 +6,7 @@
 	box-shadow: 0 0 10px rgb(0 0 0 / 20%);
 	position: fixed;
 	top: 0;
+	z-index: 9999;
 }
 
 /* header - logo */
@@ -33,18 +34,25 @@
 }
 #header_menu ul  {
 	text-align: center;
+	margin-top: 19px;
 }
-#header_menu ul li {
+#header_menu ul li  {
+	display: inline-block;
+}
+#header_menu ul li a {
 	display: inline-block;
 	text-align: center;
 	width: 100px;
-	height: 88px;
-	line-height: 85px;
+	height: 50px;
+	line-height: 50px;
 	list-style: none;
 	color: #212121CC;
 	font-weight: 700;
 	padding: 0 20px;
 	font-family: 'Ubuntu', sans-serif;
+}
+#header_menu ul li a:hover {
+	color: #00abd7;
 }
 
 /* header - member */
@@ -68,4 +76,7 @@
 	font-weight: 700;
 	font-family: 'Ubuntu', sans-serif;
 	font-size: 16px;
+}
+#member ul li button:hover {
+	color: #00abd7;
 }

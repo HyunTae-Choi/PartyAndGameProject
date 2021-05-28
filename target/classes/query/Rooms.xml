@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.pag.client.rooms.dao.RoomsDao">
+	
+	<!--  룸 정보 쿼리 -->
+	<select id="roomsInfo" parameterType="int" resultType="rooms">
+		/* Rooms - roomsInfo */
+		SELECT
+			  r_no, r_name, r_intro, r_min_num, r_max_num, r_weekday_day_price, r_weekday_night_price, 
+			  r_weekend_day_price, r_weekend_night_price, r_availabled
+		FROM room_tbl
+		WHERE r_no = #{r_no}
+	</select>
+
+</mapper>
+

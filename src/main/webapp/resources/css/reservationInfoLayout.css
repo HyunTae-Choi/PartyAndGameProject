@@ -1,0 +1,197 @@
+#reservation_layout {
+	height: 1080px; 
+	background: #f3f3f3; 
+	margin-top: 90px;
+}
+#reservation_title h1 {
+	font-size: 28px; 
+	font-weight: 400; 
+	text-align: center; 
+	padding-top: 25px;
+}
+
+/* reservation_wrap */
+#reservation_wrap {
+	width: 865px; 
+	height: 100%; 
+	margin: 0 auto;
+}
+
+/* reservation_left_box */
+#reservation_left_box {
+	width: 516px; 
+	float: left;
+}
+/* reservation_left_box - reservation_info_box */
+#reservation_left_box #reservation_info_box {
+	background: #fff; 
+	height: 200px; 
+	width: 520px; 
+	margin-top: 20px;
+}
+#reservation_info_box #reservation_img {
+	display: table-cell; 
+	height: 90px; 
+	width: 104px;
+	padding-top: 5px;
+}
+#reservation_info_box #reservation_img img {
+	width: 90px; 
+	height: 90px; 
+	background-size: cover;
+}
+#reservation_info_box #reservation_info {
+	display: table-cell; 
+	height: 90px; 
+	width: 368px; 
+	vertical-align: top;
+}
+#reservation_info_box #reservation_info span {
+	font-size: 14px; 
+	margin-bottom: 4px;
+}
+
+/* reservation_left_box - reservation_info_box */
+#reservation_left_box #reservation_person_info_box {
+	background: #fff; 
+	height: 160px; 
+	width: 520px; 
+	margin-top: 20px;
+}
+#reservation_person_info_box span {
+	font-size: 14px; 
+	margin-bottom: 4px;
+}
+#reservation_person_info_box input {
+	border: 0; 
+	background: #fff;
+}
+#reservation_person_info_box button {
+	border: 1px solid #e5e5e5;
+	border-radius: 5px; 
+	background: #e5e5e5;
+	padding: 1px;
+}
+
+/* reservation_left_box - reservation_refund_info_box */
+#reservation_left_box #reservation_refund_info_box {
+	background: #fff; 
+	height: 570px; 
+	width: 520px; 
+	margin-top: 20px;
+}
+#reservation_refund_info_box table {
+	border-collapse: collapse;
+}
+#reservation_refund_info_box table td {
+	font-size: 14px; 
+	border: 1px solid #ddd; 
+	width: 200px; 
+	text-align: left; 
+	height: 37px;
+}
+
+/* reservation_right_box */
+#reservation_right_box {
+	width: 326px; 
+	float: right;
+}
+
+/* reservation_right_box - reservation_payment_info_box */
+#reservation_right_box #reservation_payment_info_box {
+	background: #fff;
+	height: 180px; 
+	width: 326px; 
+	margin-top: 20px;
+}
+#reservation_payment_info_box #reservation_payment_info {
+	display: table-cell; 
+	height: 90px; 
+	width: 300px; 
+	vertical-align: top;
+}
+#reservation_payment_info #reservation_payment_info_row_1 {
+	padding-bottom: 10px; 
+	border-bottom: 1px solid #e5e5e5;
+}
+#reservation_payment_info_row_1 #reservation_payment_info_left {
+	display: table-cell;
+	width: 138.5px; 
+	text-align: left;
+}
+#reservation_payment_info_row_1 #reservation_payment_info_left span {
+	font-size: 14px; 
+	margin-bottom: 4px; 
+	color: #999;
+}
+#reservation_payment_info_row_1 #reservation_payment_info_right {
+	display: table-cell;
+	width: 138.5px; 
+	text-align: right;
+}
+#reservation_payment_info_row_1 #reservation_payment_info_right span {
+	font-size: 14px; 
+	margin-bottom: 4px; 
+	color: #999;
+}
+#reservation_payment_info_row_2 {
+	padding-top: 10px;
+}
+#reservation_payment_info_row_2 #reservation_payment_info_left {
+	display: table-cell;
+	width: 138.5px; 
+	text-align: left;
+}
+#reservation_payment_info_row_2 #reservation_payment_info_left span {
+	font-size: 14px; 
+	margin-bottom: 4px; 
+	color: #999;
+}
+#reservation_payment_info_row_2 #reservation_payment_info_right {
+	display: table-cell;
+	width: 138.5px; 
+	text-align: right;
+}
+#reservation_payment_info_row_2 #reservation_payment_info_right span {
+	font-size: 14px; 
+	margin-bottom: 4px; 
+	color: #999;
+}
+
+/* reservation_payment */
+#reservation_payment {
+	background: #fff; 
+	height: 170px; 
+	width: 326px; 
+	margin-top: 20px;
+}
+
+/* reservation_payment_chk_btn */
+#reservation_payment_chk_btn {
+	background: #fff; 
+	height: 100px; 
+	width: 326px; 
+	margin-top: 20px;
+}
+#booking_btn {
+	background: #ffb300; 
+	color: #fff; 
+	padding: 11px 63px; 
+	font-size: 16px; 
+	font-weight: 700;
+}
+#cancel_btn {
+	float: right;
+	background: #ffb300; 
+	color: #fff; 
+	padding: 11px 63px; 
+	font-size: 16px; 
+	font-weight: 700;
+}
+
+#booking_btn:hover {
+	background: #cc8f00;
+}
+#cancel_btn:hover {
+	background: #cc8f00;
+}

@@ -4,6 +4,8 @@ import com.pag.client.login.vo.LoginVO;
 
 public interface LoginService {
 
-	public LoginVO loginSelect(String m_Id, String m_Pw);
-		
+	public LoginVO loginSelect(LoginVO lvo); // 로그인
+	public String idSelect(String m_Email); // 이메일로 아이디 찾기
+	public String pwSelect(LoginVO lvo); // 아이디로 임시비밀번호 재생성, 
+
 }

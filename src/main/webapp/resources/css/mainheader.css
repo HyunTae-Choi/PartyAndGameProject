@@ -5,6 +5,7 @@
 	background: rgba(0,0,0,0.2);
 	position: fixed;
 	top: 0;
+	z-index: 9999;
 }
 #header.roll {
 	width: 100%;
@@ -13,6 +14,7 @@
 	position: fixed;
 	top: 0;
 	box-shadow: 0 0 10px rgb(0 0 0 / 20%);
+	z-index: 9999;
 }
 
 /* header - logo */
@@ -48,31 +50,43 @@
 }
 #header_menu ul  {
 	text-align: center;
+	margin-top: 19px;
 }
-#header_menu ul li {
+#header_menu ul li  {
+	display: inline-block;
+}
+#header_menu ul li a {
 	display: inline-block;
 	text-align: center;
 	width: 100px;
-	height: 88px;
-	line-height: 85px;
+	height: 50px;
+	line-height: 50px;
 	list-style: none;
 	color: white;
 	font-weight: 700;
 	padding: 0 20px;
 	font-family: 'Ubuntu', sans-serif;
 }
-#header_menu .menu_li.roll {
+#header_menu ul li a:hover {
+	color: #ffe400;
+}
+#header_menu ul li a.roll {
 	display: inline-block;
 	text-align: center;
 	width: 100px;
-	height: 88px;
-	line-height: 85px;
+	height: 50px;
+	line-height: 50px;
 	list-style: none;
 	color: #212121CC;
 	font-weight: 700;
 	font-family: 'Ubuntu', sans-serif;
 }
-
+#header_menu ul li a.roll:hover {
+	color: #00abd7;
+}
+.active {
+	color: #00abd7 !important;
+}
 /* header - member */
 #member {
 	width: 18%;
@@ -83,11 +97,12 @@
 #member ul  {
 	margin: 0 auto;
 	padding-right: 20px;
+	margin-top: 19px;
 }
 #member ul li button {
 	width: 80px;
-	height: 88px;
-	line-height: 85px;
+	height: 50px;
+	line-height: 50px;
 	list-style: none;
 	float: right;
 	color: white;
@@ -95,14 +110,20 @@
 	font-family: 'Ubuntu', sans-serif;
 	font-size: 16px;
 }
+#member ul li button:hover {
+	color: #ffe400;
+}
 #member .member_li.roll {
 	width: 80px;
-	height: 88px;
-	line-height: 85px;
+	height: 50px;
+	line-height: 50px;
 	list-style: none;
 	float: right;
 	color: #212121CC;
 	font-weight: 700;
 	font-family: 'Ubuntu', sans-serif;
 	font-size: 16px;
+}
+#member .member_li.roll:hover {
+	color: #00abd7;
 }

@@ -1,5 +1,5 @@
 $(function(){
-	var rollHeader = 100;
+	var rollHeader = 200;
 	$(window).scroll(function() {
 		var scroll = getCurrentScroll();
 		if ( scroll >= rollHeader ) {
@@ -15,6 +15,36 @@ $(function(){
 			$('.menu_li').removeClass('roll');
 			$('.member_li').removeClass('roll');
 			$('#move_top_btn').fadeOut();
+		}
+		if(scroll >= 850 && scroll < 1400) {
+			$("#about_btn").addClass("active");
+			$("#rooms_btn").removeClass("active");
+			$("#event_btn").removeClass("active");
+			$("#service_btn").removeClass("active");
+		}
+		else if(scroll >= 1400 && scroll < 2240) {
+			$("#about_btn").removeClass("active");
+			$("#rooms_btn").addClass("active");
+			$("#event_btn").removeClass("active");
+			$("#service_btn").removeClass("active");
+		}
+		else if(scroll >= 2240 && scroll < 2980) {
+			$("#about_btn").removeClass("active");
+			$("#rooms_btn").removeClass("active");
+			$("#event_btn").addClass("active");
+			$("#service_btn").removeClass("active");
+		}
+		else if(scroll >= 2980) {
+			$("#about_btn").removeClass("active");
+			$("#rooms_btn").removeClass("active");
+			$("#event_btn").removeClass("active");
+			$("#service_btn").addClass("active");
+		} 
+		else {
+			$("#about_btn").removeClass("active");
+			$("#rooms_btn").removeClass("active");
+			$("#event_btn").removeClass("active");
+			$("#service_btn").removeClass("active");
 		}
 	});
 	$("#about_btn").click(function() {

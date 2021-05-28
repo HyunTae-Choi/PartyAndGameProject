@@ -2,20 +2,34 @@
 <!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 2.0//EN" "http://tiles.apache.org/dtds/tiles-config_2_0.dtd">
 
 <tiles-definitions>
-	<definition name="basic" template="/WEB-INF/views/template/admin/contentLayout.jsp">
+	<!-- adminPage, Manage 섹션 레이아웃 -->
+	<definition name="adminManageLayout" template="/WEB-INF/views/template/admin/adminpageManageLayout.jsp">
 		<put-attribute name="title" value="관리자 페이지" />
-		<put-attribute name="header" value="/WEB-INF/views/template/admin/header.jsp" />
-		<put-attribute name="sub" value="/WEB-INF/views/template/admin/sub.jsp" />
-		<put-attribute name="left" value="/WEB-INF/views/template/admin/left.jsp" />		
- 		<put-attribute name="main" value="" />
+		<put-attribute name="adminheader" value="/WEB-INF/views/template/admin/adminHeader.jsp" />
+		<put-attribute name="content" value="" />
+		<put-attribute name="subfooter" value="/WEB-INF/views/template/client/subfooter.jsp" />
 	</definition>
-
-	<definition name="admin/board/*" extends="basic">
-		<put-attribute name="sub" value="" />
- 		<put-attribute name="main" value="/WEB-INF/views/admin/board/{1}.jsp" />
+	
+	<!-- adminPage Manage - 예약리스트 (임시) -->
+	<definition name="admin/manage/booking" extends="adminManageLayout">
+		<put-attribute name="content" value="/WEB-INF/views/mypage/booking/bookingList.jsp" />	
 	</definition>
-	<definition name="admin/member/*" extends="basic">
-		<put-attribute name="sub" value="/WEB-INF/views/admin/member/memberSub.jsp" />
- 		<put-attribute name="main" value="/WEB-INF/views/admin/member/{1}.jsp" />
-	</definition>
+	
+	
+	
+	<!-- adminPage, Service 섹션 레이아웃 -->
+	<definition name="adminServiceLayout" template="/WEB-INF/views/template/admin/adminpageServiceLayout.jsp">
+		<put-attribute name="title" value="관리자 페이지" />
+		<put-attribute name="adminheader" value="/WEB-INF/views/template/admin/adminHeader.jsp" />
+		<put-attribute name="content" value="" />
+		<put-attribute name="subfooter" value="/WEB-INF/views/template/client/subfooter.jsp" />
+	</definition>	
+	
+	<!-- adminPage Service - 공지사항 -->
+	<!-- 1 리스트, 2 상세보기, 3 글쓰기폼 -->
+	<definition name="admin/service/notice/*" extends="adminServiceLayout">		
+		<put-attribute name="content" value="/WEB-INF/views/service/notice/{1}.jsp" />		
+	</definition>	
+	
+	
 </tiles-definitions>

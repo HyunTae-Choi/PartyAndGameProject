@@ -1,0 +1,147 @@
+#room_layout {
+	width: 100%;
+	overflow: hidden;
+	height: auto;
+	margin-top: 100px;
+}
+
+#room_infomation {
+	float: left;
+	width: 50%;
+	height: 100%;
+}
+/* room image */
+#room_infomation #room_image {
+	width: 600px;
+	height: 600px;
+	overflow:hidden;
+	position: relative;
+}
+#room_image li {
+	position: absolute;
+	left: 0; 
+	right: 0;
+	top: 0;
+	bottom: 0;
+	opacity: 0;
+	transition:1s;
+}	
+#room_image input {
+	display: none;
+}
+#room_image_small {
+	width: 600px;
+	height: 60px;
+	padding: 10px 0px 20px 0px;
+}
+#room_image_small .smallimg {
+	z-index: 10;
+}
+#room_image_small .smallimg label {
+	width: 60px;
+	height: 60px;
+	display: inline-block;
+	font-size: 0;
+	transition: 0.5s;
+	cursor: pointer;
+	margin-right: 5px;
+	background-size: cover;
+}
+/* slide */
+#pos1:checked ~ ul li:nth-child(1),
+#pos2:checked ~ ul li:nth-child(2),
+#pos3:checked ~ ul li:nth-child(3),
+#pos4:checked ~ ul li:nth-child(4) {
+	opacity: 1;
+}
+/* room info button */
+#button_group {
+	width: 598px; 
+	height: 53px;
+	display: flex; 
+	border: 1px solid #ddd; 
+	margin-bottom: 20px;
+}
+#button_group #button_1, #button_group #button_2 {
+	width: 199px; 
+	border-right: 1px solid #ddd;
+}
+#button_group #button_1 button, #button_group #button_2 button {
+	font-size: 18px; 
+	font-weight: 600; 
+	padding: 14px 64px;
+}
+#button_group #button_3 {
+	width: 200px;
+}
+#button_group #button_3 button {
+	font-size: 18px;
+	font-weight: 600;
+	padding: 14px 82px;
+}
+#button_group button:hover {
+	color: #00abd7;
+}
+.menu_selected {
+	color: #00abd7;
+}
+#button_1_contents table {
+	width: 600px; 
+	border-collapse: collapse;
+}
+
+#button_1_contents table td {
+	height: 20px; 
+	text-align: center; 
+	vertical-align: middle;
+	padding: 0px; 
+	border: 1px solid #ececec;
+}
+
+/* room reservation */
+#room_reservation {
+	float: left;
+	width: 50%;
+	height: 100%;
+}
+#room_reservation #room_title {
+	font-size: 24px;
+	margin-bottom: 10px;
+}
+#room_reservation #room_reserv_info {
+	font-size: 14px;
+	margin-bottom: 10px;
+}
+#room_reservation #room_time_select, #room_reservation #room_price, #room_reservation #room_addPeople, #room_reservation #total_price{
+	padding: 30px 0; 
+	width: 600px; 
+	border-bottom: 1px solid #e3e3e3;
+}
+#room_reservation #room_price {
+	height: 24px;
+}
+#total_price_text, #total_unit {
+	font-size: 16px;
+	color: #ffb300;
+	font-weight: bold;
+}
+
+#reservation_button_space {
+	margin-top: 10px;
+	width: 600px; 
+}
+
+#reservation_button, #cancel_button{
+	float: right;
+	width: 140px; 
+	border: 1px solid #ddd;
+}
+#reservation_button button, #cancel_button button { 
+	font-size: 18px; 
+	font-weight: 600; 
+	padding: 14px 51px;
+}
+
+#reservation_button button:hover, #cancel_button button:hover {
+	color: #00abd7;
+}

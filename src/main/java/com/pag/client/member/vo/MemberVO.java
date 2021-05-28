@@ -7,20 +7,19 @@ import com.pag.client.login.vo.LoginVO;
 public class MemberVO extends LoginVO {
 
 	// field
-
 	// loginVO에서 상속
 //	private String m_Id; // 회원 아이디
 //	private String m_Pw; // 회원 비밀번호
 //	private String m_Email; // 회원 이메일
 //	private String m_Name; // 회원 이름
+//	private int m_Availabled; // 회원 탈퇴유무, DEFAULT 1, 1- TRUE, 0 - FALSE
 	private int m_Number; // 회원 번호
 	private String m_Birth; // 회원 생년월일
 	private String m_Gender; // 회원 성별
-	private int m_Email_Verification; // 회원 이메일 확인, 1- TRUE, 0 - FALSE
 	private int m_Email_Marketing; // 회원 이메일 마케팅 수신동의, 1- TRUE, 0 - FALSE
 	private String m_Phone; // 회원 전화번호
+	private int m_Mileage; // 회원 마일리지
 	private Timestamp m_Date; // 회원 등록일자
-	private int m_Availabled; // 회원 탈퇴유무, DEFAULT 1, 1- TRUE, 0 - FALSE
 	private String m_Pw_Old; // 회원 기존의 비밀번호
 
 	// getter and setter
@@ -48,20 +47,12 @@ public class MemberVO extends LoginVO {
 		this.m_Gender = m_Gender;
 	}
 
-	public int getM_Email_Verification() {
-		return m_Email_Verification;
-	}
-
-	public void setM_Email_Verification(int m_Email_Verification) {
-		this.m_Email_Verification = m_Email_Verification;
-	}
-
 	public int getM_Email_Marketing() {
 		return m_Email_Marketing;
 	}
 
-	public void setM_Email_Marketing(int m_Email_Marketring) {
-		this.m_Email_Marketing = m_Email_Marketring;
+	public void setM_Email_Marketing(int m_Email_Marketing) {
+		this.m_Email_Marketing = m_Email_Marketing;
 	}
 
 	public String getM_Phone() {
@@ -72,20 +63,20 @@ public class MemberVO extends LoginVO {
 		this.m_Phone = m_Phone;
 	}
 
+	public int getM_Mileage() {
+		return m_Mileage;
+	}
+
+	public void setM_Mileage(int m_Mileage) {
+		this.m_Mileage = m_Mileage;
+	}
+
 	public Timestamp getM_Date() {
 		return m_Date;
 	}
 
 	public void setM_Date(Timestamp m_Date) {
 		this.m_Date = m_Date;
-	}
-
-	public int getM_Availabled() {
-		return m_Availabled;
-	}
-
-	public void setM_Availabled(int m_Availabled) {
-		this.m_Availabled = m_Availabled;
 	}
 
 	public String getM_Pw_Old() {
@@ -98,15 +89,11 @@ public class MemberVO extends LoginVO {
 
 	@Override
 	public String toString() {
-		return "MemberVO [getM_Number()=" + getM_Number() + ", getM_Birth()=" + getM_Birth() + ", getM_Gender()="
-				+ getM_Gender() + ", getM_Email_Verification()=" + getM_Email_Verification()
-				+ ", getM_Email_Marketring()=" + getM_Email_Marketing() + ", getM_Phone()=" + getM_Phone()
-				+ ", getM_Date()=" + getM_Date() + ", getM_Availabled()=" + getM_Availabled() + ", getM_Pw_Old()="
-				+ getM_Pw_Old() + ", getM_Id()=" + getM_Id() + ", getM_Pw()=" + getM_Pw() + ", getM_Email()="
-				+ getM_Email() + ", getM_Name()=" + getM_Name() + ", toString()=" + super.toString() + ", getClass()="
-				+ getClass() + ", hashCode()=" + hashCode() + "]";
+		return "MemberVO [toString()=" + super.toString() + " + m_Number=" + m_Number + ", m_Birth=" + m_Birth + ", m_Gender=" + m_Gender
+				+ ", m_Email_Marketing=" + m_Email_Marketing + ", m_Phone=" + m_Phone + ", m_Mileage=" + m_Mileage
+				+ ", m_Date=" + m_Date + ", m_Pw_Old=" + m_Pw_Old + "]";
 	}
-	
+
 	
 
 }

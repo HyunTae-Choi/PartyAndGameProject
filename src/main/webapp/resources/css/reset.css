@@ -51,3 +51,10 @@ td button {
 	text-align: center;
 	font-size: 16px; 
 }
+
+/* container */
+#container {
+	width: 1260px;
+	height: 100%;
+	margin: 0 auto;
+}

@@ -1,5 +1,7 @@
 package com.pag.client.login.controller;
 
+import java.io.IOException;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -10,7 +12,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.pag.client.login.service.LoginService;
 import com.pag.client.login.vo.LoginVO;
@@ -22,53 +25,71 @@ public class LoginController {
 
 	@Autowired
 	private LoginService loginService;
-
-	// 로그인 화면 호출
-	@RequestMapping(value = "/login", method = RequestMethod.GET)
-	public String login() {
-		log.info("login.do get 호출 성공");
-		return "client/login";
-	}
-
-	// 로그인 처리 구현
+	
+	// 로그인 처리
+	// ResponseBody 어노테이션을 붙여야, ajax에서 데이터를 받을 수 있다.(여기선 String)
+	@ResponseBody
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
-	public ModelAndView loginProceed(@ModelAttribute("LoginVO") LoginVO lvo, HttpSession session,
-			HttpServletRequest request) {
-		log.info("login post 호출 성공");
-		System.out.println("아이디 : " + lvo.getM_Id());
-		System.out.println("비밀번호 : " + lvo.getM_Pw());
-
-		ModelAndView mav = new ModelAndView();
-
-		String m_Id = lvo.getM_Id();
-
-		LoginVO loginResult = loginService.loginSelect(lvo.getM_Id(),lvo.getM_Pw());
-		System.out.println(loginResult);
-
-		if (loginResult == null) {
-			mav.setViewName("client/login");
-			System.out.println("로그인 실패");
-		} else {
-			mav.setViewName("client/login");
-			System.out.println("로그인 성공");
-			System.out.println("성공 아이디 : " + loginResult.getM_Id());
-			System.out.println("성공 비밀번호 : " + loginResult.getM_Pw());
+	public String loginProceed(@ModelAttribute LoginVO lvo, HttpSession session)
+			throws IOException {
+		log.info("맵핑 login/login, post방식으로 loginProceed method 호출");
+		
+		// admin 판정, 판정성공시 admin만 로그인세션 id에 담기
+		if(lvo.getM_Id().equals("admin") && lvo.getM_Pw().equals("1234")) {
+			LoginVO loginSession = new LoginVO();
+			loginSession.setM_Id(lvo.getM_Id());			
+			session.setAttribute("loginSession", loginSession);
+			System.out.println("관리자 로그인 성공");
+			return "success";
 		}
-		return mav;
+		
+		// 로그인 조회 (아이디, 이름, 이메일, 리턴, 비밀번호엔 로그인 성공여부가 담김)
+		LoginVO loginResult = loginService.loginSelect(lvo);
+		
+		// 로그인 성공 결과를 담기
+		String result = loginResult.getM_Pw();
+		loginResult.setM_Pw(null);//null 설정하여 삭제
+		
+		// 결과가 성공이면 loginSession에 아이디를 저장한 loginVO 저장
+		if(result == "success") {
+			// 로그인 세션에 (아이디, 이름, 이메일 담기)
+			session.setAttribute("loginSession", loginResult);
+		} else {
+			session.setAttribute("loginSession", null); //로그인 세션을 삭제
+		}
+		
+		return result;
 	}
 	
-	// PW찾기
-	@RequestMapping(value = "/find", method = RequestMethod.POST)
-	public ModelAndView searchIdPw(@ModelAttribute("LoginVO") LoginVO lvo, HttpSession session,
-			HttpServletRequest request) {
-		log.info("find post 호출 성공");
 
-		ModelAndView mav = new ModelAndView();
+	// ID 찾기, ajax로 처리
+	@ResponseBody
+	@RequestMapping(value = "/findid", method = RequestMethod.POST)
+	public String searchId(@RequestParam("m_Email") String m_Email) {
+		log.info("맵핑 login/findid, post방식으로 searchId method 호출");
 
-		System.out.println("이메일 : " + lvo.getM_Email());
-		System.out.println("아이디 : " + lvo.getM_Id());
+		// null 값이면 fail, 탈퇴한 아이디면 leave, 정상적으로 아이디가 조회되면 아이디명 리턴
+		return loginService.idSelect(m_Email);
+	}
 
-		return null;
+	// pw찾기, ajax로 처리
+	@ResponseBody
+	@RequestMapping(value = "/findpw", method = RequestMethod.POST)
+	public String searchPw(@ModelAttribute LoginVO lvo) {
+		log.info("맵핑 login/findpw, post방식으로 searchPw method 호출");
+		
+		// 성공(이메일 전송) - success, 실패 - fail, 탈퇴한 아이디 - leave 반환
+		return loginService.pwSelect(lvo);
+	}
+
+	// 로그아웃
+	@RequestMapping(value = "/logout")
+	public String logout(HttpSession session, HttpServletRequest request) {
+		log.info("맵핑 login/louout, logout method 호출");
+		session.invalidate();
+		session = request.getSession(true);
+
+		return "redirect:/";
 	}
 
 }

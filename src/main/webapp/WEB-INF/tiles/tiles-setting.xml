@@ -3,13 +3,62 @@
 
 <tiles-definitions>
 	<definition name="intro" template="/WEB-INF/views/template/client/mainLayout.jsp">
-		<put-attribute name="title" value="PartyAndGame" />
+		<put-attribute name="title" value="Party&amp;Game" />
 		<put-attribute name="mainheader" value="/WEB-INF/views/template/client/mainheader.jsp" />
-		<put-attribute name="footer" value="/WEB-INF/views/template/client/footer.jsp" />		
+		<put-attribute name="mainfooter" value="/WEB-INF/views/template/client/mainfooter.jsp" />		
 	</definition>
+	
 	<definition name="mypage" template="/WEB-INF/views/template/client/mypageLayout.jsp">
-		<put-attribute name="title" value="PartyAndGame" />
+		<put-attribute name="title" value="Party&amp;Game" />
 		<put-attribute name="subheader" value="/WEB-INF/views/template/client/subheader.jsp" />
-		<put-attribute name="footer" value="/WEB-INF/views/template/client/footer.jsp" />		
+		<put-attribute name="content" value="" />
+		<put-attribute name="subfooter" value="/WEB-INF/views/template/client/subfooter.jsp" />		
+	</definition>
+	<!-- MyPage 내 정보 -->	
+	<definition name="mypage/info/*" extends="mypage">
+		<put-attribute name="content" value="/WEB-INF/views/mypage/info/{1}.jsp" />		
+	</definition>
+	<!-- MyPage 예약정보 -->
+	<definition name="mypage/booking/*" extends="mypage">
+		<put-attribute name="content" value="/WEB-INF/views/mypage/booking/{1}.jsp" />		
+	</definition>
+	<!-- MyPage 1:1질문 -->
+	<definition name="mypage/question/*" extends="mypage">
+		<put-attribute name="content" value="/WEB-INF/views/mypage/question/{1}.jsp" />		
+	</definition>
+	
+	<!-- 파티룸 예약 & 비회원예약리스트 -->
+	<definition name="rooms" template="/WEB-INF/views/rooms/roomsInfo.jsp">
+		<put-attribute name="subheader" value="/WEB-INF/views/template/client/subheader.jsp" />
+		<put-attribute name="subfooter" value="/WEB-INF/views/template/client/subfooter.jsp" />		
+	</definition>
+	<definition name="reservationInfo" template="/WEB-INF/views/reservation/reservationInfo.jsp">
+		<put-attribute name="title" value="예약하기" />
+		<put-attribute name="subheader" value="/WEB-INF/views/template/client/subheader.jsp" />
+		<put-attribute name="subfooter" value="/WEB-INF/views/template/client/subfooter.jsp" />		
+	</definition>
+	<definition name="nonReservConfirm" template="/WEB-INF/views/reservation/nonReservConfirm.jsp">
+		<put-attribute name="title" value="비회원 예약확인" />
+		<put-attribute name="subheader" value="/WEB-INF/views/template/client/subheader.jsp" />
+		<put-attribute name="subfooter" value="/WEB-INF/views/template/client/subfooter.jsp" />		
+	</definition>
+	<definition name="nonReservList" template="/WEB-INF/views/reservation/nonReservList.jsp">
+		<put-attribute name="title" value="비회원 예약확인" />
+		<put-attribute name="subheader" value="/WEB-INF/views/template/client/subheader.jsp" />
+		<put-attribute name="subfooter" value="/WEB-INF/views/template/client/subfooter.jsp" />		
+	</definition>
+	
+	<!-- Notice 레이아웃 -->
+	<definition name="service" template="/WEB-INF/views/template/client/serviceLayout.jsp">
+		<put-attribute name="title" value="Party&amp;Game" />
+		<put-attribute name="subheader" value="/WEB-INF/views/template/client/subheader.jsp" />
+		<put-attribute name="content" value="" />
+		<put-attribute name="subfooter" value="/WEB-INF/views/template/client/subfooter.jsp" />		
+	</definition>
+	
+	<!-- Notice - 공지사항 -->
+	<!-- 1 리스트, 2 상세보기, 3 글쓰기폼 -->
+	<definition name="service/notice/*" extends="service">
+		<put-attribute name="content" value="/WEB-INF/views/service/notice/{1}.jsp" />		
 	</definition>
 </tiles-definitions>

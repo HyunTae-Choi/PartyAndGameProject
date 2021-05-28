@@ -1,12 +1,13 @@
 package com.pag.client.login.vo;
 
-public class LoginVO extends LoginHistory {
+public class LoginVO {
 
 	// field
 	private String m_Id; // 회원 아이디
 	private String m_Pw; // 회원 비밀번호
 	private String m_Email; // 회원 이메일
 	private String m_Name; // 회원 이름
+	private int m_Availabled; // 회원 탈퇴유무, DEFAULT 1, 1- TRUE, 0 - FALSE
 
 	// getter and setter
 	public String getM_Id() {
@@ -41,11 +42,18 @@ public class LoginVO extends LoginHistory {
 		this.m_Name = m_Name;
 	}
 
-	@Override
-	public String toString() {
-		return "LoginVO [m_Id=" + m_Id + ", m_Pw=" + m_Pw + ", m_Email=" + m_Email + ", m_Name=" + m_Name + "]";
+	public int getM_Availabled() {
+		return m_Availabled;
 	}
 
-	
-	
+	public void setM_Availabled(int m_Availabled) {
+		this.m_Availabled = m_Availabled;
+	}
+
+	@Override
+	public String toString() {
+		return "LoginVO [m_Id=" + m_Id + ", m_Pw=" + m_Pw + ", m_Email=" + m_Email + ", m_Name=" + m_Name
+				+ ", m_Availabled=" + m_Availabled + ", m_Result=" + "]";
+	}
+
 }

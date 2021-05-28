@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.pag.client.notice.dao.NoticeDao">
+	
+	<!--  반복구문 --> 
+	<sql id="noticeCommon">			
+		select n_no, n_title, n_content, n_writer, n_date, n_hit
+		from notice_tbl		
+		where n_availabled = 1
+		
+	</sql>
+	
+	<!-- 공지사항 게시물 카운트 페이징 -->
+	<select id="noticeListCnt" resultType="int">
+		SELECT NVL(count(1), 0) FROM 
+		( 	SELECT list.*, ROWNUM AS RNUM 
+			FROM (
+					<include refid="noticeCommon"></include> order by n_no desc
+				) list
+		)
+	</select>
+	
+	<!--  공지사항 리스트 --> 
+	<select id="noticeListSelect" parameterType="notice" resultType="notice">			
+		select * 
+		from (
+		    select rownum as recNum, n_no, n_title, n_content, n_writer, n_date, n_hit
+		    from (<include refid="noticeCommon"></include> order by n_no desc)
+		     )
+		where recNum between (#{page}-1)*10+1 and #{page}*10			
+	</select>
+	
+	
+	<!--  공지사항 보기 --> 
+	<select id="noticeDetailSelect" parameterType="int" resultType="notice">			
+		<include refid="noticeCommon"></include>
+		 and n_no = #{n_No}				
+	</select>
+	
+	
+	<!--  공지사항 글쓰기 --> 
+	<insert id="noticeInsert" parameterType="notice">			
+		insert into notice_tbl(n_no, n_title, n_content, n_writer)
+		values (notice_tbl_seq.nextval, #{n_Title}, #{n_Content}, #{n_Writer})			
+	</insert>
+	
+	<!--  공지사항 글수정 --> 
+	<update id="noticeUpdate" parameterType="notice">			
+		update notice_tbl 
+		set n_title = #{n_Title}, n_content= #{n_Content}
+		where n_no = #{n_No}			
+	</update>
+	
+	<!--  공지사항 글 조회수 업데이트 --> 
+	<update id="noticeHitCountUpdate" parameterType="int">			
+		update notice_tbl 
+		set n_hit = n_hit + 1
+		where n_no = #{n_No}			
+	</update>
+	
+</mapper>
+

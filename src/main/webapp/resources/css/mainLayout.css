@@ -40,13 +40,6 @@
 	text-align: center;
 }
 
-/* container */
-#container {
-	width: 1260px;
-	height: 100%;
-	margin: 0 auto;
-}
-
 /* about */
 #about {
 	padding-top: 90px;

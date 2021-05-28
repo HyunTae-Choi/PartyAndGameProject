@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.pag.client.booking.dao.BookingDAO">
+
+	<resultMap type="rooms" id="rooms">
+		<result column="r_name" property="r_name" />
+	</resultMap>
+	
+	<resultMap type="booking" id="booking">
+		<result column="b_no" property="b_no" />
+		<result column="b_regdate" property="b_regdate" />
+		<result column="b_date" property="b_date" />
+		<result column="b_time" property="b_time" />
+		<result column="b_number" property="b_number" />
+		<result column="b_price" property="b_price" />
+		<result column="b_status" property="b_status" />
+		<result column="m_id" property="m_id" />
+		<result column="u_name" property="u_name" />
+		<result column="u_email" property="u_email" />
+		<result column="u_phone" property="u_phone" />
+		<result column="b_memberstatus" property="b_memberstatus" />
+		<result column="r_no" property="r_no" />
+		<collection property="roomsVO" resultMap="rooms" />
+	</resultMap>
+	
+	<!-- 상품 예약 여부 확인 -->
+	<select id="bookingCheck" parameterType="booking" resultType="int">
+		/* Booking - bookingCheck */
+		SELECT NVL((
+			          SELECT 1 
+			          FROM booking_tbl
+			          WHERE r_no = #{r_no} AND b_date = #{b_date} AND b_time = #{b_time} AND (b_status = '예약완료' OR b_status = '입금대기' OR b_status = '취소대기')
+			       ), 0) as state
+		FROM dual 
+	</select>
+	
+	<!-- 비회원 예약 등록 -->
+	<insert id="bookingNonMember" parameterType="booking" >
+		/* Booking - bookingNonMember */
+		INSERT INTO booking_tbl(
+			    b_no, 
+			    b_date, 
+			    b_timestamp,
+			    b_time, 
+			    b_number,
+			    b_price,
+			    u_name,
+			    u_email,
+			    u_phone,
+			    b_memberstatus,
+			    r_no
+		)
+		VALUES(
+			   #{b_no}, 
+			   #{b_date},
+			   #{b_timestamp},  
+			   #{b_time}, 
+			   #{b_number}, 
+			   #{b_price}, 
+			   #{u_name}, 
+			   #{u_email}, 
+			   #{u_phone}, 
+			   '비회원', 
+			   #{r_no}
+		)
+	 </insert>
+	 
+	<!-- 회원 예약 등록 -->
+	<!-- <insert id="bookingMember" parameterType="booking" >
+		/* Booking - bookingMember */
+		<selectKey keyProperty="b_num" resultType="int" order="BEFORE">
+			select spring_board_seq.nextval from dual
+		</selectKey>
+			INSERT INTO spring_board(
+				    b_num, 
+				    b_name, 
+				    b_title, 
+				    b_content, 
+				    <if test="b_file != null and b_file != ''">
+				    b_file,
+				    </if>
+				    b_pwd
+			)
+			VALUES(
+				   #{b_num}
+				   ,#{b_name}
+				   ,#{b_title}
+				   ,#{b_content}
+				   <if test="b_file != null and b_file != ''">
+				   ,#{b_file}
+				   </if>
+				   ,#{b_pwd}
+			)
+	 </insert> -->
+	 
+	<!-- 비회원 예약 리스트 -->
+	<select id="nonReservList" parameterType="booking" resultMap="booking">
+			select
+			    b.b_no, 
+			    TO_CHAR(b.b_regdate,'YYYY-MM-DD') AS b_regdate,
+			    b.b_date,
+			    b.b_timestamp,  
+			    b.b_time, 
+			    b.b_number, 
+			    b.b_price, 
+			    b.b_status,
+			    b.u_name, 
+			    b.u_email, 
+			    b.u_phone,
+			    b.r_no,
+			    r.r_name 
+			from 
+			    booking_tbl b
+			join
+				room_tbl r
+			on
+				b.r_no = r.r_no
+			where
+			    b.u_name = #{u_name} and
+			    b.u_email = #{u_email} and 
+			    b.u_phone = #{u_phone} and
+			    b.b_status = '입금대기' or b.b_status = '예약완료' or b.b_status = '취소대기' or b.b_status = '환불완료' 
+			order by
+				b.b_timestamp ASC
+	</select>
+	<!-- 예약 취소 신청 -->
+	<update id="bookingReservCancel" parameterType="booking">
+		update
+			booking_tbl
+		set
+			b_status = '취소대기'
+		where
+			b_no = #{b_no}
+	</update>
+	
+	<!-- 재예약 신청 -->
+	<update id="bookingReservReturn" parameterType="booking">
+		update
+			booking_tbl
+		set
+			b_status = '예약완료'
+		where
+			b_no = #{b_no}
+	</update>
+	
+	<!-- 예약 환불 -->
+	<!-- <update id="bookingReservCmplete" parameterType="booking">
+		update
+			booking_tbl
+		set
+			b_status = '환불완료'
+		where
+			b_no = #{b_no}
+	</update> -->
+	
+</mapper>
+
