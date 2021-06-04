@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.pag.client.reply.dao.ReplyDao">
+
+	<resultMap type="member" id="member">
+		<result column="m_name" property="m_Name" />
+	</resultMap>
+	
+	<!-- property는 변수명과 일치 -->
+	<resultMap type="reply" id="reply">
+		<result column="qr_no" property="qr_No" />
+		<result column="qr_content" property="qr_Content" />
+		<result column="qr_date" property="qr_Date" />
+		<result column="m_id" property="m_Id" />
+		<result column="q_no" property="q_No" />
+		<collection property="memberVO" resultMap="member" />
+	</resultMap>
+	
+	<!-- 답글 리스트 조회 -->
+	<select id="questionReplyListSelect" parameterType="int" resultMap="reply">			
+		select qr.qr_no, qr.qr_content, qr.qr_date, m.m_id, qr.q_no, m.m_name
+		from question_reply_tbl qr left join member_tbl m
+		on qr.m_id = m.m_id
+		where q_no = #{q_No}
+		order by qr_no asc
+	</select>
+	
+	<!-- 답글 입력 -->
+	<insert id="questionReplyInsert" parameterType="reply">
+		<choose>
+			<when test="m_Id == 'admin'">
+				insert into question_reply_tbl(qr_no, qr_content, q_no)
+				values (question_reply_tbl_seq.nextval, #{qr_Content}, #{q_No})
+			</when>
+			<otherwise>
+				insert into question_reply_tbl(qr_no, qr_content, m_id, q_no)
+				values (question_reply_tbl_seq.nextval, #{qr_Content}, #{m_Id}, #{q_No})
+			</otherwise>
+		</choose>
+	</insert>
+	
+	<!-- 답글 수정 -->
+	<update id="questionReplyUpdate" parameterType="reply">
+		<choose>
+			<when test="m_Id == 'admin'">
+				update question_reply_tbl
+				set qr_content = #{qr_Content}
+				where q_no = #{q_No} and qr_no = #{qr_No} and m_id is null
+			</when>
+			<otherwise>
+				update question_reply_tbl
+				set qr_content = #{qr_Content}
+				where q_no = #{q_No} and qr_no = #{qr_No} and m_id = #{m_Id}
+			</otherwise>
+		</choose> 
+	</update>
+	
+</mapper>
+

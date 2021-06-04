@@ -3,7 +3,7 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.pag.client.member.dao.MemberDao">
-
+	
 	<!-- 회원정보 조회 -->
 	<select id="memberSelect" parameterType="member" resultType="member">
 		select m_id, m_name, m_birth, m_gender, m_email, m_phone, m_pw, m_availabled
@@ -60,4 +60,82 @@
 		set m_availabled = '0'
 		where m_id = #{m_Id} 
 	</delete>	 	 
+	
+	<!-- admin 회원갯수 조회 -->
+	<select id="adminMemberListCntSelect" parameterType="String" resultType="int">
+		SELECT NVL(count(1), 0) FROM 
+		( 	SELECT list.*, ROWNUM AS RNUM 
+			FROM (
+					select m_id, m_name, m_birth, m_gender, m_email, m_phone, m_pw, m_availabled
+					from member_tbl 
+					<choose>
+						<when test="category == 'enable'">
+							where m_availabled = '1'							
+						</when>
+						<when test="category == 'disable'">
+							where m_availabled = '-1' or m_availabled = '0'
+						</when>						
+					</choose>					
+					order by m_Number desc
+				) list
+		)
+	</select>
+	
+	<!-- admin 회원리스트 출력 -->
+	<select id="adminMemberListSelect" parameterType="page" resultType="member">
+		select *
+		from(select rownum as recNum, list.*
+			from (select m.m_number, m.m_id, m.m_name, TO_CHAR(to_date(m.m_birth,'YY/MM/DD'),'YY.MM.DD') as m_birth, 
+					m.m_email, m.m_phone, m.m_date, m.m_availabled, b.reservedNum, (case m.m_gender when 'm' then '남성' else '여성' end) as m_gender
+			        from member_tbl m 
+			            left join 
+			                (select m_id, count(*) as reservedNum
+			                from booking_tbl
+			                where b_status ='예약완료'
+			                group by m_id) b
+			        on m.m_id = b.m_id
+			        	<choose>
+							<when test="category == 'enable'">
+								where m.m_availabled = '1'							
+							</when>
+							<when test="category == 'disable'">
+								where m.m_availabled = '-1' or m.m_availabled = '0'
+							</when>						
+						</choose>	
+			        order by m.m_number asc
+			      ) list)	
+		where recNum between (#{page}-1)*10+1 and #{page}*10
+	</select>
+	
+	<!-- admin 회원 비활성화 -->
+	<update id="adminMemberDisableUpdate" parameterType="member">
+		update member_tbl
+		set m_availabled = '-1'
+		where m_id =#{m_Id} and m_number=#{m_Number}
+	</update>
+	
+	<!-- admin 회원 복구 -->
+	<update id="adminMemberEnableUpdate" parameterType="member">
+		update member_tbl
+		set m_availabled = '1'
+		where m_id =#{m_Id} and m_number=#{m_Number}
+	</update>
+	
+	<!-- admin 회원 성별 통계 -->
+	<select id="adminMemberGenderStatisticListSelect" resultType="statistic">
+		select m_gender, count(*) as st_count
+		from member_tbl 
+		group by m_gender
+	</select>
+	
+	<!-- admin 월별 가입자수 통계(21년) -->
+	<select id="adminMemberJoinMonthStatisticListSelect" resultType="statistic">
+		select substr(st_month,3) as st_month, m_gender, count(*) st_count
+		from (
+		    select to_char(m_date, 'YYMM') as st_month, m_gender
+		    from member_tbl )
+		where st_month like '21%'
+		group by st_month, m_gender
+	</select>
+	
 </mapper>

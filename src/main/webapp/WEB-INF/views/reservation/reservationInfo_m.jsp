@@ -44,7 +44,7 @@
 		<div id="reservation_layout">
 			<div id="container">
 				<div id="reservation_title">
-					<h1>비회원 결제하기</h1>
+					<h1>회원 결제하기</h1>
 				</div>
 				<div id="reservation_wrap">
 					<div id="reservation_left_box">
@@ -93,11 +93,11 @@
 								<h6 style="font-size: 16px; padding-bottom: 10px;">예약자 정보</h6>
 								<div>
 									<span>예약자 이름　　 : </span>
-									<input type="text" id="nameInput" name="nameInput" value="" placeholder="이름을 입력해주세요." size="30" style="ime-mode: auto;"><br>
+									<input type="text" id="nameInput" name="nameInput" value="${loginSession.m_Name }" readonly="readonly"><br>
 									<span>예약자 이메일　 : </span>
-									<input type="email" id="emailInput" name="emailInput" value="" placeholder="이메일을 입력해주세요." size="30"><br>
+									<input type="email" id="emailInput" name="emailInput" value="${loginSession.m_Email }" readonly="readonly"><br>
 									<span>예약자 전화번호 : </span>
-									<input type="text" id="phoneInput" name="phoneInput" value="" placeholder="-를 제외한 전화번호를 입력해주세요." size="30" onKeyup="this.value=this.value.replace(/[^0-9]/g,'');">
+									<input type="text" id="phoneInput" name="phoneInput" value="${loginSession.m_Phone }" readonly="readonly">
 								</div>
 							</div>
 						</div>
@@ -160,11 +160,13 @@
 										<div id="reservation_payment_info_row_1">
 											<div id="reservation_payment_info_left">
 												<span>상품가격</span><br>
-												<span>인원 추가금액</span>	
+												<span>인원 추가금액</span><br>
+												<span>회원 할인금액</span>
 											</div>
 											<div id="reservation_payment_info_right">
 												<span style="color: #000;"><%= request.getParameter("reserv_basePrice") %>원</span><br>
-												<span style="color: #000;"><%= request.getParameter("reserv_addPrice") %>원</span>	
+												<span style="color: #000;"><%= request.getParameter("reserv_addPrice") %>원</span><br>
+												<span style="color: #000;">-<fmt:formatNumber value='<%= request.getParameter("reserv_memberSale") %>'  groupingUsed='true' />원</span>
 											</div>
 										</div>
 										<div id="reservation_payment_info_row_2">
@@ -173,7 +175,7 @@
 											</div>
 											<div id="reservation_payment_info_right">
 												<span style="font-size: 14px; margin-bottom: 4px; color: #ffb300; font-weight: 700;">
-													<fmt:formatNumber value='<%= request.getParameter("reserv_totalPrice") %>'  groupingUsed='true' />원
+													<fmt:formatNumber value='<%= request.getParameter("reserv_totalPrice_m") %>'  groupingUsed='true' />원
 												</span>
 											</div>
 										</div>
@@ -211,9 +213,10 @@
 								<input type="hidden" name="b_time" id="b_time" value="">
 								<input type="hidden" name="b_number" id="b_number" value="">
 								<input type="hidden" name="b_price" id="b_price" value="">
-								<input type="hidden" name="u_name" id="u_name" value="">
-								<input type="hidden" name="u_email" id="u_email" value="">
-								<input type="hidden" name="u_phone" id="u_phone" value="">
+								<input type="hidden" name="m_id" id="m_id" value="${loginSession.m_Id }">
+								<input type="hidden" name="u_name" id="u_name" value="${loginSession.m_Name }">
+								<input type="hidden" name="u_email" id="u_email" value="${loginSession.m_Email }">
+								<input type="hidden" name="u_phone" id="u_phone" value="${loginSession.m_Phone }">
 								<input type="hidden" name="r_no" id="r_no" value="">
 							</form>
 							<script>
@@ -225,71 +228,33 @@
 										var reserv_timestamp = "<%= request.getParameter("reserv_timestamp") %>";
 										var reserv_time = "<%= request.getParameter("reserv_time") %>";
 										var reserv_totalPeople = <%= request.getParameter("reserv_totalPeople") %>;
-										var reserv_totalPrice = <%= request.getParameter("reserv_totalPrice") %>;
-										var reserv_name =  $("#nameInput").val();
-										var reserv_email = $("#emailInput").val();
-										var reserv_phone = $("#phoneInput").val();
+										var reserv_totalPrice = <%= request.getParameter("reserv_totalPrice_m") %>;
 										var reserv_roomNum = <%= request.getParameter("reserv_roomNum") %>;
-										if(reserv_name == "") {
-											alert("예약자 이름을 입력해주세요.");
-											$("#nameInput").focus();
-										} else if(reserv_email == "") {
-											alert("예약자 이메일을 입력해주세요.");
-											$("#emailInput").focus();
-										} else if(reserv_phone == "") {
-											alert("예약자 전화번호를 입력해주세요.");
-											$("#phoneInput").focus();
-										} else {
-											var nameRule = /^[가-힣]{2,4}$/; // 이름 정규식
-											var emailRule = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i; // 이메일 정규식
-											var phoneRule = /^[0-1]{3}[0-9]{4}[0-9]{4}$/; // 0과1 3글자 0~9 4글자 0~9 4글자핸드폰번호 정규식
-											var name = $("#nameInput").val();
-											var email = $("#emailInput").val();
-											var phone = $("#phoneInput").val();
-											if (!nameRule.test(name)) { 
-												alert("올바른 이름를 입력해주세요."); 
-												$("#nameInput").focus();
-											} else { 
-												if (!emailRule.test(email)) { 
-													alert("올바른 이메일 주소를 입력해주세요."); 
-													$("#emailInput").focus();
-												} else { 
-													if (!phoneRule.test(phone)) { 
-														alert("올바른 핸드폰번호를 입력해주세요.");
-														$("#phoneInput").focus();
-													} else {
-														$("#b_no").val(reserv_no);
-														$("#b_date").val(reserv_date);
-														$("#b_timestamp").val(reserv_timestamp);
-														$("#b_time").val(reserv_time);
-														$("#b_number").val(reserv_totalPeople);
-														$("#b_price").val(reserv_totalPrice);
-														$("#u_name").val(reserv_name);
-														$("#u_email").val(reserv_email);
-														$("#u_phone").val(reserv_phone);
-														$("#r_no").val(reserv_roomNum);
-														$.ajax({
-															url : "/booking/bookingNonMember.do",  
-															type : "post",            
-															data : $("#booking_form").serialize(), //폼전체 데이터 전송
-															dataType : "text",
-															error : function() { 
-																alert('시스템 오류 입니다. 관리자에게 문의 하세요');
-															}, 
-															success : function(resultData) { 
-																if(resultData == 'success') { 
-																	alert("예약번호 : " + $("#b_no").val() + "\n파티룸 명 : " + reserv_roonName + "\n예약날짜 : " + $("#b_date").val() + "\n예약시간 : " + $("#b_time").val() + "\n파티룸 예약 성공했습니다.");
-																	location.href = "/";
-																} else {
-																	alert("파티룸 예약 실패했습니다.");
-																	history.back();
-																}
-															}
-														});
-													}
+										$("#b_no").val(reserv_no);
+										$("#b_date").val(reserv_date);
+										$("#b_timestamp").val(reserv_timestamp);
+										$("#b_time").val(reserv_time);
+										$("#b_number").val(reserv_totalPeople);
+										$("#b_price").val(reserv_totalPrice);
+										$("#r_no").val(reserv_roomNum);
+										$.ajax({
+											url : "/booking/bookingMember.do",  
+											type : "post",            
+											data : $("#booking_form").serialize(), //폼전체 데이터 전송
+											dataType : "text",
+											error : function() { 
+												alert('시스템 오류 입니다. 관리자에게 문의 하세요');
+											}, 
+											success : function(resultData) { 
+												if(resultData == 'success') { 
+													alert("예약번호 : " + $("#b_no").val() + "\n파티룸 명 : " + reserv_roonName + "\n예약날짜 : " + $("#b_date").val() + "\n예약시간 : " + $("#b_time").val() + "\n파티룸 예약 성공했습니다.");
+													location.href = "/";
+												} else {
+													alert("파티룸 예약 실패했습니다.");
+													history.back();
 												}
-											} 
-										}
+											}
+										});
 									} else if($("#paymentCheck").is(":checked") == true && $("#refundCheck").is(":checked") == false) {
 										alert("취소/환불 규정에 대한 동의해주세요.");
 										$("#refundCheck").focus();

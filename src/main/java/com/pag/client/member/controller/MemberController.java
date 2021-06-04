@@ -102,7 +102,9 @@ public class MemberController {
 		
 		String result;
 		
-		if(memberService.memberSelect(mvo) != null){
+		mvo = memberService.memberSelect(mvo); 
+		
+		if(mvo != null){
 			if(mvo.getM_Availabled() == 0) {
 				result = "leave"; // 탈퇴한 사용자의 아이디
 			} else {
@@ -123,7 +125,9 @@ public class MemberController {
 
 		String result;
 		
-		if(memberService.memberSelect(mvo) != null){
+		mvo = memberService.memberSelect(mvo);
+		
+		if(mvo != null){
 			if(mvo.getM_Availabled() == 0) {
 				result = "leave"; // 탈퇴한 사용자의 이메일
 			} else {

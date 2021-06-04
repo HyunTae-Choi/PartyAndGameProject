@@ -1,5 +1,8 @@
 package com.pag.client.mypage.controller;
 
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
@@ -9,9 +12,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.pag.client.booking.service.BookingService;
+import com.pag.client.booking.vo.BookingVO;
 import com.pag.client.login.vo.LoginVO;
 import com.pag.client.member.service.MemberService;
 import com.pag.client.member.vo.MemberVO;
+import com.pag.common.vo.PageVO;
 
 @Controller
 public class MypageController {
@@ -19,6 +25,9 @@ public class MypageController {
 	
 	@Autowired
 	private MemberService memberService;
+	
+	@Autowired
+	private BookingService bookingService;
 	
 	@RequestMapping(value = "/mypage/myinfo")
 	public ModelAndView mypageMyInfo(HttpSession session) {	
@@ -51,7 +60,7 @@ public class MypageController {
 	}
 	
 	@RequestMapping(value = "/mypage/booking")
-	public ModelAndView mypageBooking(HttpSession session) {	
+	public ModelAndView mypageBooking(HttpSession session, HttpServletRequest request) {	
 		log.info("맵핑 /mypage/booking, MypageController 호출");
 		
 		LoginVO loginSession = null;
@@ -69,7 +78,16 @@ public class MypageController {
 			
 			// 회원 정보 수정용
 			MemberVO vo = memberService.memberSelect(mvo);
-			mav.addObject("mvo", vo);			
+			mav.addObject("mvo", vo);
+			
+			PageVO pageVO = bookingService.memberReservListCnt(request.getParameter("page"), loginSession.getM_Id());
+			BookingVO bookingVO = new BookingVO();
+			bookingVO.setPage(pageVO.getPage());
+			List<BookingVO> memberReservList = bookingService.memberReservList(loginSession.getM_Id());
+			
+			mav.addObject("pageVO", pageVO);
+			mav.addObject("memberReservList", memberReservList);
+			
 			mav.setViewName("mypage/booking/bookingList");
 			/* == 마이페이지를 호출하면서, 회원정보 변경을 위해 회원정보를 불러온다. end == */
 			

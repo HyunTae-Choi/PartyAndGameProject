@@ -3,7 +3,7 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.pag.client.booking.dao.BookingDAO">
-
+	
 	<resultMap type="rooms" id="rooms">
 		<result column="r_name" property="r_name" />
 	</resultMap>
@@ -34,6 +34,17 @@
 			          WHERE r_no = #{r_no} AND b_date = #{b_date} AND b_time = #{b_time} AND (b_status = '예약완료' OR b_status = '입금대기' OR b_status = '취소대기')
 			       ), 0) as state
 		FROM dual 
+	</select>
+	
+	<!-- 회원탈퇴 시 예약상품 여부 확인 -->
+	<select id="bookingCheck_Member" parameterType="booking" resultType="int">
+		/* Booking - memberbookingCheck */
+		SELECT NVL((
+			          SELECT 1 
+			          FROM booking_tbl
+			          WHERE m_id = #{m_id} AND (b_status = '예약완료' OR b_status = '입금대기' OR b_status = '취소대기')
+			       ), 0) as state
+		FROM dual
 	</select>
 	
 	<!-- 비회원 예약 등록 -->
@@ -68,69 +79,82 @@
 	 </insert>
 	 
 	<!-- 회원 예약 등록 -->
-	<!-- <insert id="bookingMember" parameterType="booking" >
+	<insert id="bookingMember" parameterType="booking" >
 		/* Booking - bookingMember */
-		<selectKey keyProperty="b_num" resultType="int" order="BEFORE">
-			select spring_board_seq.nextval from dual
-		</selectKey>
-			INSERT INTO spring_board(
-				    b_num, 
-				    b_name, 
-				    b_title, 
-				    b_content, 
-				    <if test="b_file != null and b_file != ''">
-				    b_file,
-				    </if>
-				    b_pwd
-			)
-			VALUES(
-				   #{b_num}
-				   ,#{b_name}
-				   ,#{b_title}
-				   ,#{b_content}
-				   <if test="b_file != null and b_file != ''">
-				   ,#{b_file}
-				   </if>
-				   ,#{b_pwd}
-			)
-	 </insert> -->
-	 
-	<!-- 비회원 예약 리스트 -->
-	<select id="nonReservList" parameterType="booking" resultMap="booking">
-			select
-			    b.b_no, 
-			    TO_CHAR(b.b_regdate,'YYYY-MM-DD') AS b_regdate,
-			    b.b_date,
-			    b.b_timestamp,  
-			    b.b_time, 
-			    b.b_number, 
-			    b.b_price, 
-			    b.b_status,
-			    b.u_name, 
-			    b.u_email, 
-			    b.u_phone,
-			    b.r_no,
-			    r.r_name 
-			from 
-			    booking_tbl b
-			join
-				room_tbl r
-			on
-				b.r_no = r.r_no
-			where
-			    b.u_name = #{u_name} and
-			    b.u_email = #{u_email} and 
-			    b.u_phone = #{u_phone} and
-			    b.b_status = '입금대기' or b.b_status = '예약완료' or b.b_status = '취소대기' or b.b_status = '환불완료' 
-			order by
-				b.b_timestamp ASC
-	</select>
+		INSERT INTO booking_tbl(
+		    b_no, 
+		    b_date, 
+		    b_timestamp,
+		    b_time, 
+		    b_number,
+		    b_price,
+		    m_id,
+		    u_name,
+		    u_email,
+		    u_phone,
+		    b_memberstatus,
+		    r_no
+		)
+		VALUES(
+		   #{b_no}, 
+		   #{b_date},
+		   #{b_timestamp},  
+		   #{b_time}, 
+		   #{b_number}, 
+		   #{b_price}, 
+		   #{m_id},
+		   #{u_name}, 
+		   #{u_email}, 
+		   #{u_phone}, 
+		   '회원', 
+		   #{r_no}
+		)
+	</insert>
+	
+	<!-- 입금 시 예약완료 변경 쿼리 -->
+	<update id="bookingReservComplete" parameterType="booking">
+		update
+			booking_tbl
+		set
+			b_status = '예약완료'
+		where
+			b_no = #{b_no}
+	</update>
+	
+	<!-- 입금 시 예약완료 변경 쿼리 -->
+	<update id="bookingRentalComplete" parameterType="booking">
+		update
+			booking_tbl
+		set
+			b_status = '대여중'
+		where
+			b_no = #{b_no}
+	</update>
+	
+	<!-- 입금 시 예약완료 변경 쿼리 -->
+	<update id="bookingRentalEnd" parameterType="booking">
+		update
+			booking_tbl
+		set
+			b_status = '대여완료'
+		where
+			b_no = #{b_no}
+	</update>
+	
+	<!-- 미입금 시 예약삭제 쿼리 -->
+	<delete id="bookingDelete" parameterType="booking">
+		delete
+		from booking_tbl
+		where
+			b_no = #{b_no}
+	</delete>
+	
 	<!-- 예약 취소 신청 -->
 	<update id="bookingReservCancel" parameterType="booking">
 		update
 			booking_tbl
 		set
-			b_status = '취소대기'
+			b_status = '환불요청'
 		where
 			b_no = #{b_no}
 	</update>
@@ -145,15 +169,283 @@
 			b_no = #{b_no}
 	</update>
 	
-	<!-- 예약 환불 -->
-	<!-- <update id="bookingReservCmplete" parameterType="booking">
+	<!-- 환불완료 쿼리 -->
+	<update id="bookingCancelComplete" parameterType="booking">
 		update
 			booking_tbl
 		set
 			b_status = '환불완료'
 		where
 			b_no = #{b_no}
-	</update> -->
+	</update>
 	
+	<!-- 비회원 예약 리스트 -->
+	<select id="nonReservList" parameterType="booking" resultMap="booking">
+		/* Booking - nonReservList */
+		select
+		    b.b_no, 
+		    TO_CHAR(b.b_regdate,'YYYY-MM-DD') AS b_regdate,
+		    b.b_date,
+		    b.b_timestamp,  
+		    b.b_time, 
+		    b.b_number, 
+		    b.b_price, 
+		    b.b_status,
+		    b.u_name, 
+		    b.u_email, 
+		    b.u_phone,
+		    b.r_no,
+		    r.r_name 
+		from 
+		    booking_tbl b
+		join
+			room_tbl r
+		on
+			b.r_no = r.r_no
+		where
+		    b.u_name = #{u_name} and
+		    b.u_email = #{u_email} and 
+		    b.u_phone = #{u_phone} and
+		    (b.b_status = '입금대기' or b.b_status = '예약완료' or b.b_status = '환불요청' or b.b_status = '환불완료') 
+		order by
+			b.b_timestamp ASC
+	</select>
+	
+	<!-- 마이페이지 회원 예약 리스트 카운트 페이징 -->
+	<select id="memberReservListCnt" resultType="int">
+		SELECT NVL(count(1), 0) FROM (SELECT list.*, ROWNUM AS RNUM  FROM ( select b_no from booking_tbl where m_id = #{m_id} ) list )
+	</select>
+	
+	<!-- 마이페이지 회원 예약 리스트 -->
+	<select id="memberReservList" parameterType="booking" resultMap="booking">
+		/* Booking - memberReservList */
+		select
+		    b.b_no, 
+		    TO_CHAR(b.b_regdate,'YYYY-MM-DD') AS b_regdate,
+		    b.b_date,
+		    b.b_timestamp,  
+		    b.b_time, 
+		    b.b_number, 
+		    b.b_price, 
+		    b.b_status,
+		    b.u_name, 
+		    b.u_email, 
+		    b.u_phone,
+		    b.r_no,
+		    r.r_name 
+		from 
+		    booking_tbl b
+		join
+			room_tbl r
+		on
+			b.r_no = r.r_no
+		where
+		    b.m_id = #{m_id} and
+		    (b.b_status = '입금대기' or b.b_status = '예약완료' or b.b_status = '환불요청' or b.b_status = '환불완료' or b.b_status = '대여중' or b.b_status = '대여완료')
+		order by
+			b.b_timestamp ASC
+	</select>
+	
+	<!-- 관리자 페이지 예약 전체 리스트 카운트 페이징 -->
+	<select id="bookingFullListCnt" resultType="int">
+		SELECT NVL(count(1), 0) FROM (SELECT list.*, ROWNUM AS RNUM  FROM ( select b_no from booking_tbl ) list )
+	</select>
+	
+	<!-- 관리자 페이지 예약 전체 리스트 -->
+	<select id="bookingFullList" parameterType="booking" resultMap="booking">
+		select *
+		from (
+			select 
+				rownum as recNum, 
+				b_no, 
+				b_regdate,  
+				b_date,
+			    b_timestamp,  
+			    b_time, 
+			    b_number, 
+			    b_price, 
+			    b_status,
+			    m_id,
+			    u_name, 
+			    u_email, 
+			    u_phone,
+			    r_no,
+			    r_name
+			from ( select b.b_no, TO_CHAR(b.b_regdate,'YYYY-MM-DD') AS b_regdate, b.b_date, b.b_timestamp, b.b_time, b.b_number, b.b_price, b.b_status, b.m_id, b.u_name, b.u_email, b.u_phone, b.r_no, r.r_name from booking_tbl b join room_tbl r on b.r_no = r.r_no order by b.b_timestamp DESC )
+		)
+		where recNum between (#{page}-1)*10+1 and #{page}*10
+	</select>
+	
+	<!-- 관리자 페이지 예약 입금대기 리스트 카운트 페이징 -->
+	<select id="bookingWaitingListCnt" resultType="int">
+		SELECT NVL(count(1), 0) FROM (SELECT list.*, ROWNUM AS RNUM  FROM ( select b_no from booking_tbl where b_status = '입금대기' ) list )
+	</select>
+	
+	<!-- 관리자 페이지 예약 입금대기 리스트 -->
+	<select id="bookingWaitingList" parameterType="booking" resultMap="booking">
+		select *
+		from (
+			select 
+				rownum as recNum, 
+				b_no, 
+				b_regdate,  
+				b_date,
+			    b_timestamp,  
+			    b_time, 
+			    b_number, 
+			    b_price, 
+			    b_status,
+			    m_id,
+			    u_name, 
+			    u_email, 
+			    u_phone,
+			    r_no,
+			    r_name
+			from ( select b.b_no, TO_CHAR(b.b_regdate,'YYYY-MM-DD') AS b_regdate, b.b_date, b.b_timestamp, b.b_time, b.b_number, b.b_price, b.b_status, b.m_id, b.u_name, b.u_email, b.u_phone, b.r_no, r.r_name from booking_tbl b join room_tbl r on b.r_no = r.r_no where b.b_status = '입금대기' order by b.b_timestamp DESC )
+		)
+		where recNum between (#{page}-1)*10+1 and #{page}*10
+	</select>
+	
+	<!-- 관리자 페이지 예약 예약완료 리스트 카운트 페이징 -->
+	<select id="bookingReservListCnt" resultType="int">
+		SELECT NVL(count(1), 0) FROM (SELECT list.*, ROWNUM AS RNUM  FROM ( select b_no from booking_tbl where b_status = '예약완료' ) list )
+	</select>
+	
+	<!-- 관리자 페이지 예약 예약완료 리스트 -->
+	<select id="bookingReservList" parameterType="booking" resultMap="booking">
+		select *
+		from (
+			select 
+				rownum as recNum, 
+				b_no, 
+				b_regdate,  
+				b_date,
+			    b_timestamp,  
+			    b_time, 
+			    b_number, 
+			    b_price, 
+			    b_status,
+			    m_id,
+			    u_name, 
+			    u_email, 
+			    u_phone,
+			    r_no,
+			    r_name
+			from ( select b.b_no, TO_CHAR(b.b_regdate,'YYYY-MM-DD') AS b_regdate, b.b_date, b.b_timestamp, b.b_time, b.b_number, b.b_price, b.b_status, b.m_id, b.u_name, b.u_email, b.u_phone, b.r_no, r.r_name from booking_tbl b join room_tbl r on b.r_no = r.r_no where b.b_status = '예약완료' order by b.b_timestamp DESC )
+		)
+		where recNum between (#{page}-1)*10+1 and #{page}*10
+	</select>
+	
+	<!-- 관리자 페이지 예약 예약당일 리스트 카운트 페이징 -->
+	<select id="bookingReservDayListCnt" resultType="int">
+		SELECT NVL(count(1), 0) FROM (SELECT list.*, ROWNUM AS RNUM  FROM ( select b_no from booking_tbl where b_date = TO_CHAR(sysdate,'YYYY-MM-DD') ) list )
+	</select>
+	
+	<!-- 관리자 페이지 예약 예약당일 리스트 -->
+	<select id="bookingReservDayList" parameterType="booking" resultMap="booking">
+		select *
+		from (
+			select 
+				rownum as recNum, 
+				b_no, 
+				b_regdate,  
+				b_date,
+			    b_timestamp,  
+			    b_time, 
+			    b_number, 
+			    b_price, 
+			    b_status,
+			    m_id,
+			    u_name, 
+			    u_email, 
+			    u_phone,
+			    r_no,
+			    r_name
+			from ( select b.b_no, TO_CHAR(b.b_regdate,'YYYY-MM-DD') AS b_regdate, b.b_date, b.b_timestamp, b.b_time, b.b_number, b.b_price, b.b_status, b.m_id, b.u_name, b.u_email, b.u_phone, b.r_no, r.r_name from booking_tbl b join room_tbl r on b.r_no = r.r_no where b.b_date = TO_CHAR(sysdate,'YYYY-MM-DD') order by b.b_timestamp DESC )
+		)
+		where recNum between (#{page}-1)*10+1 and #{page}*10
+	</select>
+	
+	<!-- 관리자 페이지 예약 환불대기 리스트 카운트 페이징 -->
+	<select id="bookingRefundWaitingListCnt" resultType="int">
+		SELECT NVL(count(1), 0) FROM (SELECT list.*, ROWNUM AS RNUM  FROM ( select b_no from booking_tbl where b_status = '입금대기' ) list )
+	</select>
+	
+	<!-- 관리자 페이지 예약 환불대기 리스트 -->
+	<select id="bookingRefundWaitingList" parameterType="booking" resultMap="booking">
+		select *
+		from (
+			select 
+				rownum as recNum, 
+				b_no, 
+				b_regdate,  
+				b_date,
+			    b_timestamp,  
+			    b_time, 
+			    b_number, 
+			    b_price, 
+			    b_status,
+			    m_id,
+			    u_name, 
+			    u_email, 
+			    u_phone,
+			    r_no,
+			    r_name
+			from ( select b.b_no, TO_CHAR(b.b_regdate,'YYYY-MM-DD') AS b_regdate, b.b_date, b.b_timestamp, b.b_time, b.b_number, b.b_price, b.b_status, b.m_id, b.u_name, b.u_email, b.u_phone, b.r_no, r.r_name from booking_tbl b join room_tbl r on b.r_no = r.r_no where b.b_status = '환불요청' order by b.b_timestamp DESC )
+		)
+		where recNum between (#{page}-1)*10+1 and #{page}*10
+	</select>
+	
+	<!-- 관리자 페이지 예약 환불완료 리스트 카운트 페이징 -->
+	<select id="bookingRefundListCnt" resultType="int">
+		SELECT NVL(count(1), 0) FROM (SELECT list.*, ROWNUM AS RNUM  FROM ( select b_no from booking_tbl where b_status = '환불완료' ) list )
+	</select>
+	
+	<!-- 관리자 페이지 예약 환불완료 리스트 -->
+	<select id="bookingRefundList" parameterType="booking" resultMap="booking">
+		select *
+		from (
+			select 
+				rownum as recNum, 
+				b_no, 
+				b_regdate,  
+				b_date,
+			    b_timestamp,  
+			    b_time, 
+			    b_number, 
+			    b_price, 
+			    b_status,
+			    m_id,
+			    u_name, 
+			    u_email, 
+			    u_phone,
+			    r_no,
+			    r_name
+			from ( select b.b_no, TO_CHAR(b.b_regdate,'YYYY-MM-DD') AS b_regdate, b.b_date, b.b_timestamp, b.b_time, b.b_number, b.b_price, b.b_status, b.m_id, b.u_name, b.u_email, b.u_phone, b.r_no, r.r_name from booking_tbl b join room_tbl r on b.r_no = r.r_no where b.b_status = '환불완료' order by b.b_timestamp DESC )
+		)
+		where recNum between (#{page}-1)*10+1 and #{page}*10
+	</select>
+	
+	<!-- admin 월별 매출액 확인 -->
+	<select id="adminSalesMonthStatisticListSelect" resultType="statistic">
+		select substr(st_month,3) as st_month, sum(b_price) as st_price
+		from(
+		    select to_char(to_date(b_date, 'YYYY-MM-DD'),'YYMM') as st_month, b_price
+		    from booking_tbl
+		    where b_status ='예약완료')
+		where st_month like '21%'
+		group by st_month
+	</select>
+	
+	<!-- admin 월별 예약 횟수 확인 -->
+	<select id="adminBookingNumMonthStatisticListSelect" resultType="statistic">
+		select substr(st_month,3) as st_month, count(*) as st_count
+		from(
+		    select to_char(to_date(b_date, 'YYYY-MM-DD'),'YYMM') as st_month, b_price
+		    from booking_tbl
+		    where b_status ='예약완료')
+		where st_month like '21%'
+		group by st_month
+	</select>
 </mapper>
 

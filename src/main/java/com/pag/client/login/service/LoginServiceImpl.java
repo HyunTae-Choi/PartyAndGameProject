@@ -42,7 +42,9 @@ public class LoginServiceImpl implements LoginService {
 		if (loginResult != null) { 
 			if (loginResult.getM_Availabled() == 0) { // 탈퇴한 회원
 				nulLoginVO.setM_Pw("leave");
-			} else {
+			} else if (loginResult.getM_Availabled() == -1) { // 비활성화된 회원
+					nulLoginVO.setM_Pw("disable");
+			} else if (loginResult.getM_Availabled() == 1){
 				if (pwEncoder.matches(lvo.getM_Pw(), loginResult.getM_Pw())) { // 비밀번호 확인, 로그인 성공
 					loginResult.setM_Pw("success");
 					return loginResult;
@@ -121,7 +123,8 @@ public class LoginServiceImpl implements LoginService {
 						mail.setSubject("[P&G] 임시 비밀번호 발급 안내"); // 이메일 제목
 
 						// 이메일 내용
-						String msg = // 백그라운드
+						String msg = 
+								// 백그라운드
 								"<div style='max-width:740px; margin:0 auto;padding:9px;background:#f8f8f8;border:1px solid #f0f0f0;letter-spacing:-1px'>"
 										+ "<div style='margin:0 auto;background:#fff'>"
 										+ "<div style='text-align:center; padding:15px 15px'>"

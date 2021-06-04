@@ -9,9 +9,18 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @Controller
 public class ReservationController {
 	private Logger log = LoggerFactory.getLogger(ReservationController.class);
-	@RequestMapping(value = "/reservationInfo", method = RequestMethod.POST)
-	public String reservationInfo() {
-		log.info("reservationInfo 호출 성공");
-		return "reservationInfo";
+	
+	// 비회원 예약 페이지 컨트롤러
+	@RequestMapping(value = "/reservationInfo_n", method = RequestMethod.POST)
+	public String reservationInfo_n() {
+		log.info("reservationInfo_n 호출 성공");
+		return "reservationInfo_n";
+	}
+	
+	// 회원 예약 페이지 컨트롤러
+	@RequestMapping(value = "/reservationInfo_m", method = RequestMethod.POST)
+	public String reservationInfo_m() {
+		log.info("reservationInfo_m 호출 성공");
+		return "reservationInfo_m";
 	}
 }

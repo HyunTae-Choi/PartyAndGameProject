@@ -32,8 +32,8 @@
 		<put-attribute name="subheader" value="/WEB-INF/views/template/client/subheader.jsp" />
 		<put-attribute name="subfooter" value="/WEB-INF/views/template/client/subfooter.jsp" />		
 	</definition>
-	<definition name="reservationInfo" template="/WEB-INF/views/reservation/reservationInfo.jsp">
-		<put-attribute name="title" value="예약하기" />
+	<definition name="reservationInfo_n" template="/WEB-INF/views/reservation/reservationInfo_n.jsp">
+		<put-attribute name="title" value="비회원 예약하기" />
 		<put-attribute name="subheader" value="/WEB-INF/views/template/client/subheader.jsp" />
 		<put-attribute name="subfooter" value="/WEB-INF/views/template/client/subfooter.jsp" />		
 	</definition>
@@ -44,6 +44,11 @@
 	</definition>
 	<definition name="nonReservList" template="/WEB-INF/views/reservation/nonReservList.jsp">
 		<put-attribute name="title" value="비회원 예약확인" />
+		<put-attribute name="subheader" value="/WEB-INF/views/template/client/subheader.jsp" />
+		<put-attribute name="subfooter" value="/WEB-INF/views/template/client/subfooter.jsp" />		
+	</definition>
+	<definition name="reservationInfo_m" template="/WEB-INF/views/reservation/reservationInfo_m.jsp">
+		<put-attribute name="title" value="회원 예약하기" />
 		<put-attribute name="subheader" value="/WEB-INF/views/template/client/subheader.jsp" />
 		<put-attribute name="subfooter" value="/WEB-INF/views/template/client/subfooter.jsp" />		
 	</definition>
@@ -59,6 +64,6 @@
 	<!-- Notice - 공지사항 -->
 	<!-- 1 리스트, 2 상세보기, 3 글쓰기폼 -->
 	<definition name="service/notice/*" extends="service">
-		<put-attribute name="content" value="/WEB-INF/views/service/notice/{1}.jsp" />		
+		<put-attribute name="content" value="/WEB-INF/views/notice/{1}.jsp" />		
 	</definition>
 </tiles-definitions>

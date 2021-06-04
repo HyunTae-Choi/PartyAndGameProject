@@ -20,7 +20,9 @@ public class MemberVO extends LoginVO {
 	private String m_Phone; // 회원 전화번호
 	private int m_Mileage; // 회원 마일리지
 	private Timestamp m_Date; // 회원 등록일자
+
 	private String m_Pw_Old; // 회원 기존의 비밀번호
+	private int reservedNum; // 예약횟수
 
 	// getter and setter
 	public int getM_Number() {
@@ -87,13 +89,20 @@ public class MemberVO extends LoginVO {
 		this.m_Pw_Old = m_Pw_Old;
 	}
 
-	@Override
-	public String toString() {
-		return "MemberVO [toString()=" + super.toString() + " + m_Number=" + m_Number + ", m_Birth=" + m_Birth + ", m_Gender=" + m_Gender
-				+ ", m_Email_Marketing=" + m_Email_Marketing + ", m_Phone=" + m_Phone + ", m_Mileage=" + m_Mileage
-				+ ", m_Date=" + m_Date + ", m_Pw_Old=" + m_Pw_Old + "]";
+	public int getReservedNum() {
+		return reservedNum;
 	}
 
-	
+	public void setReservedNum(int reservedNum) {
+		this.reservedNum = reservedNum;
+	}
+
+	@Override
+	public String toString() {
+		return "MemberVO [m_Number=" + m_Number + ", m_Birth=" + m_Birth + ", m_Gender=" + m_Gender
+				+ ", m_Email_Marketing=" + m_Email_Marketing + ", m_Phone=" + m_Phone + ", m_Mileage=" + m_Mileage
+				+ ", m_Date=" + m_Date + ", m_Pw_Old=" + m_Pw_Old + ", reservedNum=" + reservedNum + ", toString()="
+				+ super.toString() + "]";
+	}
 
 }

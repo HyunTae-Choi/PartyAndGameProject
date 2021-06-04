@@ -110,7 +110,7 @@ function loginCheck(){
 	else if (!formBlankCheck($('#m_pw_login'), "비밀번호를")) return;
 	else {
 		$.ajax({
-	 			url : "/login/login",  
+	 			url : "/login",  
 	 			type : "post",                
 	 			data : $("#loginForm").serialize(), // 로그인폼 전체 데이터 전송
 	 			
@@ -122,7 +122,9 @@ function loginCheck(){
 		 			if(resultData == 'fail'){ // 결과값 fail
 		 				alert('아이디 혹은 비밀번호가 잘못되었습니다.');
 		 			} else if (resultData == 'leave'){
-		 				alert('탈퇴한 계정의 아이디입니다.\n이에 관해 문의 사항이 있으시면 사이트 운영자에게 문의해주세요.');
+		 				alert('탈퇴한 계정입니다.\n문의 사항이 있으시면 사이트 운영자에게 문의해주세요.');
+	 				} else if (resultData == 'disable'){
+	 					alert('비활성화된 계정입니다.\n문의 사항이 있으시면 사이트 운영자에게 문의해주세요.');
 		 			} else if (resultData == 'success'){ //결과값 success이면 새로고침
 		 				window.location.reload();
 		 			} 	 				
@@ -337,27 +339,42 @@ function memberLeave(){
 	if (m_Id == null || m_Id == '') { 
 		alert('로그아웃된 상태입니다. 다시 로그인 해주세요.'); return;
 	} else {
-	
 		$.ajax({
-	 			url : "/member/leave",  
-	 			type : "post",                
-	 			data : {"m_Id":m_Id, "m_Pw":m_Pw},
-	 			
-	 			error : function(){  
-	 				alert('시스템에 오류가 발생했습니다.\n다시 시도해주시거나 사이트 운영자에게 문의해주세요.');	 			
-	 			},
-	 			
-	 			success : function(resultData){
-	 				
-	 				if (resultData=='fail') { 
-		 				alert('잘못된 비밀번호를 입력하셨습니다.');
-		 				
-		 			} else if(resultData=='success') { 
-		 				alert('회원 탈퇴가 완료되었습니다.\n지금까지 사랑해주셔서 감사합니다.');
-		 				window.location.href = '/login/logout';
-		 			} 
+			url : "/booking/bookingCheck_Member.do",  
+ 			type : "post",                
+ 			data : {"m_Id":m_Id},
+ 			
+ 			error : function(){  
+ 				alert('시스템에 오류가 발생했습니다.\n다시 시도해주시거나 사이트 운영자에게 문의해주세요.');	 			
+ 			},
+ 			
+ 			success : function(resultData) {
+ 				if (resultData=='Reserved') { 
+	 				alert('예약중인 상품이 있어 회원탈퇴를 못합니다. 예약취소 또는 문의해주세요.');
+	 				return;
+	 			} else {
+	 				$.ajax({
+						url : "/member/leave",  
+			 			type : "post",                
+			 			data : {"m_Id":m_Id, "m_Pw":m_Pw},
+			 			
+			 			error : function(){  
+			 				alert('시스템에 오류가 발생했습니다.\n다시 시도해주시거나 사이트 운영자에게 문의해주세요.');	 			
+			 			},
+			 			
+			 			success : function(resultData){
+			 				if (resultData=='fail') { 
+	 							alert('잘못된 비밀번호를 입력하셨습니다.');
+	 							return;
+	 						} else {
+	 							alert('회원 탈퇴가 완료되었습니다.\n지금까지 사랑해주셔서 감사합니다.');
+				 				window.location.href = '/logout';
+	 						}
+	 					}
+	 				});
 	 			}
-	 		});
+			}
+		});
 	}
 }
 

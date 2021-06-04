@@ -19,6 +19,7 @@ public class RoomsController {
 	@Autowired
 	private RoomsService roomsService;
 	
+	// 파티룸 상품 정보 페이지 컨트롤러
 	@RequestMapping(value = "/rooms", method = RequestMethod.GET)
 	public String roomsInfo(@ModelAttribute RoomsVO rvo, Model model) {
 		log.info("roomsInfo 호출 성공");

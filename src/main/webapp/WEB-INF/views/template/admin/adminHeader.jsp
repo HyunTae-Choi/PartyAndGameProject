@@ -9,7 +9,7 @@
 </div>
 <div id="header_menu">
 	<ul>
-		<li><a href="${contextPath}/admin/manage/booking" id="manage_btn" class="menu_li">MANAGE</a></li>
+		<li><a href="${contextPath}/admin/manage/booking/bookingFullList" id="manage_btn" class="menu_li">MANAGE</a></li>
 		<li><a href="${contextPath}/admin/service/notice" id="service_btn" class="menu_li">SERVICE</a></li>
 	</ul>
 </div>
@@ -17,7 +17,7 @@
 	<ul>
 		<c:choose>
 			<c:when test="${loginSession.m_Id == 'admin'}">	
-				<li><a href="${pageContext.request.contextPath}/login/logout"><button class="member_li" id="logout" >Logout</button></a></li>
+				<li><a href="${pageContext.request.contextPath}/logout"><button class="member_li" id="logout" >Logout</button></a></li>
 				<li><a href="${pageContext.request.contextPath}/admin/manage/booking"><button class="member_li" id="go_adminPage">Admin</button></a></li>		
 			</c:when>
 		</c:choose>

@@ -1,0 +1,29 @@
+/* 페이징 css */
+div#pagination-container{
+	text-align: center;
+}
+
+ul#pagination li{
+	margin: 0;
+}
+
+#pagination>li {
+    display: inline;
+}
+
+#pagination>li>a {
+    display: inline-block;
+    min-width: 30px;
+    height: 36px;
+    color: #999;
+    font-size: 14px;
+    line-height: 34px;
+    text-decoration: none;
+    text-align: center;
+}
+
+#pagination>li#active>a {
+    font-weight: bold;
+  	border-bottom: 1px solid #000;
+  	color: #000;
+}

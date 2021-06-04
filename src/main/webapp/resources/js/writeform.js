@@ -14,6 +14,13 @@ var toolbar = [
 	['insert', [ 'picture', 'link', 'video']],
 	[ 'view', [ 'codeview' ] ] ];
 
+var toolbar_comment = [
+	[ 'fontname', [ 'fontname' ] ],
+	[ 'fontsize', [ 'fontsize' ] ],
+	[ 'style',    [ 'bold', 'italic', 'underline','strikethrough', 'clear' ] ],
+	[ 'color', [ 'forecolor', 'color' ] ],
+	[ 'view', [ 'codeview' ] ] ];
+
 var setting = {
 	height: 500,
 	minHeight: 500,
@@ -23,7 +30,18 @@ var setting = {
     toolbar : toolbar,
     fontSizes : fontSizes,
     fontNames : fontNames,
-    placeholder : '내용을 입력해주세요.' }; 
+    placeholder : '내용을 입력해주세요.' };
+    
+var setting_comment = {
+	height: 100,
+	minHeight: 100,
+	maxHeight: 500,
+    focus : true,
+    lang : 'ko-KR',
+    toolbar : toolbar_comment,
+    fontSizes : fontSizes,
+    fontNames : fontNames,
+    placeholder : '답글을 입력해주세요.' }; 
 /* ===== 써머노트 세팅 end ===== */ 
 
    

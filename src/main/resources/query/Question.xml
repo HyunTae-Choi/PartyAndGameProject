@@ -4,30 +4,92 @@
 
 <mapper namespace="com.pag.client.question.dao.QuestionDao">
 
+	<resultMap type="member" id="member">
+		<result column="m_name" property="m_Name" />
+	</resultMap>
+	
+	<!-- property는 변수명과 일치 -->
+	<resultMap type="question" id="question">
+		<result column="q_no" property="q_No" />
+		<result column="q_title" property="q_Title" />
+		<result column="q_content" property="q_Content" />
+		<result column="q_date" property="q_Date" />
+		<result column="q_reply_check" property="q_Reply_Check" />
+		<result column="m_id" property="m_Id" />
+		<collection property="memberVO" resultMap="member" />
+	</resultMap>
+
 	<!--  반복구문 --> 
 	<sql id="questionCommon">			
-		select q.q_no, q.q_title, q.q_content, q.q_date, q.q_reply_check, m.m_name
+		select q.q_no, q.q_title, q.q_content, q.q_date, q.q_reply_check, m.m_name, q.m_id
 		from question_tbl q, member_tbl m
 		where q.m_id = m.m_id
 	</sql>
+		
+	<!-- 공지사항 게시물 카운트 페이징, id가 admin이면 id검색 안함 -->
+	<select id="questionListCnt" parameterType="string"  resultType="int">
+		SELECT NVL(count(1), 0) FROM 
+		( 	SELECT list.*, ROWNUM AS RNUM 
+			FROM (
+					<include refid="questionCommon"></include>
+					<if test="m_Id != 'admin'"> 
+						and q.m_id = #{m_Id}
+					</if>
+					order by q_No desc
+				) list
+		)
+	</select>
+	
 	
 	<!--  1:1 문의글 리스트 --> 
-	<select id="questionListSelect" parameterType="string" resultType="question">			
+	<select id="questionListSelect" parameterType="question" resultMap="question">			
 		select * 
 		from (
-		    select rownum as recNum, q_no, q_title, q_content, q_date, q_reply_check, m_name
+		    select rownum as recNum, q_no, q_title, q_content, q_date, q_reply_check, m_name, m_id
 		    from (<include refid="questionCommon"/> 
-		    		and q.m_id = #{m_Id}
+		    		<if test="m_Id != 'admin'"> 
+					and q.m_id = #{m_Id}
+					</if>
 		    		order by q_No desc )
 		     )	
+		  where recNum between (#{page}-1)*10+1 and #{page}*10
 	</select>
 	
 	<!--  1:1 문의글 상세보기 --> 
-	<select id="questionDetailSelect" parameterType="question" resultType="question">			
+	<select id="questionDetailSelect" parameterType="question" resultMap="question">			
 		<include refid="questionCommon"/>
-		and q.m_id = #{m_Id} 
+		<if test="m_Id != 'admin'"> 
+		and q.m_id = #{m_Id}
+		</if>
 		and q.q_no = #{q_No}
 	</select>
+	
+	<!--  1:1 문의글 입력 --> 
+	<insert id="questionInsert" parameterType="question">			
+		insert into question_tbl(q_no, q_title, q_content, m_id)
+		values (question_tbl_seq.nextval, #{q_Title}, #{q_Content}, #{m_Id})
+	</insert>
+	
+	<!--  1:1 문의글 수정 --> 
+	<update id="questionUpdate" parameterType="question">			
+		update question_tbl
+		set q_title = #{q_Title}, q_content = #{q_Content}
+		where q_no = #{q_No} and m_id = #{m_Id}
+	</update>
+	
+	<!--  1:1 문의글 답변상태 수정 -->
+	<update id="questionReplyCheckUpdate" parameterType="question">			
+		update question_tbl
+		<choose>
+			<when test="q_Reply_Check == '답변대기'">
+				set q_reply_check = '답변완료'
+			</when>
+			<when test="q_Reply_Check == '답변완료'">
+				set q_reply_check = '답변대기'
+			</when>
+		</choose>
+		where q_no = #{q_No}
+	</update>
 	
 	
 </mapper>

@@ -7,7 +7,7 @@ public class LoginVO {
 	private String m_Pw; // 회원 비밀번호
 	private String m_Email; // 회원 이메일
 	private String m_Name; // 회원 이름
-	private int m_Availabled; // 회원 탈퇴유무, DEFAULT 1, 1- TRUE, 0 - FALSE
+	private int m_Availabled; // 회원 탈퇴유무, DEFAULT 1, 1: 유효, 0: 탈퇴, -1: 비활성화 
 
 	// getter and setter
 	public String getM_Id() {
@@ -53,7 +53,7 @@ public class LoginVO {
 	@Override
 	public String toString() {
 		return "LoginVO [m_Id=" + m_Id + ", m_Pw=" + m_Pw + ", m_Email=" + m_Email + ", m_Name=" + m_Name
-				+ ", m_Availabled=" + m_Availabled + ", m_Result=" + "]";
+				+ ", m_Gender=" + ", m_Availabled=" + m_Availabled + "]";
 	}
 
 }

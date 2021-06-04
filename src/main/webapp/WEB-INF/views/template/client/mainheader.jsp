@@ -19,11 +19,11 @@
 	<ul>
 		<c:choose>
 			<c:when test="${loginSession.m_Id == 'admin'}">
-				<li><a href="${pageContext.request.contextPath}/login/logout"><button class="member_li" id="logout">Logout</button></a></li>
-				<li><a href="${pageContext.request.contextPath}/admin/manage/booking"><button class="member_li" id="go_adminPage">Admin</button></a></li>
+				<li><a href="${pageContext.request.contextPath}/logout"><button class="member_li" id="logout">Logout</button></a></li>
+				<li><a href="${pageContext.request.contextPath}/admin/manage/booking/bookingFullList"><button class="member_li" id="go_adminPage">Admin</button></a></li>
 			</c:when>
 			<c:when test="${loginSession.m_Id != null and loginSession.m_Id != ''}">
-				<li><a href="${pageContext.request.contextPath}/login/logout"><button class="member_li" id="logout">Logout</button></a></li>
+				<li><a href="${pageContext.request.contextPath}/logout"><button class="member_li" id="logout">Logout</button></a></li>
 				<li><a href="${pageContext.request.contextPath}/mypage/myinfo"><button class="member_li" id="go_myPage">MyPage</button></a></li>
 			</c:when>
 			<c:when test="${loginSession.m_Id == null or loginSession.m_Id == ''}">
@@ -43,7 +43,7 @@
 		<div class="modal_body">
 			<form id="loginForm">
 				<div class="input_form">
-					<input class="modal_input" type="text" id="m_id_login" name="m_Id" placeholder="아이디">
+					<input class="modal_input" type="text" id="m_id_login" name="m_Id" placeholder="아이디" autocomplete="off">
 				</div>
 				<div class="input_form">
 					<input class="modal_input" type="password" id="m_pw_login" name="m_Pw" placeholder="비밀번호" autocomplete="off">
@@ -282,15 +282,15 @@
 
 				<!-- 아이디 / 비밀번호 -->
 				<div class="form-group mb-3"> 아이디 / 비밀번호 <strong class="emphasis">(필수)</strong>
-					<input class="modal_input mb-1" type="text" id="m_id_register" name="m_Id" placeholder="아이디, 영문자/숫자 (8-20자)	">
-					<input class="modal_input mb-1" type="password" id="m_pw_register" name="m_Pw" placeholder="비밀번호, 영문자/숫자/특수문자 (8-20자) ">
-					<input class="modal_input" type="password" id="m_pw_check_register" placeholder="비밀번호 확인">				
+					<input class="modal_input mb-1" type="text" id="m_id_register" name="m_Id" placeholder="아이디, 영문자/숫자 (8-20자)	" autocomplete='off'>
+					<input class="modal_input mb-1" type="password" id="m_pw_register" name="m_Pw" placeholder="비밀번호, 영문자/숫자/특수문자 (8-20자) " autocomplete='off'>
+					<input class="modal_input" type="password" id="m_pw_check_register" placeholder="비밀번호 확인" autocomplete='off'>				
 				</div>
 
 				<!-- 이름 -->
 				<div class="form-group mb-3">
 					<label class="form-label" style="width: 100%"> 이름 <strong class="emphasis">(필수)</strong>
-						<input class="modal_input mb-2" type="text" id="m_name_register" name="m_Name" placeholder="이름">
+						<input class="modal_input mb-2" type="text" id="m_name_register" name="m_Name" placeholder="이름" autocomplete='off'>
 					</label>
 				</div>
 
@@ -309,14 +309,14 @@
 				<!-- 연락처 -->
 				<div class="form-group mb-3">
 					<label class="form-label" style="width: 100%"> 핸드폰 번호 <strong class="emphasis">(필수)</strong>
-						<input class="modal_input" type="tel" id="m_phone_register" name="m_Phone" placeholder="핸드폰 번호">
+						<input class="modal_input" type="tel" id="m_phone_register" name="m_Phone" placeholder="핸드폰 번호" autocomplete='off'>
 					</label>
 				</div>
 
 				<!-- 이메일 -->
 				<div class="form-group mb-3">
 					<label class="form-label" style="width: 100%"> E-mail <strong class="emphasis">(필수)</strong>
-						<input class="modal_input" type="email" id="m_email_register" name="m_Email" placeholder="E-mail">
+						<input class="modal_input" type="email" id="m_email_register" name="m_Email" placeholder="E-mail" autocomplete='off'>
 						<input class="modal_input" type="hidden" value='0' id="m_email_margetring_register" name="m_Email_Marketing">
 					</label>
 				</div>
@@ -352,13 +352,13 @@
 				<!-- 아이디 찾기 (이메일) -->
 				<div class="form-group findid mb-2"> 
 					<label class="form-label" style="width: 100%"> 이메일로 아이디 찾기
-						<input class="modal_input" type="email" id="m_email_find" name="m_Email" placeholder="E-mail">
+						<input class="modal_input" type="email" id="m_email_find" name="m_Email" placeholder="E-mail" autocomplete='off'>
 					</label>
 				</div>	
 				<!-- 비밀번호 찾기 (이메일) -->
 				<div class="form-group findpw mb-2 none" > 
 					<label class="form-label" style="width: 100%"> 아이디로 비밀번호 찾기
-						<input class="modal_input" type="text" id="m_id_find" name="m_Id" placeholder="가입한 아이디">
+						<input class="modal_input" type="text" id="m_id_find" name="m_Id" placeholder="가입한 아이디" autocomplete='off'>
 					</label>	
 				</div>		
 				<div class="modal_btn">

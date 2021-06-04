@@ -30,9 +30,10 @@
 <link rel="stylesheet" type="text/css" href="/resources/css/mypage_questiondiv.css">
 <link rel="stylesheet" type="text/css" href="/resources/css/footer.css">
 <link rel="stylesheet" type="text/css" href="/resources/css/log.css">
-
-<link rel="stylesheet" type="text/css" href="/resources/css/service_noticediv.css">
+<link rel="stylesheet" type="text/css" href="/resources/css/adminpage_memberdiv.css">
+<link rel="stylesheet" type="text/css" href="/resources/css/adminpage_statisticdiv.css">
 <link rel="stylesheet" type="text/css" href="/resources/css/common_list_writeform.css">
+<link rel="stylesheet" type="text/css" href="/resources/css/paging.css">
 
 <!-- 글쓰기 에디터 css-->
 <link rel="stylesheet" href="/resources/summernote/summernote-lite.css">
@@ -46,7 +47,8 @@
 <script src="/resources/js/writeform.js"></script>
 
 <script src="/resources/js/mypage.js"></script>
-<script src="/resources/js/modal.js"></script>
+	<script src="/resources/js/modal.js"></script>
+	<script src="/resources/js/admin_member.js"></script>
 
 </head>
 
@@ -61,8 +63,7 @@
 			<div id="container">
 				<div id="side_menu">
 					<ul>
-						<li><a href="${contextPath}/admin/manage/booking"><button id="admin_bookinglist_btn">예약 리스트</button></a></li>
-						<li><a href="${contextPath}/admin/manage/bookingcancel"><button id="admin_bookingcancel_btn">예약 취소,<br>환불 리스트</button></a></li>
+						<li><a href="${contextPath}/admin/manage/booking/bookingFullList"><button id="admin_bookinglist_btn">예약 리스트</button></a></li>
 						<li><a href="${contextPath}/admin/manage/member"><button id="admin_member_manage_btn">회원 관리</button></a></li>
 						<li><a href="${contextPath}/admin/manage/room"><button id="admin_partyroom_manage_btn">파티룸 관리</button></a></li>
 						<li><a href="${contextPath}/admin/manage/statistic"><button id="admin_statistic_btn">매출 분석</button></a></li>

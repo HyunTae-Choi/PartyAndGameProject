@@ -37,11 +37,6 @@
 	<script src="/resources/js/modal.js"></script>
 	<script>
 		$(function(){
-			function enterkey() { 
-				if(window.event.keyCode == 13) {
-					$("#confirm_btn").click();
-				}
-			}
 			$("#confirm_btn").click(function() {
 				if($("#u_name").val() == null || $("#u_name").val() == "") {
 					alert("이름을 입력해주세요.");
@@ -69,12 +64,12 @@
 				<div id="booking_table_div">
 					<form method="post" action="/booking/nonReservList" id="reserv_confirm_form" name="reserv_confirm_form">
 						<label>이름 : </label>
-						<input type="text" name="u_name" id="u_name" value="">
+						<input type="text" name="u_name" id="u_name" value="" autocomplete='off' size="30">
 						<label>　이메일 : </label>
-						<input type="text" name="u_email" id="u_email" value="">
+						<input type="text" name="u_email" id="u_email" value="" autocomplete='off' size="30">
 						<label>　전화번호 : </label>
-						<input type="text" name="u_phone" id="u_phone" value="">　
-						<input type="button" name="confirm_btn" id="confirm_btn" value="확인" style="padding: 0 5px;" onkeyup="enterkey();">
+						<input type="text" name="u_phone" id="u_phone" value="" autocomplete='off' size="30">　
+						<input type="button" name="confirm_btn" id="confirm_btn" value="확인" style="padding: 0 5px;">
 					</form>
 					<p style="margin: 15px 0 0 116px;">파티룸 예약 신청할 때 작성한 이름 이메일 전화번호로 검색하세요.</p>
 				</div>

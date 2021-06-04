@@ -922,7 +922,7 @@
 							<input type="hidden" name="totalprice" id="totalprice" value="">
 						</div>
 					</div>
-					<form action="reservationInfo" method="post" name="reservation_form" id="reservation_form">
+					<form method="post" name="reservation_form" id="reservation_form">
 						<input type="hidden" name="reserv_no" id="reserv_no" value=""> <!-- 100121052510~20 --><!-- 100121052530~40 -->
 						<input type="hidden" name="reserv_roomNum" id="reserv_roomNum" value="">
 						<input type="hidden" name="reserv_roomName" id="reserv_roomName" value="">
@@ -934,7 +934,9 @@
 						<input type="hidden" name="reserv_totalPeople" id="reserv_totalPeople" value="">
 						<input type="hidden" name="reserv_basePrice" id="reserv_basePrice" value="">
 						<input type="hidden" name="reserv_addPrice" id="reserv_addPrice" value="">
-						<input type="hidden" name="reserv_totalPrice" id="reserv_totalPrice" value="">
+						<input type="hidden" name="reserv_memberSale" id="reserv_memberSale" value="">
+						<input type="hidden" name="reserv_totalPrice_m" id="reserv_totalPrice_m" value="">
+						<input type="hidden" name="reserv_totalPrice_n" id="reserv_totalPrice_n" value="">
 					</form>
 					<div id="reservation_button_space" class="clearfix">
 						<div id="cancel_button" style="margin-left: 10px;">
@@ -976,7 +978,9 @@
 											$("#reserv_totalPeople").val((Number(${r_info.r_min_num}) + Number($("#addPeople option:selected").val())));
 											$("#reserv_basePrice").val($("#base_price").text());
 											$("#reserv_addPrice").val($("#add_price").text());
-											$("#reserv_totalPrice").val($("#totalprice").val());
+											$("#reserv_memberSale").val($("#totalprice").val() * 0.05);
+											$("#reserv_totalPrice_m").val($("#totalprice").val() * 0.95);
+											$("#reserv_totalPrice_n").val($("#totalprice").val());
 											$('#reserv_form_modal').attr("style", "display:block");	
 										}
 									}
@@ -986,7 +990,18 @@
 									location.href = "/#rooms";
 								}
 								
+								$("#member_reserv_btn").click(function() {
+									if(${loginSession.m_Id == null || loginSession.m_Id == ''}) {
+										$('#reserv_form_modal').attr("style", "display:none");	
+										$("#open_login_modal").click();
+									} else {
+										$("#reservation_form").attr("action", "reservationInfo_m");
+										$("#reservation_form").submit();
+									}
+								});
+								
 								$("#non_member_reserv_btn").click(function() {
+									$("#reservation_form").attr("action", "reservationInfo_n");
 									$("#reservation_form").submit();
 								});
 							</script>

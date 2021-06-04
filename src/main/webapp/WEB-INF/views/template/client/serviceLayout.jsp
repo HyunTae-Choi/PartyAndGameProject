@@ -29,6 +29,7 @@
 <link rel="stylesheet" type="text/css" href="/resources/css/log.css">
 <link rel="stylesheet" type="text/css" href="/resources/css/service_noticediv.css">
 <link rel="stylesheet" type="text/css" href="/resources/css/common_list_writeform.css">
+<link rel="stylesheet" type="text/css" href="/resources/css/paging.css">
 
 <!-- 글쓰기 에디터 css-->
 <link rel="stylesheet" href="/resources/summernote/summernote-lite.css">

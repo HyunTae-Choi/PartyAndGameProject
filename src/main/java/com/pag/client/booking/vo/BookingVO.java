@@ -1,8 +1,9 @@
 package com.pag.client.booking.vo;
 
 import com.pag.client.rooms.vo.RoomsVO;
+import com.pag.common.vo.PageVO;
 
-public class BookingVO {
+public class BookingVO extends PageVO {
 	private long b_no; // 예약 번호
 	private String b_regdate; // 예약 등록일
 	private String b_date; // 예약 예정일

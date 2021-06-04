@@ -10,12 +10,20 @@
 		<put-attribute name="subfooter" value="/WEB-INF/views/template/client/subfooter.jsp" />
 	</definition>
 	
-	<!-- adminPage Manage - 예약리스트 (임시) -->
-	<definition name="admin/manage/booking" extends="adminManageLayout">
-		<put-attribute name="content" value="/WEB-INF/views/mypage/booking/bookingList.jsp" />	
+	<!-- adminPage Manage - 예약리스트 -->
+	<definition name="admin/manage/booking/*" extends="adminManageLayout">
+		<put-attribute name="content" value="/WEB-INF/views/adminpage/booking/{1}.jsp" />
 	</definition>
 	
+	<!-- adminPage Manage - 회원관리 -->
+	<definition name="admin/manage/member" extends="adminManageLayout">
+		<put-attribute name="content" value="/WEB-INF/views/adminpage/member/memberList.jsp" />	
+	</definition>
 	
+	<!-- adminPage Manage - 통계-->
+	<definition name="admin/manage/statistic" extends="adminManageLayout">
+		<put-attribute name="content" value="/WEB-INF/views/adminpage/statistic/statisticView.jsp" />	
+	</definition>
 	
 	<!-- adminPage, Service 섹션 레이아웃 -->
 	<definition name="adminServiceLayout" template="/WEB-INF/views/template/admin/adminpageServiceLayout.jsp">
@@ -28,8 +36,18 @@
 	<!-- adminPage Service - 공지사항 -->
 	<!-- 1 리스트, 2 상세보기, 3 글쓰기폼 -->
 	<definition name="admin/service/notice/*" extends="adminServiceLayout">		
-		<put-attribute name="content" value="/WEB-INF/views/service/notice/{1}.jsp" />		
-	</definition>	
+		<put-attribute name="content" value="/WEB-INF/views/notice/{1}.jsp" />		
+	</definition>
+	
+	<!-- adminPage Service - 1:1문의사항 -->
+	<!-- 1 상세보기, 2 글쓰기-->
+	<definition name="admin/service/question/*" extends="adminServiceLayout">		
+		<put-attribute name="content" value="/WEB-INF/views/mypage/question/{1}.jsp" />		
+	</definition>
+	<!-- 3 리스트 -->
+	<definition name="admin/service/question/questionList" extends="adminServiceLayout">		
+		<put-attribute name="content" value="/WEB-INF/views/adminpage/question/questionList.jsp" />		
+	</definition>
 	
 	
 </tiles-definitions>

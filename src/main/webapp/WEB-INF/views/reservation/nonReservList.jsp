@@ -150,11 +150,11 @@
 															<button class="reserv_cancel_btn" style="color:red;">예약취소</button>
 														</td>
 													</c:when>
-													<c:when test="${nonReservList.b_status eq '취소대기'}">
+													<c:when test="${nonReservList.b_status eq '환불요청'}">
 														<td>
 															${nonReservList.b_status}
 															<br>
-															<button class="reserv_return_btn" style="color:red;">신청취소</button>
+															<button class="reserv_return_btn" style="color:red;">요청취소</button>
 														</td>
 													</c:when>
 													<c:otherwise>
@@ -167,7 +167,7 @@
 								</c:when>
 								<c:otherwise>
 									<tr>
-										<td colspan="8">예약리스트가 없습니다. 입금여부 또는 이름 이메일 전화번호가 정확한지 확인해주세요.</td>
+										<td colspan="8">예약리스트가 없습니다. 이름 이메일 전화번호가 정확한지 확인해주세요.</td>
 									</tr>
 								</c:otherwise>
 							</c:choose>

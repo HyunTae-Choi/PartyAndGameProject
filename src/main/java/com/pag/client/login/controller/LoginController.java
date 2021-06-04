@@ -19,7 +19,6 @@ import com.pag.client.login.service.LoginService;
 import com.pag.client.login.vo.LoginVO;
 
 @Controller
-@RequestMapping("login")
 public class LoginController {
 	private Logger log = LoggerFactory.getLogger(LoginController.class);
 
@@ -64,7 +63,7 @@ public class LoginController {
 
 	// ID 찾기, ajax로 처리
 	@ResponseBody
-	@RequestMapping(value = "/findid", method = RequestMethod.POST)
+	@RequestMapping(value = "login/findid", method = RequestMethod.POST)
 	public String searchId(@RequestParam("m_Email") String m_Email) {
 		log.info("맵핑 login/findid, post방식으로 searchId method 호출");
 
@@ -74,7 +73,7 @@ public class LoginController {
 
 	// pw찾기, ajax로 처리
 	@ResponseBody
-	@RequestMapping(value = "/findpw", method = RequestMethod.POST)
+	@RequestMapping(value = "login/findpw", method = RequestMethod.POST)
 	public String searchPw(@ModelAttribute LoginVO lvo) {
 		log.info("맵핑 login/findpw, post방식으로 searchPw method 호출");
 		

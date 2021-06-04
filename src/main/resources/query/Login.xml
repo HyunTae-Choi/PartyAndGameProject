@@ -6,7 +6,7 @@
 	
 	<!--  로그인 처리 쿼리 --> 
 	<select id="loginSelect" parameterType="string" resultType="login">	
-		select m_id, m_pw, m_email, m_name, m_availabled
+		select m_id, m_pw, m_email, m_name, m_phone, m_mileage, m_availabled
 		from member_tbl
 		where m_id = #{m_Id}
 	</select>

@@ -30,8 +30,9 @@
 	<link rel="stylesheet" type="text/css" href="/resources/css/footer.css">
 	<link rel="stylesheet" type="text/css" href="/resources/css/log.css">
 	
-	<link rel="stylesheet" type="text/css" href="/resources/css/service_noticediv.css">
+	<link rel="stylesheet" type="text/css" href="/resources/css/adminpage_noticediv.css">
 	<link rel="stylesheet" type="text/css" href="/resources/css/common_list_writeform.css">
+	<link rel="stylesheet" type="text/css" href="/resources/css/paging.css">
 	
 	<!-- 글쓰기 에디터 css-->
 	<link rel="stylesheet" href="/resources/summernote/summernote-lite.css">
@@ -47,6 +48,8 @@
 	<script src="/resources/js/mypage.js"></script>
 	<script src="/resources/js/modal.js"></script>
 	<script src="/resources/js/notice.js"></script>
+	<script src="/resources/js/question.js"></script>
+	
 </head>
 
 <body>
@@ -62,7 +65,6 @@
 					<ul>
 						<li><a href="${contextPath}/admin/service/notice"><button id="admin_notice_btn">공지사항</button></a></li>
 						<li><a href="${contextPath}/admin/service/question"><button id="admin_question_btn">1:1 문의</button></a></li>
-						<li><a href="${contextPath}/admin/service/fnq"><button id="admin_fnq_btn">자주 묻는 질문</button></a></li>
 					</ul>
 				</div>
 	

@@ -2,9 +2,8 @@ div.admin_notice_common_div{
 	max-width: 1080px;
     min-width: 480px;
     min-height: 600px;
-    margin-left: 70px;
-    margin-right: 70px;
-    margin-top: 50px;
+    margin-top: 80px;
+    margin-left: 60px;
 }
 
 /* 공동 사용 */
@@ -52,37 +51,6 @@ div.notice_common_div{
 	max-width: 100%;
 	height: 50px;
 	line-height: 50px;
-}
-
-
-/* 페이징 css */
-div#pagination-container{
-	text-align: center;
-}
-
-ul#pagination li{
-	margin: 0;
-}
-
-#pagination>li {
-    display: inline;
-}
-
-#pagination>li>a {
-    display: inline-block;
-    min-width: 30px;
-    height: 36px;
-    color: #999;
-    font-size: 14px;
-    line-height: 34px;
-    text-decoration: none;
-    text-align: center;
-}
-
-#pagination>li#active>a {
-    font-weight: bold;
-  	border-bottom: 1px solid #000;
-  	color: #000;
 }
 
 
