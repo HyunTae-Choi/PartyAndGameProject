@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.pag.client.member.dao.MemberDao;
 import com.pag.client.member.vo.MemberVO;
+import com.pag.client.review.vo.ReviewVO;
 import com.pag.common.vo.PageVO;
 import com.pag.common.vo.StatisticVO;
 
@@ -39,14 +40,19 @@ public class MemberServiceImpl implements MemberService {
 		return memberDao.memberInsert(mvo);
 	}
 
-	// 회원 정보 변경 - 비즈니스 로직
+	// 회원 비밀번호 변경 - 비즈니스 로직
 	@Override
-	public int memberUpdate(MemberVO mvo) { 
-
+	public int memberPwUpdate(MemberVO mvo) {
 		// 비밀번호 암호화
 		String encodedPw = pwEncoder.encode(mvo.getM_Pw());
 		mvo.setM_Pw(encodedPw);
-		
+
+		return memberDao.memberPwUpdate(mvo);
+	}
+	
+	// 회원 정보 변경 - 비즈니스 로직
+	@Override
+	public int memberUpdate(MemberVO mvo) { 		
 		return memberDao.memberUpdate(mvo);
 	}
 
@@ -164,5 +170,12 @@ public class MemberServiceImpl implements MemberService {
 	public List<StatisticVO> adminMemberJoinMonthStatisticListSelect() {
 		return memberDao.adminMemberJoinMonthStatisticListSelect();
 	}
+
+	// 리뷰 작성 후, 마일리지 지급
+	@Override
+	public int memberReviewMileageUpdate(ReviewVO rvo) {
+		return memberDao.memberReviewMileageUpdate(rvo);
+	}
+
 
 }

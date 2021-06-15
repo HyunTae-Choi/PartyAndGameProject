@@ -19,7 +19,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;500;700&display=swap" rel="stylesheet">
-<link href="image/party_icon.gif" rel="shortcut icon" type="image/x-icon">
+<link href="/resources/image/party_icon.gif" rel="shortcut icon" type="image/x-icon">
 <link rel="stylesheet" type="text/css" href="/resources/css/reset.css">
 <link rel="stylesheet" type="text/css" href="/resources/css/subheader.css">
 
@@ -31,6 +31,7 @@
 <link rel="stylesheet" type="text/css" href="/resources/css/footer.css">
 <link rel="stylesheet" type="text/css" href="/resources/css/log.css">
 <link rel="stylesheet" type="text/css" href="/resources/css/adminpage_memberdiv.css">
+<link rel="stylesheet" type="text/css" href="/resources/css/adminpage_partyroomdiv.css">
 <link rel="stylesheet" type="text/css" href="/resources/css/adminpage_statisticdiv.css">
 <link rel="stylesheet" type="text/css" href="/resources/css/common_list_writeform.css">
 <link rel="stylesheet" type="text/css" href="/resources/css/paging.css">
@@ -47,8 +48,8 @@
 <script src="/resources/js/writeform.js"></script>
 
 <script src="/resources/js/mypage.js"></script>
-	<script src="/resources/js/modal.js"></script>
-	<script src="/resources/js/admin_member.js"></script>
+<script src="/resources/js/modal.js"></script>
+<script src="/resources/js/admin_member.js"></script>
 
 </head>
 
@@ -65,8 +66,8 @@
 					<ul>
 						<li><a href="${contextPath}/admin/manage/booking/bookingFullList"><button id="admin_bookinglist_btn">예약 리스트</button></a></li>
 						<li><a href="${contextPath}/admin/manage/member"><button id="admin_member_manage_btn">회원 관리</button></a></li>
-						<li><a href="${contextPath}/admin/manage/room"><button id="admin_partyroom_manage_btn">파티룸 관리</button></a></li>
-						<li><a href="${contextPath}/admin/manage/statistic"><button id="admin_statistic_btn">매출 분석</button></a></li>
+						<li><a href="${contextPath}/admin/manage/partyroomList"><button id="admin_partyroom_manage_btn">파티룸 관리</button></a></li>
+						<li><a href="${contextPath}/admin/manage/statistic"><button id="admin_statistic_btn">통계 분석</button></a></li>
 					</ul>
 				</div>
 				

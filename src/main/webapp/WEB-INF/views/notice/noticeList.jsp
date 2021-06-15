@@ -24,7 +24,7 @@
 				<c:forEach var="notice" items="${noticeList}" varStatus="status"><tr>
 						<td>${notice.n_No}</td>
 						<td class="notice_title"><a href="${contextPath}/notice/view?notice_no=${notice.n_No}">${notice.n_Title}</a></td>
-						<td><fmt:formatDate value="${notice.n_Date}"/></td>
+						<td><fmt:formatDate value="${notice.n_Date}" pattern="yyyy-MM-dd"/></td>
 						<td>${notice.n_Hit}</td>
 					</tr>
 				</c:forEach>
@@ -33,8 +33,8 @@
 				<c:forEach var="notice" items="${noticeList}" varStatus="status"><tr>
 						<td>${notice.n_No}</td>
 						<td class="notice_title"><a href="${contextPath}/admin/service/notice/view?notice_no=${notice.n_No}">${notice.n_Title}</a></td>
-						<td><fmt:formatDate value="${notice.n_Date}"/></td>
-						<td>${notice.n_Hit}</td>
+						<td style="color: black;"><fmt:formatDate value="${notice.n_Date}" pattern="yyyy-MM-dd"/></td>
+						<td style="color: black;">${notice.n_Hit}</td>
 					</tr>
 				</c:forEach>
 			</c:when>
@@ -67,7 +67,7 @@
 						
 						<%-- section이 2 이상일 경우, pre표시 --%>
 						<c:if test="${pvo.section >= 2 && pageNum == (pvo.section*10-9)}">
-							<li><a href="${contextPath}/notice?page=${(pvo.section-1)*10}"><</a></li>
+							<li><a href="${contextPath}/notice?page=${(pvo.section-1)*10}">&lt;</a></li>
 						</c:if>
 													
 						<c:choose>
@@ -84,7 +84,7 @@
 				
 						<%-- next표시 --%>
 						<c:if test="${pvo.maxSection > pvo.section && pageNum == pvo.section*10}">
-							<li><a href="${contextPath}/notice?page=${pvo.section*10+1}">></a>
+							<li><a href="${contextPath}/notice?page=${pvo.section*10+1}">&gt;</a>
 						</c:if>					
 					</c:forEach>	
 				</ul>				
@@ -101,7 +101,7 @@
 						
 						<%-- section이 2 이상일 경우, pre표시 --%>
 						<c:if test="${pvo.section >= 2 && pageNum == (pvo.section*10-9)}">
-							<li><a href="${contextPath}/admin/service/notice?page=${(pvo.section-1)*10}"><</a></li>
+							<li><a href="${contextPath}/admin/service/notice?page=${(pvo.section-1)*10}">&lt;</a></li>
 						</c:if>
 													
 						<c:choose>
@@ -118,7 +118,7 @@
 				
 						<%-- next표시 --%>
 						<c:if test="${pvo.maxSection > pvo.section && pageNum == pvo.section*10}">
-							<li><a href="${contextPath}/admin/service/notice?page=${pvo.section*10+1}">></a>
+							<li><a href="${contextPath}/admin/service/notice?page=${pvo.section*10+1}">&gt;</a>
 						</c:if>					
 					</c:forEach>	
 				</ul>				

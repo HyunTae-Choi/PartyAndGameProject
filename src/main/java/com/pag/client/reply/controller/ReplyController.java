@@ -28,6 +28,8 @@ public class ReplyController {
 	public ModelAndView questionReplyInsert(@ModelAttribute ReplyVO rvo, HttpSession session, HttpServletRequest request) {
 		log.info("매핑 '/mypage/question_reply/insert', ReplyController 호출, 답글입력");
 		
+		System.out.println(rvo);
+		
 		// 세션에 저장된 loginSession 호출, 
 		LoginVO loginSession = (LoginVO)session.getAttribute("loginSession");	
 		if (loginSession == null) { // loginSession이 null이면 메인화면으로 redirect 

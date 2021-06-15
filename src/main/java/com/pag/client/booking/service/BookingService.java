@@ -41,4 +41,6 @@ public interface BookingService {
 	
 	public List<StatisticVO> adminSalesMonthStatisticListSelect();
 	public List<StatisticVO> adminBookingNumMonthStatisticListSelect();
+	
+	public int roomsBookingCheck(int r_no); // 파티룸 예약자 확인
 }

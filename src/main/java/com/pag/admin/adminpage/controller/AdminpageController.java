@@ -1,6 +1,7 @@
 package com.pag.admin.adminpage.controller;
 
 
+import java.io.IOException;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -23,6 +24,9 @@ import com.pag.client.member.vo.MemberVO;
 import com.pag.client.notice.service.NoticeService;
 import com.pag.client.question.service.QuestionService;
 import com.pag.client.question.vo.QuestionVO;
+import com.pag.client.rooms.service.RoomsService;
+import com.pag.client.rooms.vo.RoomsVO;
+import com.pag.common.file.FileUploadUtil;
 import com.pag.common.util.Util;
 import com.pag.common.vo.PageVO;
 import com.pag.common.vo.StatisticVO;
@@ -38,11 +42,15 @@ public class AdminpageController {
 	private BookingService bookingService;
 	
 	@Autowired
+	private RoomsService roomsService;
+	
+	@Autowired
 	QuestionService questionService;
 	
 	@Autowired
 	MemberService memberService;
 	
+	/* ============= admin Manage 예약리스트 파트 ============= */
 	// 관리자 예약관리 페이지에서 전체 예약 리스트 조회
 	@RequestMapping(value = "/admin/manage/booking/bookingFullList")
 	public ModelAndView adminManage(HttpSession session, HttpServletRequest request) {
@@ -68,8 +76,6 @@ public class AdminpageController {
 		// 페이징과 리스트 add
 		mav.addObject("bookingFullList", bookingFullList);
 		mav.addObject("pageVO", pageVO);
-		
-		mav.addObject("changeAdminPage", "admin_"); // view.jsp를 adminPage용으로 바꾸기
 		
 		// bookingFullList 출력
 		mav.setViewName("admin/manage/booking/bookingFullList");	
@@ -102,8 +108,6 @@ public class AdminpageController {
 		mav.addObject("bookingWaitingList", bookingWaitingList);
 		mav.addObject("pageVO", pageVO);
 		
-		mav.addObject("changeAdminPage", "admin_"); // view.jsp를 adminPage용으로 바꾸기
-		
 		// bookingWaitingList 출력
 		mav.setViewName("admin/manage/booking/bookingWaitingList");		
 		return mav;
@@ -134,8 +138,6 @@ public class AdminpageController {
 		mav.addObject("bookingReservList", bookingReservList);
 		mav.addObject("pageVO", pageVO);
 		
-		mav.addObject("changeAdminPage", "admin_"); // view.jsp를 adminPage용으로 바꾸기
-		
 		// bookingReservList 출력
 		mav.setViewName("admin/manage/booking/bookingReservList");		
 		return mav;
@@ -164,8 +166,6 @@ public class AdminpageController {
 		
 		mav.addObject("bookingReservDayList", bookingReservDayList);
 		mav.addObject("pageVO", pageVO);
-		
-		mav.addObject("changeAdminPage", "admin_"); // view.jsp를 adminPage용으로 바꾸기
 		
 		// bookingReservDayList 출력
 		mav.setViewName("admin/manage/booking/bookingReservDayList");		
@@ -197,8 +197,6 @@ public class AdminpageController {
 		mav.addObject("bookingRefundWaitingList", bookingRefundWaitingList);
 		mav.addObject("pageVO", pageVO);
 		
-		mav.addObject("changeAdminPage", "admin_"); // view.jsp를 adminPage용으로 바꾸기
-		
 		// bookingRefundWaitingList 출력
 		mav.setViewName("admin/manage/booking/bookingRefundWaitingList");		
 		return mav;
@@ -228,8 +226,6 @@ public class AdminpageController {
 		// 저장
 		mav.addObject("bookingRefundList", bookingRefundList);
 		mav.addObject("pageVO", pageVO);
-		
-		mav.addObject("changeAdminPage", "admin_"); // view.jsp를 adminPage용으로 바꾸기
 		
 		// bookingRefundList 출력
 		mav.setViewName("admin/manage/booking/bookingRefundList");		
@@ -306,6 +302,308 @@ public class AdminpageController {
 		/* === 회원 복구 end === */
 		
 		return Integer.toString(result);
+	}
+	
+	/* ============= admin Manage 파티룸관리 파트 ============= */
+	/* ====== admin 파티룸 리스트 출력 컨트롤러 ====== */
+	@RequestMapping(value = "/admin/manage/partyroomList")
+	public ModelAndView adminManagePartyRoomList(HttpSession session, HttpServletRequest request) {
+		log.info("맵핑 /admin/manage/partyroomList, adminManagePartyRoomList 호출");
+
+		ModelAndView mav = new ModelAndView();
+		
+		// 세션이 null이거나 session의 id가 admin이 아니면 adminpage로 이동 불가
+		if(Util.checkAdminSession(session)) {
+			mav.setViewName("redirect:/");
+			return mav;
+		}
+		RoomsVO roomsVO = new RoomsVO();
+		List<RoomsVO> partyroomList = roomsService.partyroomList(roomsVO);
+		
+		// 저장
+		mav.addObject("partyroomList", partyroomList);
+		
+		// adminManagePartyRoom 출력
+		mav.setViewName("admin/manage/partyroom/partyroomList");	
+		
+		return mav;
+	}
+	
+	/* ====== admin 파티룸 추가 페이지 출력 컨트롤러 ====== */
+	@RequestMapping(value = "/admin/manage/partyroomInsertPage")
+	public ModelAndView adminManagePartyRoomInsertpage(HttpSession session, HttpServletRequest request) {
+		log.info("맵핑 /admin/manage/partyroomInsertPage, adminManagePartyRoomInsertpage 호출");
+
+		ModelAndView mav = new ModelAndView();
+		
+		// 세션이 null이거나 session의 id가 admin이 아니면 adminpage로 이동 불가
+		if(Util.checkAdminSession(session)) {
+			mav.setViewName("redirect:/");
+			return mav;
+		}
+		
+		// adminManagePartyRoom 출력
+		mav.setViewName("admin/manage/partyroom/partyroomInsertPage");
+		
+		return mav;
+	}
+	
+	/* ====== admin 파티룸 추가 컨트롤러 ====== */
+	@ResponseBody
+	@RequestMapping(value="/admin/manage/partyroomInsertAction", method=RequestMethod.POST, produces = "text/plain; charset=UTF-8")
+	public String adminManagePartyRoomInsertAction(@ModelAttribute RoomsVO roomsVO, HttpServletRequest request) throws IllegalStateException, IOException {
+		log.info("맵핑 /admin/manage/partyroomInsertAction, adminManagePartyRoomInsertAction 호출");
+		
+		int result = 0;
+		String resultString = "";
+		
+		if(roomsVO.getThumbnail() != null) {
+			String thumbnail = FileUploadUtil.fileUpload(roomsVO.getThumbnail(), request, Integer.toString(roomsVO.getR_no()));
+			roomsVO.setR_thumbnail(thumbnail);
+		}
+		if(roomsVO.getIntroimg1() != null) {
+			String introimg1 = FileUploadUtil.fileUpload(roomsVO.getIntroimg1(), request, Integer.toString(roomsVO.getR_no()));
+			roomsVO.setR_introimg1(introimg1);
+		}
+		if(roomsVO.getIntroimg2() != null) {
+			String introimg2 = FileUploadUtil.fileUpload(roomsVO.getIntroimg2(), request, Integer.toString(roomsVO.getR_no()));
+			roomsVO.setR_introimg2(introimg2);
+		}
+		if(roomsVO.getIntroimg3() != null) {
+			String introimg3 = FileUploadUtil.fileUpload(roomsVO.getIntroimg3(), request, Integer.toString(roomsVO.getR_no()));
+			roomsVO.setR_introimg3(introimg3);
+		}
+		if(roomsVO.getIntroimg4() != null) {
+			String introimg4 = FileUploadUtil.fileUpload(roomsVO.getIntroimg4(), request, Integer.toString(roomsVO.getR_no()));
+			roomsVO.setR_introimg4(introimg4);
+		}
+		
+		result = roomsService.roomsInsert(roomsVO);
+		
+		// result값이 1이면 예약 등록 성공
+		if(result == 1) {
+			resultString = "success";
+		} else { // result값이 1이 아니면 예약 등록 실패
+			resultString = "fail";
+		}
+		
+		log.info("result = " + result);
+		
+		return resultString;  
+	}
+	
+	/* ====== admin 파티룸 추가 시 파티룸 번호 추가가능여부 확인 컨트롤러 ====== */
+	@ResponseBody
+	@RequestMapping(value="/admin/manage/partyroomNumberCheck", method=RequestMethod.POST, produces = "text/plain; charset=UTF-8")
+	public String adminManagePartyRoomNumberCheck(@ModelAttribute RoomsVO roomsVO, HttpServletRequest request) {
+		log.info("맵핑 /admin/manage/partyroomNumberCheck, adminManagePartyRoomNumberCheck 호출");
+		
+		int result = 0;
+		String resultString = "";
+		
+		result = roomsService.roomsNumberCheck(roomsVO.getR_no());
+		
+		// result값이 1이면 예약 불가능
+		if(result == 1) {
+			resultString = "unavailable";
+		} else { // result값이 1이 아니면 예약 가능
+			resultString = "available";
+		}
+		
+		log.info("result = " + result);
+		
+		return resultString;  
+	}
+	
+	/* ====== admin 수정 시 파티룸이 비활성화인지 체크하는 컨트롤러 ====== */
+	@ResponseBody
+	@RequestMapping(value="/admin/manage/partyroomUnavailableCheck", method=RequestMethod.POST)
+	public String adminManagePartyRoomUnavailableCheck(@ModelAttribute RoomsVO roomsVO, HttpServletRequest request) {
+		log.info("맵핑 /admin/manage/partyroomUnavailableCheck, adminManagePartyRoomUnavailableCheck 호출");
+		
+		int result = 0;
+		String resultString = "";
+		
+		result = roomsService.roomsUnavailableCheck(roomsVO.getR_no());
+		
+		// result값이 0이면 비활성화
+		if(result == 0) {
+			resultString = "unavailable";
+		} else { // result값이 1이면 활성화
+			resultString = "available";
+		}
+		
+		log.info("result = " + result);
+		
+		return resultString;  
+	}
+	
+	/* ====== admin 비활성화 시 파티룸에 예약자가 있는 지 체크하는 컨트롤러 ====== */
+	@ResponseBody
+	@RequestMapping(value="/admin/manage/partyroomBookingCheck", method=RequestMethod.POST)
+	public String adminManagePartyRoomBookingCheck(@ModelAttribute RoomsVO roomsVO, HttpServletRequest request) {
+		log.info("맵핑 /admin/manage/partyroomBookingCheck, adminManagePartyRoomBookingCheck 호출");
+		
+		int result = 0;
+		String resultString = "";
+		
+		result = bookingService.roomsBookingCheck(roomsVO.getR_no());
+		
+		// result값이 1보다 크거나 같으면 예약자가 있음
+		if(result >= 1) {
+			resultString = "yes";
+		} else { // result값이 0이면 예약자가 없음
+			resultString = "no";
+		}
+		
+		log.info("result = " + result);
+		
+		return resultString;  
+	}
+	
+	/* ====== admin 파티룸 비활성화 컨트롤러 ====== */
+	@ResponseBody
+	@RequestMapping(value="/admin/manage/partyroomUnavailableAction", method=RequestMethod.POST)
+	public String adminManagePartyRoomUnavailableAction(@ModelAttribute RoomsVO roomsVO, HttpServletRequest request) {
+		log.info("맵핑 /admin/manage/partyroomUnavailableAction, adminManagePartyRoomUnavailableAction 호출");
+		
+		int result = 0;
+		String resultString = "";
+		
+		result = roomsService.roomsUnavailableAction(roomsVO.getR_no());
+		
+		// result값이 1이면 비활성화 성공
+		if(result == 1) {
+			resultString = "success";
+		} else { // result값이 1이 아니면 비활성화 실패
+			resultString = "fail";
+		}
+		
+		log.info("result = " + result);
+		
+		return resultString;  
+	}
+	
+	/* ====== admin 파티룸 활성화 컨트롤러 ====== */
+	@ResponseBody
+	@RequestMapping(value="/admin/manage/partyroomAvailableAction", method=RequestMethod.POST)
+	public String adminManagePartyRoomAvailableAction(@ModelAttribute RoomsVO roomsVO, HttpServletRequest request) {
+		log.info("맵핑 /admin/manage/partyroomAvailableAction, adminManagePartyRoomAvailableAction 호출");
+		
+		int result = 0;
+		String resultString = "";
+		
+		result = roomsService.roomsAvailableAction(roomsVO.getR_no());
+		
+		// result값이 1이면 활성화 성공
+		if(result == 1) {
+			resultString = "success";
+		} else { // result값이 1이 아니면 활성화 실패
+			resultString = "fail";
+		}
+		
+		log.info("result = " + result);
+		
+		return resultString;  
+	}
+	
+	/* ====== admin 파티룸 updateform 컨트롤러 ====== */
+	@RequestMapping(value="/admin/manage/partyroomUpdateForm", method=RequestMethod.POST)
+	public ModelAndView adminManagePartyRoomUpdateform(@ModelAttribute RoomsVO roomsVO, HttpSession session, HttpServletRequest request) {
+		log.info("맵핑 /admin/manage/partyroomUpdateform, adminManagePartyRoomUpdateform 호출");
+		
+		ModelAndView mav = new ModelAndView();
+		
+		// 세션이 null이거나 session의 id가 admin이 아니면 adminpage로 이동 불가
+		if(Util.checkAdminSession(session)) {
+			mav.setViewName("redirect:/");
+			return mav;
+		}
+		
+		RoomsVO roomsUpdate = new RoomsVO();
+		roomsUpdate = roomsService.roomsInfo(roomsVO.getR_no());
+		
+		mav.addObject("roomsUpdate", roomsUpdate);
+		
+		mav.setViewName("admin/manage/partyroom/partyroomUpdatePage");
+		
+		return mav;  
+	}
+	
+	/* ====== admin 파티룸 수정 Action 컨트롤러 ====== */
+	@ResponseBody
+	@RequestMapping(value="/admin/manage/partyroomUpdateAction", method=RequestMethod.POST)
+	public String adminManagePartyRoomUpdateAction(@ModelAttribute RoomsVO roomsVO, HttpServletRequest request) throws IllegalStateException, IOException {
+		log.info("맵핑 /admin/manage/partyroomUpdateAction, adminManagePartyRoomUpdateAction 호출");
+		
+		int result = 0;
+		String resultString = "";
+		String r_thumbnail = "";
+		String r_introimg1 = "";
+		String r_introimg2 = "";
+		String r_introimg3 = "";
+		String r_introimg4 = "";
+
+		if(!roomsVO.getThumbnail().isEmpty()) {
+			if(!roomsVO.getR_thumbnail().isEmpty()) {
+				FileUploadUtil.fileDelete(roomsVO.getR_thumbnail(), request);
+			}
+			r_thumbnail = FileUploadUtil.fileUpload(roomsVO.getThumbnail(), request, Integer.toString(roomsVO.getR_no()));
+			roomsVO.setR_thumbnail(r_thumbnail);
+		}else{
+			roomsVO.setR_thumbnail("");
+		}
+		
+		if(!roomsVO.getIntroimg1().isEmpty()) {
+			if(!roomsVO.getR_introimg1().isEmpty()) {
+				FileUploadUtil.fileDelete(roomsVO.getR_introimg1(), request);
+			}
+			r_introimg1 = FileUploadUtil.fileUpload(roomsVO.getIntroimg1(), request, Integer.toString(roomsVO.getR_no()));
+			roomsVO.setR_introimg1(r_introimg1);
+		}else{
+			roomsVO.setR_introimg1("");
+		}
+		
+		if(!roomsVO.getIntroimg2().isEmpty()) {
+			if(!roomsVO.getR_introimg2().isEmpty()) {
+				FileUploadUtil.fileDelete(roomsVO.getR_introimg2(), request);
+			}
+			r_introimg2 = FileUploadUtil.fileUpload(roomsVO.getIntroimg2(), request, Integer.toString(roomsVO.getR_no()));
+			roomsVO.setR_introimg2(r_introimg2);
+		} else{
+			roomsVO.setR_introimg2("");
+		}
+		
+		if(!roomsVO.getIntroimg3().isEmpty()) {
+			if(!roomsVO.getR_introimg3().isEmpty()) {
+				FileUploadUtil.fileDelete(roomsVO.getR_introimg3(), request);
+			}
+			r_introimg3 = FileUploadUtil.fileUpload(roomsVO.getIntroimg3(), request, Integer.toString(roomsVO.getR_no()));
+			roomsVO.setR_introimg3(r_introimg3);
+		} else{
+			roomsVO.setR_introimg3("");
+		}
+		
+		if(!roomsVO.getIntroimg4().isEmpty()) {
+			if(!roomsVO.getR_introimg4().isEmpty()) {
+				FileUploadUtil.fileDelete(roomsVO.getR_introimg4(), request);
+			}
+			r_introimg4 = FileUploadUtil.fileUpload(roomsVO.getIntroimg4(), request, Integer.toString(roomsVO.getR_no()));
+			roomsVO.setR_introimg4(r_introimg4);
+		} else{
+			roomsVO.setR_introimg4("");
+		}
+		
+		result = roomsService.roomsUpdateAction(roomsVO);
+		
+		// result값이 1이면 수정 성공
+		if(result == 1) {
+			resultString = "success";
+		} else { // result값이 1이 아니면 수정 실패
+			resultString = "fail";
+		}
+		
+		return resultString;  
 	}
 	
 	/* ============= admin Manage 매출분석 파트 ============= */

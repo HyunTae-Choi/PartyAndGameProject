@@ -41,4 +41,6 @@ public interface BookingDAO {
 	List<StatisticVO> adminSalesMonthStatisticListSelect();
 	List<StatisticVO> adminBookingNumMonthStatisticListSelect();
 	
+	int roomsBookingCheck(int r_no); // 파티룸 예약자 확인
+	
 }

@@ -12,6 +12,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.pag.client.login.vo.LoginVO;
@@ -187,6 +189,26 @@ public class NoticeController {
 		}
 		
 		return mav;
+	}
+
+	/* === 공지사항 글삭제 (비활성화) 진행 === */
+	@ResponseBody
+	@RequestMapping(value = "/notice/unavailable", method = RequestMethod.POST)
+	public String noticeUnavailableUpdate(@RequestParam("n_No") int n_No, HttpSession session, HttpServletRequest request) {
+		log.info("매핑 '/notice/unavailable', 공지사항 글삭제 진행");
+		
+		// 세션이 null이거나 session의 id가 admin이 아니면 글 삭제 불가
+		if(Util.checkAdminSession(session)) { return "error";}
+		System.out.println(n_No);
+				
+		/* ==== 공지글 삭제(비활성화) ==== */ 
+		int result = 0; 
+		result = noticeService.noticeUnavailableUpdate(n_No);
+		if(result == 0) { System.out.println("공지사항 삭제(비활성화) 실패");
+		} else if(result == 1){ System.out.println("공지사항 삭제(비활성화) 성공");}
+		/* ==== 공지글 수정 end ==== */
+		
+		return Integer.toString(result);
 	}
 }
 

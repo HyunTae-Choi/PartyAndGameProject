@@ -9,6 +9,7 @@ public class PageVO {
 	private int section; // 현재 섹션
 	private int page; // 현재 페이지 번호
 	private String category; // 카테고리
+	private int lineNumber; // 1페이지당 글 수
 
 	// getter and setter
 	public int getTotalCnt() {
@@ -59,10 +60,18 @@ public class PageVO {
 		this.category = category;
 	}
 
+	public int getLineNumber() {
+		return lineNumber;
+	}
+
+	public void setLineNumber(int lineNumber) {
+		this.lineNumber = lineNumber;
+	}
+
 	@Override
 	public String toString() {
 		return "PageVO [totalCnt=" + totalCnt + ", maxSection=" + maxSection + ", maxPage=" + maxPage + ", section="
-				+ section + ", page=" + page + ", category=" + category + "]";
+				+ section + ", page=" + page + ", category=" + category + ", lineNumber=" + lineNumber + "]";
 	}
 
 }

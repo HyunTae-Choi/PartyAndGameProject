@@ -1,0 +1,65 @@
+/* === mypage bookinglist_ 리뷰 별점 === */
+.review_star_container{
+		margin: 15px 0px;
+}
+.review_star_content{
+	height: 25px;
+	line-height: 25px;
+}
+
+.review_modify_star_content_value{
+	width: 25px;
+	height: 25px;		
+	border: 0;
+	color: transparent;		
+}
+
+.review_modify_star_content_value:hover{
+	cursor: auto;		
+}
+
+.review_modify_star_btn_active{		
+	background: url(/resources/image/starRate.png) no-repeat;
+	background-size: 25px;
+}
+
+.review_modify_star_btn_nonactive{		
+	background: url(/resources/image/starRate_blank.png) no-repeat;
+	background-size: 25px;
+}
+
+/* === 방정보 리뷰 === */
+/* 리뷰 */
+.review {
+	width: 600px;
+	border-bottom: 1px solid #d1d1d1;
+	margin: 10px 0;
+}
+
+.review_writer {
+	width: 600px;
+	margin-bottom: 10px;
+	height: 25px; 
+	line-height: 25px;
+	padding-left: 4px;
+}
+
+
+/* 리뷰 - 별점 */
+.star-rating {
+	width: 80px;
+	background: url(/resources/image/starRate_all_blank.png) no-repeat;
+	background-size: 80px;
+	vertical-align: middle;
+	margin: 0px 8px;
+}
+
+.star-rating span {
+	background: url(/resources/image/starRate_all.png) no-repeat;
+	background-size: 80px;
+}
+
+.star-rating, .star-rating span {
+	display: inline-block;
+	height: 20px;
+}

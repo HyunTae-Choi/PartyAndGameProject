@@ -20,7 +20,7 @@ $(function() {
 		<h1 class="detail_title">${qvo.q_Title}</h1>
 		<div class="detail_subhead">
 			<span class="subhead_detail_writer">${qvo.memberVO.m_Name}<span style="padding-left: 5px; color: #626262">(${qvo.m_Id})</span></span>
-			<span class="subhead_detail_date" id="test_dd"><fmt:formatDate value="${qvo.q_Date}"/></span>
+			<span class="subhead_detail_date" id="test_dd"><fmt:formatDate value="${qvo.q_Date}" pattern="yyyy-MM-dd HH:mm"/></span>
 								
 			<c:choose>
 				<c:when test="${loginSession.m_Id != 'admin'}">
@@ -73,7 +73,7 @@ $(function() {
 						</c:choose>				
 						
 						<span class="subhead_detail_date" style="float: right; padding-right: 30px;">
-							<fmt:formatDate value="${questionReply.qr_Date}" pattern="yy-MM-dd HH:ss" />
+							<fmt:formatDate value="${questionReply.qr_Date}" pattern="yyyy-MM-dd HH:mm" />
 						</span>						
 																	
 					</div>

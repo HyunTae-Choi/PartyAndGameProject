@@ -3,35 +3,37 @@
 <%@ page trimDirectiveWhitespaces="true" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
-  
-<div id="logo">
-	<a href="/" class="logo">Party&amp;Game</a>
-</div>
-<div id="header_menu">
-	<ul>
-		<li><a href="#about" id="about_btn" class="menu_li">ABOUT</a></li>
-		<li><a href="#rooms" id="rooms_btn" class="menu_li">ROOMS</a></li>
-		<li><a href="#event" id="event_btn" class="menu_li">EVENT</a></li>
-		<li><a href="#service" id="service_btn" class="menu_li">SERVICE</a></li>
-	</ul>
-</div>
-<div id="member">
-	<ul>
-		<c:choose>
-			<c:when test="${loginSession.m_Id == 'admin'}">
-				<li><a href="${pageContext.request.contextPath}/logout"><button class="member_li" id="logout">Logout</button></a></li>
-				<li><a href="${pageContext.request.contextPath}/admin/manage/booking/bookingFullList"><button class="member_li" id="go_adminPage">Admin</button></a></li>
-			</c:when>
-			<c:when test="${loginSession.m_Id != null and loginSession.m_Id != ''}">
-				<li><a href="${pageContext.request.contextPath}/logout"><button class="member_li" id="logout">Logout</button></a></li>
-				<li><a href="${pageContext.request.contextPath}/mypage/myinfo"><button class="member_li" id="go_myPage">MyPage</button></a></li>
-			</c:when>
-			<c:when test="${loginSession.m_Id == null or loginSession.m_Id == ''}">
-				<li><button class="member_li" id="open_register_modal">Register</button></li>
-				<li><button class="member_li" id="open_login_modal">Login</button></li>
-			</c:when>
-		</c:choose>
-	</ul>
+
+<div id="header_div" style="width: 1260px; height: 100%; margin: 0 auto;">
+	<div id="logo">
+		<a href="/" class="logo">Party&amp;Game</a>
+	</div>
+	<div id="header_menu">
+		<ul>
+			<li><a href="#about" id="about_btn" class="menu_li">ABOUT</a></li>
+			<li><a href="#rooms" id="rooms_btn" class="menu_li">ROOMS</a></li>
+			<li><a href="#event" id="event_btn" class="menu_li">EVENT</a></li>
+			<li><a href="#service" id="service_btn" class="menu_li">SERVICE</a></li>
+		</ul>
+	</div>
+	<div id="member">
+		<ul>
+			<c:choose>
+				<c:when test="${loginSession.m_Id == 'admin'}">
+					<li><a href="${pageContext.request.contextPath}/logout"><button class="member_li" id="logout">Logout</button></a></li>
+					<li><a href="${pageContext.request.contextPath}/admin/manage/booking/bookingFullList"><button class="member_li" id="go_adminPage">Admin</button></a></li>
+				</c:when>
+				<c:when test="${loginSession.m_Id != null and loginSession.m_Id != ''}">
+					<li><a href="${pageContext.request.contextPath}/logout"><button class="member_li" id="logout">Logout</button></a></li>
+					<li><a href="${pageContext.request.contextPath}/mypage/myinfo"><button class="member_li" id="go_myPage">MyPage</button></a></li>
+				</c:when>
+				<c:when test="${loginSession.m_Id == null or loginSession.m_Id == ''}">
+					<li><button class="member_li" id="open_register_modal">Register</button></li>
+					<li><button class="member_li" id="open_login_modal">Login</button></li>
+				</c:when>
+			</c:choose>
+		</ul>
+	</div>
 </div>
 <!-- Login Modal -->
 <div class="modal" id="login_modal" tabindex="-1" aria-labelledby="login_form" aria-hidden="true">

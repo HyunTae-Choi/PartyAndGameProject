@@ -84,11 +84,18 @@ public class NoticeServiceImpl implements NoticeService{
 	public int noticeUpdate(NoticeVO nvo) {
 		return noticeDao.noticeUpdate(nvo);
 	}
-
+	
+	// 공지사항 조회수 비즈니스 로직
 	@Override
 	public void noticeHitCountUpdate(int n_No) {
 		noticeDao.noticeHitCountUpdate(n_No);
 		
+	}
+
+	// 공지사항 비활성화 비즈니스 로직
+	@Override
+	public int noticeUnavailableUpdate(int n_No) {
+		return noticeDao.noticeUnavailableUpdate(n_No);
 	}
 	
 	

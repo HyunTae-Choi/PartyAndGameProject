@@ -1,5 +1,6 @@
 package com.pag.client.booking.vo;
 
+import com.pag.client.review.vo.ReviewVO;
 import com.pag.client.rooms.vo.RoomsVO;
 import com.pag.common.vo.PageVO;
 
@@ -19,7 +20,8 @@ public class BookingVO extends PageVO {
 	private String b_memberstatus; // 예약자 회원 여부
 	private String r_no; // 룸 번호
 	
-	private RoomsVO roomsVO;
+	private RoomsVO roomsVO; // 방이름
+	private ReviewVO reviewVO; // 리뷰번호
 	
 	public long getB_no() {
 		return b_no;
@@ -110,5 +112,11 @@ public class BookingVO extends PageVO {
 	}
 	public void setB_timestamp(long b_timestamp) {
 		this.b_timestamp = b_timestamp;
+	}
+	public ReviewVO getReviewVO() {
+		return reviewVO;
+	}
+	public void setReviewVO(ReviewVO reviewVO) {
+		this.reviewVO = reviewVO;
 	}
 }

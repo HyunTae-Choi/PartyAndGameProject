@@ -41,7 +41,16 @@ var setting_comment = {
     toolbar : toolbar_comment,
     fontSizes : fontSizes,
     fontNames : fontNames,
-    placeholder : '답글을 입력해주세요.' }; 
+    placeholder : '답글을 입력해주세요.' };
+    
+var setting_review = {
+	height: 240,
+	minHeight: 240,
+	maxHeight: 240,
+    focus : true,
+    lang : 'ko-KR',
+    toolbar : toolbar_comment,
+    placeholder : '리뷰를 입력해주세요.' }; 
 /* ===== 써머노트 세팅 end ===== */ 
 
    

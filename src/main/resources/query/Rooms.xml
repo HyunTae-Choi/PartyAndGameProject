@@ -4,15 +4,152 @@
 
 <mapper namespace="com.pag.client.rooms.dao.RoomsDao">
 	
-	<!--  룸 정보 쿼리 -->
+	<!-- 파티룸 정보 쿼리 -->
 	<select id="roomsInfo" parameterType="int" resultType="rooms">
 		/* Rooms - roomsInfo */
 		SELECT
 			  r_no, r_name, r_intro, r_min_num, r_max_num, r_weekday_day_price, r_weekday_night_price, 
-			  r_weekend_day_price, r_weekend_night_price, r_availabled
+			  r_weekend_day_price, r_weekend_night_price, r_thumbnail, r_introimg1, r_introimg2,
+			  r_introimg3, r_introimg4, r_availabled
 		FROM room_tbl
 		WHERE r_no = #{r_no}
 	</select>
-
+	
+	<!-- 파티룸 등록 쿼리 -->
+	<insert id="roomsInsert" parameterType="rooms">
+		/* Rooms - roomsIsert */
+		INSERT INTO room_tbl (
+			r_no, 
+			r_name, 
+			r_intro, 
+			r_min_num, 
+			r_max_num,
+			r_weekday_day_price, 
+			r_weekday_night_price, 
+			r_weekend_day_price, 
+			r_weekend_night_price, 
+			r_thumbnail,
+			r_introimg1,
+			r_introimg2,
+			r_introimg3,
+			r_introimg4
+		)
+		VALUES(
+			#{r_no},
+			#{r_name},
+			#{r_intro}, 
+			#{r_min_num},
+			#{r_max_num},
+			#{r_weekday_day_price}, 
+			#{r_weekday_night_price},
+			#{r_weekend_day_price}, 
+			#{r_weekend_night_price}, 
+			#{r_thumbnail}, 
+			#{r_introimg1},
+			#{r_introimg2},
+			#{r_introimg3},
+			#{r_introimg4}
+		)
+	</insert>
+	
+	<!-- 파티룸 리스트 -->
+	<select id="partyroomList" parameterType="rooms" resultType="rooms">
+		/* Rooms - partyroomList */
+		select
+			r_no, 
+			r_name, 
+			r_intro, 
+			r_min_num, 
+			r_max_num,
+			r_weekday_day_price, 
+			r_weekday_night_price, 
+			r_weekend_day_price, 
+			r_weekend_night_price, 
+			r_thumbnail,
+			r_introimg1,
+			r_introimg2,
+			r_introimg3,
+			r_introimg4,
+			r_availabled
+		from 
+		    room_tbl
+		order by
+			r_no ASC
+	</select>
+	
+	<!-- 파티룸 번호 추가가능 여부 확인 -->
+	<select id="roomsNumberCheck" parameterType="int" resultType="int">
+		/* Rooms - roomsNumberCheck */
+		SELECT NVL((
+			          SELECT 1 
+			          FROM room_tbl
+			          WHERE r_no = #{r_no}
+			       ), 0) as state
+		FROM dual
+	</select>
+		
+	<!-- 파티룸 비활성화 체크 -->
+	<select id="roomsUnavailableCheck" parameterType="int" resultType="int">
+		/* Rooms - roomsUnavailableCheck */
+		select
+			r_availabled
+		from 
+		    room_tbl
+		WHERE 
+			r_no = #{r_no}
+	</select>
+	
+	<!-- 파티룸 비활성화 -->
+	<update id="roomsUnavailableAction" parameterType="int">
+		update
+			room_tbl
+		set
+			r_availabled = '0'
+		where
+			r_no = #{r_no}
+	</update>
+	
+	<!-- 파티룸 활성화 -->
+	<update id="roomsAvailableAction" parameterType="int">
+		update
+			room_tbl
+		set
+			r_availabled = '1'
+		where
+			r_no = #{r_no}
+	</update>
+	
+	<!-- 파티룸 수정 -->
+	<update id="roomsUpdateAction" parameterType="rooms">
+		update
+			room_tbl
+		set
+			r_name = #{r_name} 
+			, r_intro = #{r_intro}
+			, r_min_num = #{r_min_num}
+			, r_max_num = #{r_max_num}
+			, r_weekday_day_price = #{r_weekday_day_price}
+			, r_weekday_night_price = #{r_weekday_night_price}
+			, r_weekend_day_price = #{r_weekend_day_price}
+			, r_weekend_night_price = #{r_weekend_night_price}
+			<if test="r_thumbnail != ''">
+				, r_thumbnail = #{r_thumbnail}
+			</if>
+			<if test="r_introimg1 != ''">
+				, r_introimg1 = #{r_introimg1}
+			</if>
+			<if test="r_introimg2 != ''">
+				, r_introimg2 = #{r_introimg2}
+			</if>
+			<if test="r_introimg3 != ''">
+				, r_introimg3 = #{r_introimg3}
+			</if>
+			<if test="r_introimg4 != ''">
+				, r_introimg4 = #{r_introimg4}
+			</if>
+		where
+			r_no = #{r_no}
+	</update>
+	
 </mapper>
 

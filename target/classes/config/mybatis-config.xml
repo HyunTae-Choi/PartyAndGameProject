@@ -11,6 +11,7 @@
 		<typeAlias type="com.pag.client.reply.vo.ReplyVO" alias="reply" />
 		<typeAlias type="com.pag.client.rooms.vo.RoomsVO" alias="rooms" />
 		<typeAlias type="com.pag.client.booking.vo.BookingVO" alias="booking" />
+		<typeAlias type="com.pag.client.review.vo.ReviewVO" alias="review" />
 		<typeAlias type="com.pag.common.vo.PageVO" alias="page" />
 		<typeAlias type="com.pag.common.vo.StatisticVO" alias="statistic" />
 	</typeAliases>
@@ -30,5 +31,5 @@
 	<mappers>
 		<mapper resource="#package/#mapper.xml" />
 	</mappers>
-	 -->
+-->
 </configuration>

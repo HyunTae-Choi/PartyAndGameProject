@@ -84,5 +84,36 @@ $(function() {
 		}
 	});
 	
+	$('#notice_delete').click(function() {
+		if(confirm('공시사항을 삭제 하시겠습니까? 재등록은 불가능 합니다.')){
+			var btn = $(this).data().noticeno;			
+			var data ="n_No=" + btn;
+			
+			var admin = $(this).data().admin;		
+			
+			$.ajax({
+		 			url : "/notice/unavailable",  
+		 			type : "post",                
+		 			data : data,		 							 			
+		 			error : function(){ // 전송 실패시
+		 				alert('시스템에 오류가 발생했습니다.\n다시 시도해주시거나 운영자에게 문의해주세요.');
+		 			},		 
+		 			success : function(resultData){ // 전송 성공시 
+		 				if(resultData == 'error'){
+		 					alert('로그인에 오류가 발생했습니다.\n다시 시도해주시거나 운영자에게 문의해주세요.');
+			 			} else if(resultData != '1'){
+			 				alert('공지사항이 비활성화 되지 않았습니다.\n다시 시도해주시거나 운영자에게 문의해주세요.');
+			 			} else if (resultData == '1'){
+			 				alert('공지사항이 비활성화 되었습니다.');			 				
+			 				if(admin == 'admin_'){
+			 					location.replace('/admin/service/notice');
+			 				} else {
+			 					location.replace('/notice');
+			 				}			 							 				
+			 			} 				
+		 			}
+		 		}); 			
+		}
+	});	
 	
 });

@@ -37,14 +37,14 @@
 				<th width="107px;">예약번호</th>
 				<th width="130px;">파티룸 명</th>
 				<th width="120px;">아이디</th>
-				<th>이름</th>
+				<th width="38px;">이름</th>
 				<th width="100px;">전화번호</th>
-				<th>예약등록일</th>
-				<th>예약날짜</th>
-				<th>시간</th>
-				<th>인원</th>
-				<th>금액</th>
-				<th>예약상황</th>
+				<th width="76px;">예약등록일</th>
+				<th width="76px;">예약날짜</th>
+				<th width="38px;">시간</th>
+				<th width="25px;">인원</th>
+				<th width="65px;">금액</th>
+				<th width="50px;">예약상황</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -73,7 +73,7 @@
 				</c:when>
 				<c:otherwise>
 					<tr>
-						<td colspan="8">예약리스트가 없습니다.</td>
+						<td colspan="11">예약리스트가 없습니다.</td>
 					</tr>
 				</c:otherwise>
 			</c:choose>

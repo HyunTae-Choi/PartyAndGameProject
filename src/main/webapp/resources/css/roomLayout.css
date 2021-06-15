@@ -45,7 +45,11 @@
 	transition: 0.5s;
 	cursor: pointer;
 	margin-right: 5px;
-	background-size: cover;
+}
+#room_image_small .smallimg label img {
+	width: 60px;
+	height: 60px;
+	object-fit: cover;
 }
 /* slide */
 #pos1:checked ~ ul li:nth-child(1),

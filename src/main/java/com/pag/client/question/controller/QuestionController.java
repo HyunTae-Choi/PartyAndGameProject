@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.pag.client.login.vo.LoginVO;
@@ -38,7 +39,7 @@ public class QuestionController {
 	private MemberService memberService;
 	
 	/* ===== 1:1 고객 문의글 목록 ===== */
-	@RequestMapping(value="")
+	@RequestMapping(value="", method = RequestMethod.GET)
 	public ModelAndView questionList(HttpSession session, HttpServletRequest request) {
 		log.info("매핑 '/mypage/question', QuestionController 호출, 1:1 문의글 리스트");
 		
@@ -60,13 +61,6 @@ public class QuestionController {
 		mav.addObject("pvo", pvo); // 페이징	
 		/* == 1:1 문의글 목록 출력 end == */	
 				
-		/* == 회원 정보 수정용 정보 받기 == */
-		MemberVO mvo = new MemberVO();
-		mvo.setM_Id(loginSession.getM_Id());		
-		mvo = memberService.memberSelect(mvo);
-		mav.addObject("mvo", mvo);
-		/* == 회원 정보 수정용 정보 받기 end == */
-		
 		// mypage로 보낼지, adminpage로 보낼지 판단, (adminpageController에서 온 것이면 보냄) 
 		String toAdminPage = (String) request.getAttribute("toAdminPage");
 		if(Util.checkStringEmpty(toAdminPage) || !"toAdminPage".equals(toAdminPage)) {		
@@ -81,7 +75,7 @@ public class QuestionController {
 	
 	
 	/* ===== 1:1 고객 문의글 상세보기  ===== */
-	@RequestMapping(value = "/view")
+	@RequestMapping(value = "/view", method = RequestMethod.GET)
 	public ModelAndView questionDetailView(HttpSession session, HttpServletRequest request) {
 		log.info("매핑 '/mypage/question/view', QuestionController 호출, 1:1 문의글 상세보기");
 		
@@ -146,7 +140,7 @@ public class QuestionController {
 	
 	
 	/* ===== 1:1 고객 문의글 글쓰기폼 출력 ===== */
-	@RequestMapping(value = "/write")
+	@RequestMapping(value = "/write", method = RequestMethod.GET)
 	public ModelAndView questionWriteform(HttpSession session, HttpServletRequest request) {
 		log.info("매핑 '/mypage/question/writeform', QuestionController 호출, 1:1 문의글 글쓰기");
 		
@@ -170,13 +164,16 @@ public class QuestionController {
 	
 	
 	/* ===== 1:1 고객 문의글 글입력 ===== */
-	@RequestMapping(value = "/insert")
-	public ModelAndView questionInsert(@ModelAttribute("QuestionVO") QuestionVO qvo, HttpSession session) {
+	@RequestMapping(value = "/insert", method = RequestMethod.POST)
+	public ModelAndView questionInsert(@ModelAttribute QuestionVO qvo, HttpSession session) {
 		log.info("매핑 '/mypage/question/insert', QuestionController 호출, 1:1 문의게시글 글입력");
 		
-		// 세션이에 저장된 login값 호출, 해당 값이 null이면 mypage로 못감
+		System.out.println(qvo);
+		
+		// 세션이에 저장된 login값 호출, 해당 값이 null이거나 id값이 일치하지 않으면 mypage로 못감
 		LoginVO loginSession = (LoginVO)session.getAttribute("loginSession");	
 		if(loginSession == null) {return new ModelAndView("redirect:/");}
+		else if(!loginSession.getM_Id().equals(qvo.getM_Id())) {return new ModelAndView("redirect:/");}		
 		
 		ModelAndView mav = new ModelAndView();		
 		
@@ -206,9 +203,12 @@ public class QuestionController {
 	public ModelAndView questionUpdate(@ModelAttribute("QuestionVO") QuestionVO qvo, HttpSession session) {
 		log.info("매핑 '/mypage/question/update', QuestionController 호출, 1:1 문의게시글 글수정");
 		
-		// 세션이에 저장된 login값 호출, 해당 값이 null이면 mypage로 못감
+		System.out.println(qvo);
+		
+		// 세션이에 저장된 login값 호출, 해당 값이 null이거나 id값이 일치하지 않으면 mypage로 못감
 		LoginVO loginSession = (LoginVO)session.getAttribute("loginSession");	
 		if(loginSession == null) {return new ModelAndView("redirect:/");}
+		else if(!loginSession.getM_Id().equals(qvo.getM_Id())) {return new ModelAndView("redirect:/");}	
 		
 		ModelAndView mav = new ModelAndView();
 		

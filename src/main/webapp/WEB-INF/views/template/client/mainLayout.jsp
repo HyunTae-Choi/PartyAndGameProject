@@ -1,7 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="tiles" uri="http://tiles.apache.org/tags-tiles" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
 <%@ page trimDirectiveWhitespaces="true" %>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -45,16 +49,16 @@
 				</li>
 				<li id="imgslide_item" style="background: linear-gradient( rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.3) ),url(/resources/image/2.png) no-repeat;">
 					<div id="textbox">
-						<h2>프라이빗 공간의 모든 것, 쏘플!</h2><br>
+						<h2>Party And Game</h2><br>
 						<h4>#스튜디오렌탈  #회의실/강의실  #업무공간  #주방키친  #스터디룸</h4><br>
 						<h4>다양한 컨셉이 있는 공간을 만나보세요</h4>
 					</div>
 				</li>
 				<li id="imgslide_item" style="background: linear-gradient( rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.3) ),url(/resources/image/3.png) no-repeat;">
 					<div id="textbox">
-						<h2>스튜디오 공간도, 쏘플!</h2><br>
+						<h2>Party And Game</h2><br>
 						<h4>#자연광  #루프탑테라스  #주방키친  #플랜테리어</h4><br>
-						<h4>다양한 연출이 가능한 SSOPLE STUDIO</h4>
+						<h4>Party And Game</h4>
 					</div>
 				</li>
 			</ul>
@@ -80,112 +84,114 @@
 			<div id="container">
 				<h1>ROOMS</h1>
 				<div id="rooms_product_row">
-					<div id="rooms_product">
-						<a href="/rooms?r_no=1001">
-							<div id="rooms_img" style="background: url(/resources/image/room1.jpg) no-repeat; background-size: contain;"></div>
-						</a>
-						<a href="/rooms?r_no=1001">
-							<div id="rooms_title">
-								<p>
-									<b>우드 파티룸</b><br>
-									<span>기준 4명 ~ 최대 6명</span>
-								</p>
-							</div>
-						</a>
-					</div>
-					<div id="rooms_product">
-						<a href="/rooms?r_no=1002">
-							<div id="rooms_img" style="background: url(/resources/image/room2.jpg) no-repeat; background-size: contain;"></div>
-						</a>
-						<a href="/rooms?r_no=1002">
-							<div id="rooms_title">
-								<p>
-									<b>레트로 파티룸</b><br>
-									<span>기준 4명 ~ 최대 8명</span>
-								</p>
-							</div>
-						</a>
-					</div>
-					<div id="rooms_product">
-						<a href="/rooms?r_no=1003">
-							<div id="rooms_img" style="background: url(/resources/image/room3.jpg) no-repeat; background-size: contain;"></div>
-						</a>
-						<a href="/rooms?r_no=1003">
-							<div id="rooms_title">
-								<p>
-									<b>다락방 파티룸</b><br>
-									<span>기준 4명 ~ 최대 8명</span>
-								</p>
-							</div>
-						</a>
-					</div>
-					<div id="rooms_product">
-						<a href="/rooms?r_no=1004">
-							<div id="rooms_img" style="background: url(/resources/image/room4.jpg) no-repeat; background-size: contain;"></div>
-						</a>
-						<a href="/rooms?r_no=1004">
-							<div id="rooms_title">
-								<p>
-									<b>루프탑 파티룸</b><br>
-									<span>기준 4명 ~ 최대 8명</span>
-								</p>
-							</div>
-						</a>
-					</div>
+					<c:choose>
+						<c:when test="${not empty partyroomList}" >
+							<c:forEach var="partyroomList" items="${partyroomList}" begin="0" end="3">
+								<c:choose>
+									<c:when test="${partyroomList.r_availabled eq 1}">
+										<div id="rooms_product" data-roomnum="${partyroomList.r_no}">
+											<a href="/rooms?r_no=${partyroomList.r_no}">
+												<div id="rooms_img" style="background: url(/uploadimage/${partyroomList.r_no }/${partyroomList.r_thumbnail }) no-repeat; background-size: contain;"></div>
+											</a>
+											<a href="/rooms?r_no=${partyroomList.r_no}">
+												<div id="rooms_title">
+													<p>
+														<b>${partyroomList.r_name }</b><br>
+														<span>기준 ${partyroomList.r_min_num }명 ~ 최대 ${partyroomList.r_max_num }명</span>
+													</p>
+												</div>
+											</a>
+										</div>
+									</c:when>
+									<c:otherwise>
+										<div id="rooms_product" data-roomnum="${partyroomList.r_no}">
+											<a href="void(0);" onclick="alert('상품 준비 중입니다.');return false;">
+												<div id="rooms_img" style="background: url(/resources/image/productsPrepared.jpg) no-repeat; background-size: contain;"></div>
+											</a>
+											<a href="void(0);" onclick="alert('상품 준비 중입니다.');return false;">
+												<div id="rooms_title">
+													<p>
+														<b>상품 준비중</b>
+													</p>
+												</div>
+											</a>
+										</div>
+									</c:otherwise>
+								</c:choose>
+							</c:forEach>
+						</c:when>
+						<c:otherwise>
+							<c:forEach begin="0" end="3">
+								<div id="rooms_product">
+									<a href="void(0);" onclick="alert('상품 준비 중입니다.');return false;">
+										<div id="rooms_img" style="background: url(/resources/image/productsPrepared.jpg) no-repeat; background-size: contain;"></div>
+									</a>
+									<a href="void(0);" onclick="alert('상품 준비 중입니다.');return false;">
+										<div id="rooms_title">
+											<p>
+												<b>상품 준비중</b>
+											</p>
+										</div>
+									</a>
+								</div>
+							</c:forEach>
+						</c:otherwise>
+					</c:choose>
 				</div>
 				<div id="rooms_product_row">
-					<div id="rooms_product">
-						<a href="/rooms?r_no=1005">
-							<div id="rooms_img" style="background: url(/resources/image/room5.jpg) no-repeat; background-size: contain;"></div>
-						</a>
-						<a href="/rooms?r_no=1005">
-							<div id="rooms_title">
-								<p>
-									<b>데일리핑크 파티룸</b><br>
-									<span>기준 6명 ~ 최대 12명</span>
-								</p>
-							</div>
-						</a>
-					</div>
-					<div id="rooms_product">
-						<a href="/rooms?r_no=1006">
-							<div id="rooms_img" style="background: url(/resources/image/room6.jpg) no-repeat; background-size: contain;"></div>
-						</a>
-						<a href="/rooms?r_no=1006">
-							<div id="rooms_title">
-								<p>
-									<b>달빛 파티룸</b><br>
-									<span>기준 6명 ~ 최대 12명</span>
-								</p>
-							</div>
-						</a>
-					</div>
-					<div id="rooms_product">
-						<a href="/rooms?r_no=1007">
-							<div id="rooms_img" style="background: url(/resources/image/room7.jpg) no-repeat; background-size: contain;"></div>
-						</a>
-						<a href="/rooms?r_no=1007">
-							<div id="rooms_title">
-								<p>
-									<b>블랙&화이트 파티룸</b><br>
-									<span>기준 8명 ~ 최대 16명</span>
-								</p>
-							</div>
-						</a>
-					</div>
-					<div id="rooms_product">
-						<a href="/rooms?r_no=1008">
-							<div id="rooms_img" style="background: url(/resources/image/room8.jpg) no-repeat; background-size: contain;"></div>
-						</a>
-						<a href="/rooms?r_no=1008">
-							<div id="rooms_title">
-								<p>
-									<b>화이트 파티룸</b><br>
-									<span>기준 10명 ~ 최대 25명</span>
-								</p>
-							</div>
-						</a>
-					</div>
+					<c:choose>
+						<c:when test="${not empty partyroomList}" >
+							<c:forEach var="partyroomList" items="${partyroomList}" begin="4" end="7">
+								<c:choose>
+									<c:when test="${partyroomList.r_availabled eq 1}">
+										<div id="rooms_product" data-roomnum="${partyroomList.r_no}">
+											<a href="/rooms?r_no=${partyroomList.r_no}">
+												<div id="rooms_img" style="background: url(/uploadimage/${partyroomList.r_no }/${partyroomList.r_thumbnail }) no-repeat; background-size: contain;"></div>
+											</a>
+											<a href="/rooms?r_no=${partyroomList.r_no}">
+												<div id="rooms_title">
+													<p>
+														<b>${partyroomList.r_name }</b><br>
+														<span>기준 ${partyroomList.r_min_num }명 ~ 최대 ${partyroomList.r_max_num }명</span>
+													</p>
+												</div>
+											</a>
+										</div>
+									</c:when>
+									<c:otherwise>
+										<div id="rooms_product" data-roomnum="${partyroomList.r_no}">
+											<a href="void(0);" onclick="alert('상품 준비 중입니다.');return false;">
+												<div id="rooms_img" style="background: url(/resources/image/productsPrepared.jpg) no-repeat; background-size: contain;"></div>
+											</a>
+											<a href="void(0);" onclick="alert('상품 준비 중입니다.');return false;">
+												<div id="rooms_title">
+													<p>
+														<b>상품 준비중</b>
+													</p>
+												</div>
+											</a>
+										</div>
+									</c:otherwise>
+								</c:choose>
+							</c:forEach>
+						</c:when>
+						<c:otherwise>
+							<c:forEach begin="0" end="3">
+								<div id="rooms_product">
+									<a href="void(0);" onclick="alert('상품 준비 중입니다.');return false;">
+										<div id="rooms_img" style="background: url(/resources/image/productsPrepared.jpg) no-repeat; background-size: contain;"></div>
+									</a>
+									<a href="void(0);" onclick="alert('상품 준비 중입니다.');return false;">
+										<div id="rooms_title">
+											<p>
+												<b>상품 준비중</b>
+											</p>
+										</div>
+									</a>
+								</div>
+							</c:forEach>
+						</c:otherwise>
+					</c:choose>
 				</div>
 			</div>
 		</div>

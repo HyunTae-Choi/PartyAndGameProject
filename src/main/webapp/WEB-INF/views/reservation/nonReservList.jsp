@@ -51,13 +51,43 @@
 				var reserv_date = $(this).parents("tr").attr("data-reservdate");
 				var date_difference_timestamp = (new Date(reserv_date).getTime() - new Date(today_date).getTime()) / 1000;
 				var date_difference = date_difference_timestamp / (3600*24);
-				if(date_difference < 4) {
-					alert("이용 3일 전부터는 예약취소가 불가능합니다.");
-				} else {
-					var b_no = $(this).parents("tr").attr("data-reservnum");
-					$("#b_no").val(b_no);
-					$.ajax({
-						url : "/booking/bookingReservCancel",  
+				if (!confirm("예약번호 : " + $("#b_no").val() + "\n파티룸 예약취소 하시겠습니까?")) {
+		            return;
+		        } else {
+		        	if(date_difference < 4) {
+						alert("이용 3일 전부터는 예약취소가 불가능합니다.");
+					} else {
+						var b_no = $(this).parents("tr").attr("data-reservnum");
+						$("#b_no").val(b_no);
+						$.ajax({
+							url : "/booking/bookingReservCancel",  
+							type : "post",            
+							data : {b_no : $("#b_no").val()}, //폼전체 데이터 전송
+							dataType : "text",
+							error : function() { 
+								alert('시스템 오류 입니다. 관리자에게 문의 하세요');
+							}, 
+							success : function(resultData) { 
+								if(resultData == 'success') { 
+									alert("예약번호 : " + $("#b_no").val() + "\n파티룸 예약 취소신청에 성공했습니다.");
+									location.reload();
+								} else {
+									alert("파티룸 예약 취소신청에 실패했습니다.");
+								}
+							}
+						});
+					}
+		        }
+				
+			});
+			$(".reserv_return_btn").click(function() {
+				var b_no = $(this).parents("tr").attr("data-reservnum");
+				$("#b_no").val(b_no);
+				if (!confirm("예약번호 : " + $("#b_no").val() + "\n파티룸 재예약 하시겠습니까?")) {
+		            return;
+		        } else {
+		        	$.ajax({
+						url : "/booking/bookingReservReturn",  
 						type : "post",            
 						data : {b_no : $("#b_no").val()}, //폼전체 데이터 전송
 						dataType : "text",
@@ -66,35 +96,14 @@
 						}, 
 						success : function(resultData) { 
 							if(resultData == 'success') { 
-								alert("예약번호 : " + $("#b_no").val() + "\n파티룸 예약 취소신청에 성공했습니다.");
+								alert("예약번호 : " + $("#b_no").val() + "\n파티룸 재예약에 성공했습니다.");
 								location.reload();
 							} else {
-								alert("파티룸 예약 취소신청에 실패했습니다.");
+								alert("파티룸 재예약에 실패했습니다.");
 							}
 						}
 					});
-				}
-			});
-			$(".reserv_return_btn").click(function() {
-				var b_no = $(this).parents("tr").attr("data-reservnum");
-				$("#b_no").val(b_no);
-				$.ajax({
-					url : "/booking/bookingReservReturn",  
-					type : "post",            
-					data : {b_no : $("#b_no").val()}, //폼전체 데이터 전송
-					dataType : "text",
-					error : function() { 
-						alert('시스템 오류 입니다. 관리자에게 문의 하세요');
-					}, 
-					success : function(resultData) { 
-						if(resultData == 'success') { 
-							alert("예약번호 : " + $("#b_no").val() + "\n파티룸 재예약에 성공했습니다.");
-							location.reload();
-						} else {
-							alert("파티룸 재예약에 실패했습니다.");
-						}
-					}
-				});
+		        }
 			});
 		});
 	</script>

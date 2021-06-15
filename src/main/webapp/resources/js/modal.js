@@ -87,11 +87,12 @@ function checkboxBlankCheck(inputName, msg) {
 }
 
 /* 공백확인 */
+//<p><br></p>는 스마트에디터 공백 체크를 위한 것
 /* 
 @param data 공백을 확인할 데이터 - 이미 제이쿼리로 호출된 데이터
 @param msg 출력 메시지 */ 
 function formBlankCheck(data, msg){
-	if(data.val().replace(/\s/g,"")==""){
+	if(data.val().replace(/\s/g,"")=="" || data.val().replace(/\s/g,"")=="<p><br></p>"){
 		alert(msg+" 입력해 주세요");
 		data.val("");
 		data.focus();
@@ -150,6 +151,8 @@ function findId(){
 		 				alert('입력하신 정보와 일치하는 계정이 없습니다.\n다시 시도해주시거나 사이트 운영자에게 문의해주세요.');
 		 			} else if (resultData=='leave') { 
 	 					alert('탈퇴한 계정의 이메일입니다.\n이에 관해 문의 사항이 있으시면 사이트 운영자에게 문의해주세요.');
+	 				} else if (resultData == 'disable'){
+	 					alert('비활성화된 계정의 이메일입니다.\n이에 관해 문의 사항이 있으시면 사이트 운영자에게 문의해주세요.');
 	 				} else { 
 		 				alert('아이디는 ' + resultData + '입니다.');
 		 			} 
@@ -176,6 +179,8 @@ function findPw(){
 	 				alert('입력하신 정보와 일치하는 계정이 없습니다.\n다시 시도해주시거나 사이트 운영자에게 문의해주세요.');
 	 			} else if (resultData=='leave') { 
 	 				alert('탈퇴한 계정의 아이디입니다.\n이에 관해 문의 사항이 있으시면 사이트 운영자에게 문의해주세요.');
+	 			} else if (resultData == 'disable'){
+	 				alert('비활성화된 계정의 아이디입니다.\n이에 관해 문의 사항이 있으시면 사이트 운영자에게 문의해주세요.');
 	 			} else if (resultData=='success') { 
 	 				alert('비밀번호를 이메일로 전송했습니다.\n이메일을 확인해주세요.');
 	 				window.location.href = '/';
@@ -248,28 +253,6 @@ function changeNone(find) {
 		$('.findpw').removeClass('none')
 		$('#findpw_tab').addClass('active')
 		$('#findid_tab').removeClass('active')
-	}
-}
-
-
-/*  === 회원 정보 수정 (공백, 유효성 검사)  === */
-function updateMember() {
-	//입력값 체크 // 아이디 중복 체크도 넣어야함.
-	if (!formBlankCheck($('#m_pw_update'), "비밀번호를")) return;
-	else if (!inputVerify(1, '#m_pw_update', "비밀번호")) return;
-	else if (!formBlankCheck($('#m_pw_check_update'), "비밀번호 확인을")) return;
-	else if (!passwordCheck("#m_pw_update", "#m_pw_check_update")) return;
-	else if (!formBlankCheck($('#m_phone_update'), "핸드폰 번호를")) return;
-	else if (!inputVerify(3, '#m_phone_update', "핸드폰 번호")) return;
-	else if (!formBlankCheck($('#m_email_update'), "E-mail을")) return;
-	else if (!inputVerify(4, '#m_email_update', "E-mail")) return;
-	else if (!emailOverlapCheck('#m_email_update')) return;
-	else {
-		$("#memberUpdateForm").attr({
-			"method" : "post",
-			"action" : "/member/update"
-		});
-		$("#memberUpdateForm").submit();
 	}
 }
 
@@ -520,6 +503,125 @@ $(function(){
 	$(".modal_layer").click(function(){
 		$('.modal').attr("style", "display:none");
 	});  	
+// 회원 비밀번호 확인 후, 비밀번호 수정 폼 출력
+	$("#modal_confirm_password_update").click(function(){			
+		if (!formBlankCheck($('#m_pw_confirm'), '비밀번호를')) {return;}
+	 	else {
+	 		$.ajax({
+	 			url : "/member/pwConfirm",  
+	 			type : "post",                
+	 			data : "m_Pw=" + $('#m_pw_confirm').val()+ "&m_Id=" + $('#m_id_session').val(),
+	 			error : function(){  
+	 				alert('시스템에 오류가 발생했습니다.\n다시 시도해주시거나 사이트 운영자에게 문의해주세요.');
+	 			},
+	 			success : function(resultData){	
+	 				if (resultData.result=='error') {
+	 					alert('로그인에 문제가 발생했습니다.\n다시 시도해주시거나 사이트 운영자에게 문의해주세요.');
+	 				} else if (resultData.result=='fail') { 
+		 				alert('잘못된 비밀번호를 입력하셨습니다.');
+		 			} else if (resultData.result=='success') { 
+		 				$('#update_form_modal').attr("style", "display:none");
+	 					$('#update_pwform_modal').attr("style", "display:block");	 									
+	 				} 
+	 			}
+	 		});
+	 	}		
+	});
+	
+	
+	// 회원 비밀번호 수정
+	$("#modal_password_update").click(function(){
+		if (!formBlankCheck($('#m_pw_old_update'), "기존 비밀번호를")) return;			
+		else if (!formBlankCheck($('#m_pw_update'), "수정할 비밀번호를")) return;
+		else if (!inputVerify(1, '#m_pw_update', "수정할 비밀번호")) return;
+		else if (!formBlankCheck($('#m_pw_check_update'), "비밀번호 확인을")) return;
+		else if (!passwordCheck("#m_pw_update", "#m_pw_check_update")) return;
+	 	else {
+	 		$.ajax({
+	 			url : "/member/pwUpdate",  
+	 			type : "post",                
+	 			data : "m_Pw=" + $('#m_pw_update').val()+"&m_Pw_Old=" + $('#m_pw_old_update').val()
+	 					+ "&m_Id=" + $('#m_id_session').val(),
+	 			error : function(){  
+	 				alert('시스템에 오류가 발생했습니다.\n다시 시도해주시거나 사이트 운영자에게 문의해주세요.');	 				
+	 			},
+	 			success : function(resultData){ 			 
+	 				if (resultData=='error') {
+	 					alert('로그인에 문제가 발생했습니다.\n다시 시도해주시거나 사이트 운영자에게 문의해주세요.');
+	 				} else if (resultData=='fail_pw_old') { 
+		 				alert('잘못된 기존 비밀번호를 입력하셨습니다.');
+		 			} else if (resultData=='overlap_pw') { 
+		 				alert('기존의 비밀번호와 동일한 비밀번호를 입력하셨습니다.');									
+	 				} else if (resultData=='pw_update_fail') { 
+		 				alert('시스템에 오류가 발생하여 비밀번호 변경에 실패했습니다.\n다시 시도해주시거나 사이트 운영자에게 문의해주세요.');									
+	 				} else if (resultData=='pw_update_success') { 
+		 				alert('비밀번호가 변경되었습니다.');
+		 				window.location.reload();							
+	 				}
+	 			}
+	 		});
+	 	}		
+	});
+	
+	// 회원 비밀번호 확인 후, 회원정보 변경 폼 출력
+	$("#modal_confirm_information_update").click(function(){			
+		if (!formBlankCheck($('#m_pw_confirm'), '비밀번호를')) {return;}
+	 	else {
+	 		$.ajax({
+	 			url : "/member/pwConfirm",  
+	 			type : "post",                
+	 			data : "m_Pw=" + $('#m_pw_confirm').val()+ "&m_Id=" + $('#m_id_session').val(),
+	 			error : function(){  
+	 				alert('시스템에 오류가 발생했습니다.\n다시 시도해주시거나 사이트 운영자에게 문의해주세요.');	 				
+	 			},
+	 			success : function(resultData){	
+	 				if (resultData.result=='error') {
+	 					alert('로그인에 문제가 발생했습니다.\n다시 시도해주시거나 사이트 운영자에게 문의해주세요.');
+	 				} else if (resultData.result=='fail') { 
+		 				alert('잘못된 비밀번호를 입력하셨습니다.');
+		 			} else if (resultData.result=='success') {		 				
+		 				// 값 넣기
+		 				$('#m_id_update').val(resultData.m_Id);
+		 				$('#m_name_update').val(resultData.m_Name);
+		 				$(":radio[name='m_Gender'][value='" + resultData.m_Gender + "']").attr('checked', true);
+		 				$('#m_phone_update').val(resultData.m_Phone);
+		 				$('#m_email_update').val(resultData.m_Email);
+		 				$('#m_birth_update').val(resultData.m_Birth);
+		 				
+		 				$('#update_form_modal').attr("style", "display:none");
+	 					$('#update_informationform_modal').attr("style", "display:block");	 									
+	 				} 
+	 			}
+	 		});
+	 	}		
+	});
+	
+	// 회원 회원정보 수정
+	$("#member_information_update").click(function(){
+		if (!formBlankCheck($('#m_phone_update'), "핸드폰 번호를")) return;
+		else if (!inputVerify(3, '#m_phone_update', "핸드폰 번호")) return;
+		else if (!formBlankCheck($('#m_email_update'), "E-mail을")) return;
+		else if (!inputVerify(4, '#m_email_update', "E-mail")) return;
+		else if (!emailOverlapCheck('#m_email_update')) return;
+		else {
+			$.ajax({
+	 			url : "/member/update",  
+	 			type : "post",                
+	 			data : $('#memberUpdateForm').serialize(),
+	 			error : function(){  
+	 				alert('시스템에 오류가 발생했습니다.\n다시 시도해주시거나 사이트 운영자에게 문의해주세요.');	 				
+	 			},
+	 			success : function(resultData){	
+	 				if (resultData=='error') {
+	 					alert('로그인에 문제가 발생했습니다.\n다시 시도해주시거나 사이트 운영자에게 문의해주세요.');
+	 				} else if (resultData=='1') { 
+		 				alert('회원 정보가 변경되었습니다.');
+		 				window.location.reload();
+		 			} 
+	 			}
+	 		});
+		}		
+	});
 
 });
 /*================= 자동 실행 함수 end=====================*/

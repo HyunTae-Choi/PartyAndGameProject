@@ -19,26 +19,3 @@
 #main_content #booking_table_div table td {
 	border-bottom: 1px solid #e3e3e3;
 }
-#main_content #booking_table_div #next_btn {
-	float: right;
-	font-size: 16px; 
-	font-weight: 700;
-	margin-left: 10px;
-	margin-top: 5px;
-	width: 55px;
-	height: 35px;
-	border: 1px solid #e3e3e3;
-	border-radius: 5px;
-	background: #e3e3e3;
-}
-#main_content #booking_table_div #prev_btn {
-	float: right;
-	font-size: 16px; 
-	font-weight: 700;
-	margin-top: 5px;
-	width: 55px;
-	height: 35px;
-	border: 1px solid #e3e3e3;
-	border-radius: 5px;
-	background: #e3e3e3;
-}

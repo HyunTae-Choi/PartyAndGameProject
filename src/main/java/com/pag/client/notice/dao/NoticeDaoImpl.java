@@ -50,4 +50,10 @@ public class NoticeDaoImpl implements NoticeDao {
 		session.update("noticeHitCountUpdate", n_No);		
 	}
 
+	// 공지사항 글 비활성화 업데이트 - DB접근
+	@Override
+	public int noticeUnavailableUpdate(int n_No) {
+		return session.update("noticeUnavailableUpdate", n_No);
+	}
+
 }

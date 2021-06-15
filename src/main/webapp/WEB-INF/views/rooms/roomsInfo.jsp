@@ -55,10 +55,23 @@
 	<link rel="stylesheet" type="text/css" href="/resources/css/footer.css">
 	<link rel="stylesheet" type="text/css" href="/resources/css/log.css">
 	<link rel="stylesheet" type="text/css" href="/resources/css/cal.css">
+	<link rel="stylesheet" type="text/css" href="/resources/css/review.css">
+	<link rel="stylesheet" type="text/css" href="/resources/css/paging.css">
 	
+	<!-- 글쓰기 에디터 css-->
+	<link rel="stylesheet" href="/resources/summernote/summernote-lite.css">
+	
+	<!-- j쿼리 js-->
 	<script src="http://code.jquery.com/jquery-latest.js"></script>
+	
+	<!-- 글쓰기 에디터 js-->
+	<script src="/resources/summernote/summernote-lite.js"></script>
+	<script src="/resources/summernote/lang/summernote-ko-KR.js"></script>
+	<script src="/resources/js/writeform.js"></script>
+	
 	<script src="/resources/js/room.js"></script>
 	<script src="/resources/js/modal.js"></script>
+	
 	<script>
 		$(function() {
 			function numberWithCommas(x) {
@@ -194,7 +207,55 @@
 			    	}
 		    	}
 		    });
+		    $(".admin_review_delete_btn").click(function(e) {
+		    	var btn = e.target.dataset;
+		    	
+		    	var reviewData ="b_No=" + btn.reservnum + "&r_No=" + btn.roomnum + "&rv_No=" + btn.reviewno;
+				console.log(reviewData);
+				
+		    	if(!confirm('정말로 리뷰를 비활성화하시겠습니까? \n리뷰에 폭언 및 욕설이 있을 경우에만 비활성화가 허용됩니다.'))return;
+		    	else {
+		    		$.ajax({
+			 			url : "/review/admindisableupdate",  
+			 			type : "post",                
+			 			data : reviewData,
+			 							 			
+			 			error : function(){ // 전송 실패시
+			 				alert('시스템에 오류가 발생했습니다.\n다시 시도해주시거나 사이트 운영자에게 문의해주세요.');
+			 			},
+			 
+			 			success : function(resultData){ // 전송 성공시 
+			 				if(resultData == 'error'){
+			 					alert('시스템에 오류가 발생했습니다.\n다시 시도해주시거나 사이트 운영자에게 문의해주세요.');
+			 				}else if(resultData == '0'){ // 결과값 fail
+				 				alert('리뷰가 비활성화 되지 않았습니다. \n사이트 운영자에게 문의해주세요.');
+				 			} else if (resultData == '1'){
+				 				alert('리뷰가 비활성화 되었습니다.');
+				 				window.location.reload();
+				 			} 				
+			 			}
+			 		}); 
+		    	}
+		    });
+		    var urlPage = getURLParams(location.search).page;
+		    if(urlPage != null){
+		    	console.log(urlPage);
+		    	$('#button1').removeClass("menu_selected");
+				$('#button2').removeClass("menu_selected");
+				$('#button3').addClass("menu_selected");
+
+				$("#button_1_contents").css("display","none");
+				$("#button_2_contents").css("display","none");
+				$("#button_3_contents").css("display","block"); 
+				
+				$('html').scrollTop(600);
+		    };
 		});
+		function getURLParams(url) {
+	        var result = {};
+	        url.replace(/[?&]{1}([^=&#]+)=([^&#]*)/g, function(s, k, v) { result[k] = decodeURIComponent(v); });
+	        return result;
+	    }
 	</script>
 </head>
 <body>
@@ -205,182 +266,26 @@
 		<div id="room_layout">
 			<div id="container">
 				<div id="room_infomation">
-					<c:if test="${r_info.r_no eq room1}">
-						<div id="room_image">
+					<div id="room_image">
 							<input type="radio" name="pos" id="pos1" checked>
 							<input type="radio" name="pos" id="pos2">
 							<input type="radio" name="pos" id="pos3">
 							<input type="radio" name="pos" id="pos4">
 							<ul>
-								<li style="background: url(/resources/image/room1_1.jpg) no-repeat;"></li>
-								<li style="background: url(/resources/image/room1_2.jpg) no-repeat;"></li>
-								<li style="background: url(/resources/image/room1_3.jpg) no-repeat;"></li>
-								<li style="background: url(/resources/image/room1_4.jpg) no-repeat;"></li>
+								<li style="background: url(/uploadimage/${r_info.r_no }/${r_info.r_introimg1 }) no-repeat;"></li>
+								<li style="background: url(/uploadimage/${r_info.r_no }/${r_info.r_introimg2 }) no-repeat;"></li>
+								<li style="background: url(/uploadimage/${r_info.r_no }/${r_info.r_introimg3 }) no-repeat;"></li>
+								<li style="background: url(/uploadimage/${r_info.r_no }/${r_info.r_introimg4 }) no-repeat;"></li>
 							</ul>
 						</div>
 						<div id="room_image_small">
 							<p class="smallimg" style="font-size: 0px;">
-								<label for="pos1" style="background: url(/resources/image/room1_1.jpg) no-repeat; background-size: cover;">1</label>
-								<label for="pos2" style="background: url(/resources/image/room1_2.jpg) no-repeat; background-size: cover;">2</label>
-								<label for="pos3" style="background: url(/resources/image/room1_3.jpg) no-repeat; background-size: cover;">3</label>
-								<label for="pos4" style="background: url(/resources/image/room1_4.jpg) no-repeat; background-size: cover;">4</label>
+								<label for="pos1" style="background: url(/uploadimage/${r_info.r_no }/${r_info.r_introimg1 }) no-repeat; background-size: cover;">1</label>
+								<label for="pos2" style="background: url(/uploadimage/${r_info.r_no }/${r_info.r_introimg2 }) no-repeat; background-size: cover;">2</label>
+								<label for="pos3" style="background: url(/uploadimage/${r_info.r_no }/${r_info.r_introimg3 }) no-repeat; background-size: cover;">3</label>
+								<label for="pos4" style="background: url(/uploadimage/${r_info.r_no }/${r_info.r_introimg4 }) no-repeat; background-size: cover;">4</label>
 							</p>
 						</div>
-					</c:if>
-					<c:if test="${r_info.r_no eq room2}">
-						<div id="room_image">
-							<input type="radio" name="pos" id="pos1" checked>
-							<input type="radio" name="pos" id="pos2">
-							<input type="radio" name="pos" id="pos3">
-							<input type="radio" name="pos" id="pos4">
-							<ul>
-								<li style="background: url(/resources/image/room2_1.jpg) no-repeat;"></li>
-								<li style="background: url(/resources/image/room2_2.jpg) no-repeat;"></li>
-								<li style="background: url(/resources/image/room2_3.jpg) no-repeat;"></li>
-								<li style="background: url(/resources/image/room2_4.jpg) no-repeat;"></li>
-							</ul>
-						</div>
-						<div id="room_image_small">
-							<p class="smallimg" style="font-size: 0px;">
-								<label for="pos1" style="background: url(/resources/image/room2_1.jpg) no-repeat; background-size: cover;">1</label>
-								<label for="pos2" style="background: url(/resources/image/room2_2.jpg) no-repeat; background-size: cover;">2</label>
-								<label for="pos3" style="background: url(/resources/image/room2_3.jpg) no-repeat; background-size: cover;">3</label>
-								<label for="pos4" style="background: url(/resources/image/room2_4.jpg) no-repeat; background-size: cover;">4</label>
-							</p>
-						</div>
-					</c:if>
-					<c:if test="${r_info.r_no eq room3}">
-						<div id="room_image">
-							<input type="radio" name="pos" id="pos1" checked>
-							<input type="radio" name="pos" id="pos2">
-							<input type="radio" name="pos" id="pos3">
-							<input type="radio" name="pos" id="pos4">
-							<ul>
-								<li style="background: url(/resources/image/room3_1.jpg) no-repeat;"></li>
-								<li style="background: url(/resources/image/room3_2.jpg) no-repeat;"></li>
-								<li style="background: url(/resources/image/room3_3.jpg) no-repeat;"></li>
-								<li style="background: url(/resources/image/room3_4.jpg) no-repeat;"></li>
-							</ul>
-						</div>
-						<div id="room_image_small">
-							<p class="smallimg" style="font-size: 0px;">
-								<label for="pos1" style="background: url(/resources/image/room3_1.jpg) no-repeat; background-size: cover;">1</label>
-								<label for="pos2" style="background: url(/resources/image/room3_2.jpg) no-repeat; background-size: cover;">2</label>
-								<label for="pos3" style="background: url(/resources/image/room3_3.jpg) no-repeat; background-size: cover;">3</label>
-								<label for="pos4" style="background: url(/resources/image/room3_4.jpg) no-repeat; background-size: cover;">4</label>
-							</p>
-						</div>
-					</c:if>
-					<c:if test="${r_info.r_no eq room4}">
-						<div id="room_image">
-							<input type="radio" name="pos" id="pos1" checked>
-							<input type="radio" name="pos" id="pos2">
-							<input type="radio" name="pos" id="pos3">
-							<input type="radio" name="pos" id="pos4">
-							<ul>
-								<li style="background: url(/resources/image/room4_1.jpg) no-repeat;"></li>
-								<li style="background: url(/resources/image/room4_2.jpg) no-repeat;"></li>
-								<li style="background: url(/resources/image/room4_3.jpg) no-repeat;"></li>
-								<li style="background: url(/resources/image/room4_4.jpg) no-repeat;"></li>
-							</ul>
-						</div>
-						<div id="room_image_small">
-							<p class="smallimg" style="font-size: 0px;">
-								<label for="pos1" style="background: url(/resources/image/room4_1.jpg) no-repeat; background-size: cover;">1</label>
-								<label for="pos2" style="background: url(/resources/image/room4_2.jpg) no-repeat; background-size: cover;">2</label>
-								<label for="pos3" style="background: url(/resources/image/room4_3.jpg) no-repeat; background-size: cover;">3</label>
-								<label for="pos4" style="background: url(/resources/image/room4_4.jpg) no-repeat; background-size: cover;">4</label>
-							</p>
-						</div>
-					</c:if>
-					<c:if test="${r_info.r_no eq room5}">
-						<div id="room_image">
-							<input type="radio" name="pos" id="pos1" checked>
-							<input type="radio" name="pos" id="pos2">
-							<input type="radio" name="pos" id="pos3">
-							<input type="radio" name="pos" id="pos4">
-							<ul>
-								<li style="background: url(/resources/image/room5_1.jpg) no-repeat;"></li>
-								<li style="background: url(/resources/image/room5_2.jpg) no-repeat;"></li>
-								<li style="background: url(/resources/image/room5_3.jpg) no-repeat;"></li>
-								<li style="background: url(/resources/image/room5_4.jpg) no-repeat;"></li>
-							</ul>
-						</div>
-						<div id="room_image_small">
-							<p class="smallimg" style="font-size: 0px;">
-								<label for="pos1" style="background: url(/resources/image/room5_1.jpg) no-repeat; background-size: cover;">1</label>
-								<label for="pos2" style="background: url(/resources/image/room5_2.jpg) no-repeat; background-size: cover;">2</label>
-								<label for="pos3" style="background: url(/resources/image/room5_3.jpg) no-repeat; background-size: cover;">3</label>
-								<label for="pos4" style="background: url(/resources/image/room5_4.jpg) no-repeat; background-size: cover;">4</label>
-							</p>
-						</div>
-					</c:if>
-					<c:if test="${r_info.r_no eq room6}">
-						<div id="room_image">
-							<input type="radio" name="pos" id="pos1" checked>
-							<input type="radio" name="pos" id="pos2">
-							<input type="radio" name="pos" id="pos3">
-							<input type="radio" name="pos" id="pos4">
-							<ul>
-								<li style="background: url(/resources/image/room6_1.jpg) no-repeat;"></li>
-								<li style="background: url(/resources/image/room6_2.jpg) no-repeat;"></li>
-								<li style="background: url(/resources/image/room6_3.jpg) no-repeat;"></li>
-								<li style="background: url(/resources/image/room6_4.jpg) no-repeat;"></li>
-							</ul>
-						</div>
-						<div id="room_image_small">
-							<p class="smallimg" style="font-size: 0px;">
-								<label for="pos1" style="background: url(/resources/image/room6_1.jpg) no-repeat; background-size: cover;">1</label>
-								<label for="pos2" style="background: url(/resources/image/room6_2.jpg) no-repeat; background-size: cover;">2</label>
-								<label for="pos3" style="background: url(/resources/image/room6_3.jpg) no-repeat; background-size: cover;">3</label>
-								<label for="pos4" style="background: url(/resources/image/room6_4.jpg) no-repeat; background-size: cover;">4</label>
-							</p>
-						</div>
-					</c:if>
-					<c:if test="${r_info.r_no eq room7}">
-						<div id="room_image">
-							<input type="radio" name="pos" id="pos1" checked>
-							<input type="radio" name="pos" id="pos2">
-							<input type="radio" name="pos" id="pos3">
-							<input type="radio" name="pos" id="pos4">
-							<ul>
-								<li style="background: url(/resources/image/room7_1.jpg) no-repeat;"></li>
-								<li style="background: url(/resources/image/room7_2.jpg) no-repeat;"></li>
-								<li style="background: url(/resources/image/room7_3.jpg) no-repeat;"></li>
-								<li style="background: url(/resources/image/room7_4.jpg) no-repeat;"></li>
-							</ul>
-						</div>
-						<div id="room_image_small">
-							<p class="smallimg" style="font-size: 0px;">
-								<label for="pos1" style="background: url(/resources/image/room7_1.jpg) no-repeat; background-size: cover;">1</label>
-								<label for="pos2" style="background: url(/resources/image/room7_2.jpg) no-repeat; background-size: cover;">2</label>
-								<label for="pos3" style="background: url(/resources/image/room7_3.jpg) no-repeat; background-size: cover;">3</label>
-								<label for="pos4" style="background: url(/resources/image/room7_4.jpg) no-repeat; background-size: cover;">4</label>
-							</p>
-						</div>
-					</c:if>
-					<c:if test="${r_info.r_no eq room8}">
-						<div id="room_image">
-							<input type="radio" name="pos" id="pos1" checked>
-							<input type="radio" name="pos" id="pos2">
-							<input type="radio" name="pos" id="pos3">
-							<input type="radio" name="pos" id="pos4">
-							<ul>
-								<li style="background: url(/resources/image/room8_1.jpg) no-repeat;"></li>
-								<li style="background: url(/resources/image/room8_2.jpg) no-repeat;"></li>
-								<li style="background: url(/resources/image/room8_3.jpg) no-repeat;"></li>
-								<li style="background: url(/resources/image/room8_4.jpg) no-repeat;"></li>
-							</ul>
-						</div>
-						<div id="room_image_small">
-							<p class="smallimg" style="font-size: 0px;">
-								<label for="pos1" style="background: url(/resources/image/room8_1.jpg) no-repeat; background-size: cover;">1</label>
-								<label for="pos2" style="background: url(/resources/image/room8_2.jpg) no-repeat; background-size: cover;">2</label>
-								<label for="pos3" style="background: url(/resources/image/room8_3.jpg) no-repeat; background-size: cover;">3</label>
-								<label for="pos4" style="background: url(/resources/image/room8_4.jpg) no-repeat; background-size: cover;">4</label>
-							</p>
-						</div>
-					</c:if>
 					<div id="button_group">
 						<div id="button_1">
 							<button id="button1">상세정보</button>
@@ -502,11 +407,11 @@
 								<tr>
 									<td rowspan="2" style="width: 140px; text-align: left; font-size: 14px; background-color: #FAC51C; font-weight: bold;">기준인원 초과 시</td>
 									<td style="width: 15.66%; text-align: left; font-size: 14px; background-color: #efefef; font-weight: bold;">&nbsp;낮타임</td>
-									<td style="text-align: left; font-size: 14px;">&nbsp;1인당 5000원</td>
+									<td style="text-align: left; font-size: 14px;">&nbsp;1인당 5,000원</td>
 								</tr>
 								<tr>
 									<td style="width: 15.66%; text-align: left; font-size: 14px; background-color: #efefef; font-weight: bold;">&nbsp;밤타임</td>
-									<td style="text-align: left; font-size: 14px;">&nbsp;1인당 10000원</td>
+									<td style="text-align: left; font-size: 14px;">&nbsp;1인당 10,000원</td>
 								</tr>
 								<tr>
 									<td style="width: 140px; text-align: left; font-size: 14px; background-color: #FAC51C; font-weight: bold;">최대인원</td>
@@ -796,57 +701,70 @@
 							</span>
 						</p>
 					</div>
-					<div id="button_3_contents" style="display: none; margin-bottom: 100px;">
-						<div id="reply" style="width: 600px; border-bottom: 1px solid #d1d1d1; margin: 10px 0;">
-							<div id="reply_writer" style="width: 600px; margin-bottom: 10px;">
-								<p style="font-size: 14px;">
-									홍길동　<span>별점</span>　<span style="color: #bfbfbf">2021-05-06</span>
-								</p>
+					<div id="button_3_contents" style="display: none; margin-bottom: 100px;">							
+						<c:if test="${not empty reviewList}">							
+							<c:forEach var="reviewVO" items="${reviewList}" >															
+								<div class="review">									
+									<div class="review_writer" >											
+										<span>${reviewVO.memberVO.m_Name}</span>												
+											<span class="star-rating">
+												<span style="width:${reviewVO.rv_Grade/5*100}%;"></span>
+											</span>													
+										<span style="color: #bfbfbf"><fmt:formatDate value="${reviewVO.rv_Date}"/></span>																				
+									</div>
+									
+									<div id="review_content" style="width: 600px; min-height: 50px; margin-bottom: 10px; display: table;">
+										<p style="font-size: 16px; display: table-cell; vertical-align: middle;">
+											${reviewVO.rv_Content}
+										</p>
+									</div>
+									
+									<c:if test="${loginSession.m_Id == 'admin'}">
+										<div id="review_function" style="width: 600px; margin-bottom: 10px;">
+											<button class="admin_review_delete_btn" data-reservnum="${reviewVO.b_No}" 
+											data-roomnum="${reviewVO.r_No}" data-reviewno="${reviewVO.rv_No}"
+											style="border: 1px solid #d1d1d1; color:red; padding: 5px;">리뷰 비활성화</button>
+										</div>
+									</c:if>										
+								</div>								
+							</c:forEach>													
+						</c:if>
+						
+						<c:if test="${empty reviewList}">
+							<div id="reply" style="width: 600px; height:80px; line-height:80px; border-bottom: 1px solid #d1d1d1; margin: 10px 0; padding-bottom: 10px;">
+								<p style="text-align:center; font-size: 18px;">리뷰가 아직 없습니다. 멋진 경험을 공유하시고 마일리지를 얻으세요!</p>
 							</div>
-							<div id="reply_comment" style="width: 600px; margin-bottom: 10px;">
-								<p style="font-size: 14px;">
-									후기글 입니다.
-								</p>
-							</div>
-							<div id="reply_function" style="width: 600px; margin-bottom: 10px;">
-								<a href="#" style="font-size: 12px;">수정</a>
-								<span style="font-size: 12px;">/</span>
-								<a href="#" style="font-size: 12px;">삭제</a>
-							</div>
-						</div>
-						<div id="reply" style="width: 600px; border-bottom: 1px solid #d1d1d1; margin: 10px 0;">
-							<div id="reply_writer" style="width: 600px; margin-bottom: 10px;">
-								<p style="font-size: 14px;">
-									홍길동　<span>별점</span>　<span style="color: #bfbfbf">2021-05-14</span>
-								</p>
-							</div>
-							<div id="reply_comment" style="width: 600px; margin-bottom: 10px;">
-								<p style="font-size: 14px;">
-									후기글 입니다.
-								</p>
-							</div>
-							<div id="reply_function" style="width: 600px; margin-bottom: 10px;">
-								<a href="#" style="font-size: 12px;">수정</a>
-								<span style="font-size: 12px;">/</span>
-								<a href="#" style="font-size: 12px;">삭제</a>
-							</div>
-						</div>
-						<div id="reply" style="width: 600px; border-bottom: 1px solid #d1d1d1; margin: 10px 0;">
-							<div id="reply_writer" style="width: 600px; margin-bottom: 10px;">
-								<p style="font-size: 14px;">
-									홍길동　<span>별점</span>　<span style="color: #bfbfbf">2021-05-14</span>
-								</p>
-							</div>
-							<div id="reply_comment" style="width: 600px; margin-bottom: 10px;">
-								<p style="font-size: 14px;">
-									후기글 입니다.
-								</p>
-							</div>
-							<div id="reply_function" style="width: 600px; margin-bottom: 10px;">
-								<a href="#" style="font-size: 12px;">수정</a>
-								<span style="font-size: 12px;">/</span>
-								<a href="#" style="font-size: 12px;">삭제</a>
-							</div>
+						</c:if>
+						<div id="pagination-container">			
+							<c:if test="${pvo.totalCnt != null }">
+								<ul id="pagination">									
+									<%-- 페이지 생성 반복문 section으로 반복문 범위 지정--%>
+									<c:forEach var="pageNum" begin="${pvo.section*10-9}" end="${pvo.section*10}" step="1">
+										
+										<%-- section이 2 이상일 경우, pre표시 --%>
+										<c:if test="${pvo.section >= 2 && pageNum == (pvo.section*10-9)}">
+											<li><a href="${contextPath}/rooms?r_no=${r_info.r_no}&page=${(pvo.section-1)*10}">&lt;</a></li>
+										</c:if>
+																	
+										<c:choose>
+											<%-- page와 pageNum이 같은 경우, 페이지 번호를 강조하여 현재 페이지임을 표기 --%>			
+											<c:when test="${pageNum == pvo.page}">
+												<li id="active"><a href="${contextPath}/rooms?r_no=${r_info.r_no}&page=${pageNum}">${pageNum}</a></li>				
+											</c:when>
+											
+											<%-- 현재 페이지가(pageNum) maxPage 이하이면 페이지 번호 생성 --%>
+											<c:when test="${pvo.maxPage >= pageNum }">
+												<li><a href="${contextPath}/rooms?r_no=${r_info.r_no}&page=${pageNum}">${pageNum}</a></li>										
+											</c:when>					
+										</c:choose>						
+								
+										<%-- next표시 --%>
+										<c:if test="${pvo.maxSection > pvo.section && pageNum == pvo.section*10}">
+											<li><a href="${contextPath}/rooms?r_no=${r_info.r_no}&page=${pvo.section*10+1}">&gt;</a>
+										</c:if>					
+									</c:forEach>	
+								</ul>				
+							</c:if>
 						</div>
 					</div>
 				</div>

@@ -31,13 +31,42 @@
 			var reserv_date = $(this).parents("tr").attr("data-reservdate");
 			var date_difference_timestamp = (new Date(reserv_date).getTime() - new Date(today_date).getTime()) / 1000;
 			var date_difference = date_difference_timestamp / (3600*24);
-			if(date_difference < 4) {
-				alert("이용 3일 전부터는 예약취소가 불가능합니다.");
-			} else {
-				var b_no = $(this).parents("tr").attr("data-reservnum");
-				$("#b_no").val(b_no);
-				$.ajax({
-					url : "/booking/bookingReservCancel",  
+			if (!confirm("예약번호 : " + $("#b_no").val() + "\n파티룸 예약취소 하시겠습니까?")) {
+	            return;
+	        } else {
+	        	if(date_difference < 4) {
+					alert("이용 3일 전부터는 예약취소가 불가능합니다.");
+				} else {
+					var b_no = $(this).parents("tr").attr("data-reservnum");
+					$("#b_no").val(b_no);
+					$.ajax({
+						url : "/booking/bookingReservCancel",  
+						type : "post",            
+						data : {b_no : $("#b_no").val()}, //폼전체 데이터 전송
+						dataType : "text",
+						error : function() { 
+							alert('시스템 오류 입니다. 관리자에게 문의 하세요');
+						}, 
+						success : function(resultData) { 
+							if(resultData == 'success') { 
+								alert("예약번호 : " + $("#b_no").val() + "\n파티룸 예약 취소신청에 성공했습니다.");
+								location.reload();
+							} else {
+								alert("파티룸 예약 취소신청에 실패했습니다.");
+							}
+						}
+					});
+				}
+	        }
+		});
+		$(".reserv_return_btn").click(function() {
+			var b_no = $(this).parents("tr").attr("data-reservnum");
+			$("#b_no").val(b_no);
+			if (!confirm("예약번호 : " + $("#b_no").val() + "\n파티룸 재예약 하시겠습니까?")) {
+	            return;
+	        } else {
+	        	$.ajax({
+					url : "/booking/bookingReservReturn",  
 					type : "post",            
 					data : {b_no : $("#b_no").val()}, //폼전체 데이터 전송
 					dataType : "text",
@@ -46,38 +75,230 @@
 					}, 
 					success : function(resultData) { 
 						if(resultData == 'success') { 
-							alert("예약번호 : " + $("#b_no").val() + "\n파티룸 예약 취소신청에 성공했습니다.");
+							alert("예약번호 : " + $("#b_no").val() + "\n파티룸 재예약에 성공했습니다.");
 							location.reload();
 						} else {
-							alert("파티룸 예약 취소신청에 실패했습니다.");
+							alert("파티룸 재예약에 실패했습니다.");
 						}
 					}
 				});
-			}
+	        }
 		});
-		$(".reserv_return_btn").click(function() {
-			var b_no = $(this).parents("tr").attr("data-reservnum");
-			$("#b_no").val(b_no);
+		/* == 리뷰 작성 클릭 == */
+		$(".review_btn").click(function(e) {
+			/* 리뷰창에 값 넣기 */		    		    
+		    $('#b_no_rv').empty();
+		    $('#r_name_rv').empty();
+		    $('#b_date_rv').empty();
+		    
+		    var tr = e.target.parentNode.parentNode.dataset;		   
+		    
+		    $('#b_no_rv').append(tr.reservnum);
+		    $('#r_name_rv').append(tr.roomname);
+		    $('#b_date_rv').append(tr.reservdate);
+		    $('#b_date_rv').append(' ' + tr.reservtime);
+		    
+		    /* 등록 버튼의 dataset에 값 넣기 */
+		    var domBtn = document.getElementById('review_insert_btn');
+			domBtn.dataset.reservnum = tr.reservnum;
+			domBtn.dataset.roomnum = tr.roomnum;
+			domBtn.dataset.mid = '${loginSession.m_Id}';  
+		    
+		    $('#review_form_modal').attr("style", "display:block");		    
+		});
+		
+		/* == 리뷰 별점 누를때 == */
+		$('.review_modify_star_content_value').click(function(){			
+			$(this).prevAll().addClass('review_modify_star_btn_active');
+			$(this).prevAll().removeClass('review_modify_star_btn_nonactive');
+			$(this).removeClass('review_modify_star_btn_nonactive');
+			$(this).addClass('review_modify_star_btn_active');
+			$(this).nextAll().addClass('review_modify_star_btn_nonactive');
+			$(this).nextAll().removeClass('review_modify_star_btn_active');
+			
+			$('.review_modify_star_content_value_text').empty();
+			$('.review_modify_star_content_value_text').append($(this).attr("data-text"));		
+			
+			var value = $(this).val();
+			$('#rv_grade_insert').val(value);
+			$('#rv_grade_update').val(value);
+		});
+		
+		/* == 리뷰 등록 버튼 클릭 == */
+		$("#review_insert_btn").click(function(e) {
+			var btn = e.target.dataset;
+			console.log(btn.reservnum);
+			console.log(btn.roomnum);
+			console.log(btn.mid);
+			
+			var reviewData ="rv_Grade=" + $('#rv_grade_insert').val() + "&rv_Content=" + $('#rv_content_insert').val()
+			+"&m_Id=" + btn.mid + "&b_No=" + btn.reservnum+ "&r_No=" + btn.roomnum;
+			
+			
+			if (!formBlankCheck($('#rv_grade_insert'), '리뷰 점수를')) return;
+			else if (!formBlankCheck($('#rv_content_insert'), "리뷰를")) return;
+			else {
+				$.ajax({
+		 			url : "/review/insert",  
+		 			type : "post",                
+		 			data : reviewData,
+		 							 			
+		 			error : function(){ // 전송 실패시
+		 				alert('시스템에 오류가 발생했습니다.\n다시 시도해주시거나 운영자에게 문의해주세요.');
+		 			},
+		 
+		 			success : function(resultData){ // 전송 성공시 
+		 				if(resultData == 'error'){
+		 					alert('시스템에 오류가 발생했습니다.\n다시 시도해주시거나 운영자에게 문의해주세요.');
+		 				} else if(resultData == 'errorReveiwFail'){ // 리뷰 작성 fail
+			 				alert('리뷰가 등록되지 않았습니다. \n다시 시도해주시거나 운영자에게 문의해주세요.');
+			 			} else if(resultData == 'errorMileageFail'){ // 마일리지 지급 fail
+			 				alert('리뷰가 등록되었으나 시스템에러로 마일리지가 지급되지 않았습니다. \n운영자에게 문의해주세요.');
+			 			} else if (resultData == 'success'){
+			 				alert('마일리지가 지급되었습니다. 감사합니다.');
+			 				window.location.reload();
+			 			} 				
+		 			}
+		 		}); 
+			}    
+		});
+		
+		/* == 리뷰 수정(수정폼) 클릭 == */
+		$(".review_modify_btn").click(function(e) {
+			
+			/* 리뷰창에 값 넣기 */		    		    
+		    $('#b_no_rv_update').empty();
+		    $('#r_name_rv_update').empty();
+		    $('#b_date_rv_update').empty();
+		    
+		    var tr = e.target.parentNode.parentNode.dataset;
+		    $('#b_no_rv_update').append(tr.reservnum);
+		    $('#r_name_rv_update').append(tr.roomname);
+		    $('#b_date_rv_update').append(tr.reservdate);
+		    $('#b_date_rv_update').append(' ' + tr.reservtime);
+		    
+		    /* 수정 버튼의 dataset에 값 넣기 */
+ 		    var domBtn = document.getElementById('review_update_btn');
+			domBtn.dataset.reservnum = tr.reservnum;
+			domBtn.dataset.roomnum = tr.roomnum;
+			domBtn.dataset.reviewno = tr.reviewno;
+			domBtn.dataset.mid = '${loginSession.m_Id}'; 
+			
+			// reviewData 객체 생성
+			//var reviewData ="m_Id=" + '${loginSession.m_Id}'+ "&b_No=" + tr.reservnum + "&r_No=" + tr.roomnum + "&rv_No=" + tr.reviewno;
+			var reviewData = {
+				m_Id: '${loginSession.m_Id}',
+				b_No: tr.reservnum,
+				r_No: tr.roomnum,
+				rv_No: tr.reviewno
+			};		
+			
 			$.ajax({
-				url : "/booking/bookingReservReturn",  
-				type : "post",            
-				data : {b_no : $("#b_no").val()}, //폼전체 데이터 전송
-				dataType : "text",
-				error : function() { 
-					alert('시스템 오류 입니다. 관리자에게 문의 하세요');
-				}, 
-				success : function(resultData) { 
-					if(resultData == 'success') { 
-						alert("예약번호 : " + $("#b_no").val() + "\n파티룸 재예약에 성공했습니다.");
-						location.reload();
-					} else {
-						alert("파티룸 재예약에 실패했습니다.");
-					}
-				}
-			});
+	 			url : "/review/updatedata",  
+	 			type : "post",
+	 			data : reviewData,
+	 			dataType:"json",	 			
+	 			error : function(){ // 전송 실패시
+	 				alert('시스템에 오류가 발생했습니다.\n다시 시도해주시거나 사이트 운영자에게 문의해주세요.');
+	 			},
+	 
+	 			success : function(resultData){ // 전송 성공시 
+	 				if(resultData == null){
+	 					alert('시스템에 오류가 발생했습니다.\n다시 시도해주시거나 사이트 운영자에게 문의해주세요.');
+	 				} else {
+	 					var grade = resultData.rv_Grade;
+	 					var content = resultData.rv_Content;
+	 					
+	 					/* 불러온 값 넣기 */
+	 					// content
+	 					$('#rv_content_update').empty();
+	 					$('#rv_content_update').summernote('code');
+	 					$('#rv_content_update').summernote('destroy');
+	 					$('#rv_content_update').val(content);
+	 					$('#rv_content_update').summernote(setting_review);
+	 					
+	 					// grade
+	 					$("#star_value_"+grade).trigger("click");
+	 				}
+		 						
+	 			}
+	 		}); 	
+		    $('#review_modify_form_modal').attr("style", "display:block");		    
 		});
-		$(".review_btn").click(function() {
-			history.back();
+		
+		
+		/* == 리뷰 수정(완료) 버튼 클릭 == */
+		$("#review_update_btn").click(function(e) {
+			var btn = e.target.dataset;
+			
+			var reviewData = {
+					rv_Grade: $('#rv_grade_update').val(),
+					rv_Content: $('#rv_content_update').val(),
+					m_Id: btn.mid,
+					b_No: btn.reservnum,
+					r_No: btn.roomnum,
+					rv_No: btn.reviewno	
+				};
+			
+			if (!formBlankCheck($('#rv_grade_update'), '리뷰 점수를')) return;
+			else if (!formBlankCheck($('#rv_content_update'), "리뷰를")) return;
+			else {
+				$.ajax({
+		 			url : "/review/update",  
+		 			type : "post",                
+		 			data : reviewData,
+		 							 			
+		 			error : function(){ // 전송 실패시
+		 				alert('시스템에 오류가 발생했습니다.\n다시 시도해주시거나 사이트 운영자에게 문의해주세요.');
+		 			},
+		 
+		 			success : function(resultData){ // 전송 성공시 
+		 				if(resultData == 'error'){
+		 					alert('시스템에 오류가 발생했습니다.\n다시 시도해주시거나 사이트 운영자에게 문의해주세요.');
+		 				}else if(resultData == '0'){ // 결과값 fail
+			 				alert('리뷰가 수정되지 않았습니다. \n사이트 운영자에게 문의해주세요.');
+			 			} else if (resultData == '1'){
+			 				alert('리뷰가 수정되었습니다. 감사합니다.');
+			 				window.location.reload();
+			 			} 				
+		 			}
+		 		}); 
+			}
+		    		    
+		});
+		
+		/* == 리뷰 삭제 버튼 클릭 == */
+		$("#review_delete_btn").click(function(e) {
+			var btn = e.target.previousElementSibling.dataset;	
+			
+			var reviewData = {
+				m_Id: '${loginSession.m_Id}',
+				b_No: btn.reservnum,
+				r_No: btn.roomnum,
+				rv_No: btn.reviewno	
+			};
+			
+			if(!confirm('리뷰를 삭제하시겠습니까? 복구나 재작성은 불가능합니다.')) return;  
+			else {
+				$.ajax({
+		 			url : "/review/disableupdate",  
+		 			type : "post",                
+		 			data : reviewData,			 							 			
+		 			error : function(){ // 전송 실패시
+		 				alert('시스템에 오류가 발생했습니다.\n다시 시도해주시거나 사이트 운영자에게 문의해주세요.');
+		 			},			 
+		 			success : function(resultData){ // 전송 성공시 
+		 				if(resultData == 'error'){
+		 					alert('시스템에 오류가 발생했습니다.\n다시 시도해주시거나 사이트 운영자에게 문의해주세요.');
+		 				}else if(resultData == '0'){ // 결과값 fail
+			 				alert('리뷰가 삭제되지 않았습니다. \n사이트 운영자에게 문의해주세요.');
+			 			} else if (resultData == '1'){
+			 				alert('리뷰가 삭제되었습니다.');
+			 				window.location.reload();
+			 			} 				
+		 			}
+		 		}); 
+			}
 		});
 	});
 </script>
@@ -109,7 +330,7 @@
 			<c:choose>
 				<c:when test="${not empty memberReservList}" >
 					<c:forEach var="memberReservList" items="${memberReservList}">
-						<tr data-reservnum="${memberReservList.b_no}" data-reservdate="${memberReservList.b_date}" data-roomnum="${memberReservList.r_no}">
+						<tr data-reservnum="${memberReservList.b_no}" data-reservdate="${memberReservList.b_date}" data-reservtime="${memberReservList.b_time}" data-roomnum="${memberReservList.r_no}" data-roomname="${memberReservList.roomsVO.r_name}" data-reviewno="${memberReservList.reviewVO.rv_No}">
 							<td>${memberReservList.b_no}</td>
 							<td>${memberReservList.roomsVO.r_name}</td>
 							<td class="regdate">${memberReservList.b_regdate}</td>
@@ -137,9 +358,24 @@
 								</c:otherwise>
 							</c:choose>
 							<c:choose>
+								<c:when test="${memberReservList.b_status eq '대여완료' and not empty memberReservList.reviewVO.rv_No and memberReservList.reviewVO.rv_Availabled eq '유효'}">
+									<td>
+										<button class="review_modify_btn" style="color:blue;">리뷰수정</button>
+									</td>
+								</c:when>
+								<c:when test="${memberReservList.b_status eq '대여완료' and not empty memberReservList.reviewVO.rv_No and memberReservList.reviewVO.rv_Availabled eq '회원비활성'}">
+									<td>
+										<span style="color:pink;">삭제된<br>리뷰</span>
+									</td>
+								</c:when>
+								<c:when test="${memberReservList.b_status eq '대여완료' and not empty memberReservList.reviewVO.rv_No and memberReservList.reviewVO.rv_Availabled eq '관리자비활성'}">
+									<td>
+										<span style="color:pink;">비활성화<br>된 리뷰</span>
+									</td>
+								</c:when>
 								<c:when test="${memberReservList.b_status eq '대여완료'}">
 									<td>
-										<button class="review_btn" style="color:red;">리뷰작성</button>
+										<button class="review_btn" style="color:black;">리뷰작성</button>
 									</td>
 								</c:when>
 								<c:otherwise>

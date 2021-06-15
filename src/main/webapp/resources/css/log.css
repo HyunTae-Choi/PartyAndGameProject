@@ -98,7 +98,7 @@ button.modal_main_btn_no {
 /*모달 위치 조정*/
 div.modal_container {
 	position: relative;
-	margin: 100px auto;
+	margin: 10px auto;
 }
 
 /*모달 전반적인 모양 조정*/

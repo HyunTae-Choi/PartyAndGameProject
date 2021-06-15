@@ -23,12 +23,11 @@
 	<div class="form_bottom">	
 		<c:if test="${loginSession.m_Id == 'admin'}">
         <button class="common_btn" onclick="UpdateForm()" type="button">수정</button>
+        <button class="common_btn" id="notice_delete" data-noticeno="${nvo.n_No}" data-admin="${changeAdminPage}" type="button">삭제</button>
         </c:if>
         <button class="common_btn" id="${changeAdminPage}notice_list">목록</button>
 	</div>
-</div>	
-
-
+</div>
 
 <c:if test="${loginSession.m_Id == 'admin'}">
 <!-- admin으로 로그인할 경우에만 출력 -->

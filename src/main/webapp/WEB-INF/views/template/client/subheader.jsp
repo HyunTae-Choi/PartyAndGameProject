@@ -4,35 +4,37 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
 
-<div id="logo">
-	<a href="/" class="logo">Party&amp;Game</a>
-</div>
-<div id="header_menu">
-	<ul>
-		<li class="menu_li"><a href="/#about" id="about_btn">ABOUT</a></li>
-		<li class="menu_li"><a href="/#rooms" id="rooms_btn">ROOMS</a></li>
-		<li class="menu_li"><a href="/#event" id="event_btn">EVENT</a></li>
-		<li class="menu_li"><a href="/#service" id="service_btn">SERVICE</a></li>
-	</ul>
-</div>
-<div id="member">
-	<ul>
-		<c:choose>
-			<c:when test="${loginSession.m_Id == 'admin'}">
-				<li><a href="${pageContext.request.contextPath}/logout"><button class="member_li" id="logout">Logout</button></a></li>
-				<li><a href="${pageContext.request.contextPath}/admin/manage/booking"><button class="member_li" id="go_adminPage">Admin</button></a></li>
-			</c:when>
-			<c:when test="${loginSession.m_Id != null and loginSession.m_Id != ''}">
-				<li><a href="${pageContext.request.contextPath}/logout"><button class="member_li" id="logout">Logout</button></a></li>
-				<li><a href="${pageContext.request.contextPath}/mypage/myinfo"><button class="member_li" id="go_myPage">MyPage</button></a></li>
-			</c:when>
-			<c:when test="${loginSession.m_Id == null or loginSession.m_Id == ''}">
-				<li><button class="member_li" id="open_register_modal">Register</button></li>
-				<li><button class="member_li" id="open_login_modal">Login</button></li>
-			</c:when>
-		</c:choose>
-	</ul>
-	<input type="hidden" id="m_id_session" value="${loginSession.m_Id }">
+<div id="header_div" style="width: 1260px; height: 100%; margin: 0 auto;">
+	<div id="logo">
+		<a href="/" class="logo">Party&amp;Game</a>
+	</div>
+	<div id="header_menu">
+		<ul>
+			<li class="menu_li"><a href="/#about" id="about_btn">ABOUT</a></li>
+			<li class="menu_li"><a href="/#rooms" id="rooms_btn">ROOMS</a></li>
+			<li class="menu_li"><a href="/#event" id="event_btn">EVENT</a></li>
+			<li class="menu_li"><a href="/#service" id="service_btn">SERVICE</a></li>
+		</ul>
+	</div>
+	<div id="member">
+		<ul>
+			<c:choose>
+				<c:when test="${loginSession.m_Id == 'admin'}">
+					<li><a href="${pageContext.request.contextPath}/logout"><button class="member_li" id="logout">Logout</button></a></li>
+					<li><a href="${pageContext.request.contextPath}/admin/manage/booking/bookingFullList"><button class="member_li" id="go_adminPage">Admin</button></a></li>
+				</c:when>
+				<c:when test="${loginSession.m_Id != null and loginSession.m_Id != ''}">
+					<li><a href="${pageContext.request.contextPath}/logout"><button class="member_li" id="logout">Logout</button></a></li>
+					<li><a href="${pageContext.request.contextPath}/mypage/myinfo"><button class="member_li" id="go_myPage">MyPage</button></a></li>
+				</c:when>
+				<c:when test="${loginSession.m_Id == null or loginSession.m_Id == ''}">
+					<li><button class="member_li" id="open_register_modal">Register</button></li>
+					<li><button class="member_li" id="open_login_modal">Login</button></li>
+				</c:when>
+			</c:choose>
+		</ul>
+		<input type="hidden" id="m_id_session" value="${loginSession.m_Id }">
+	</div>
 </div>
 <!-- Login Modal -->
 <div class="modal" id="login_modal" tabindex="-1" aria-labelledby="login_form" aria-hidden="true">
@@ -371,8 +373,55 @@
 	</div>
 	<div class="modal_layer"></div>
 </div> <!-- search id & pw Modal end -->
-<!-- Update form Modal -->
-<div class="modal" id="update_form_modal" tabindex="-1" aria-labelledby="register_inform_form" aria-hidden="true">
+<!-- 회원정보 수정을 위한 비밀번호 확인 -->
+<div class="modal" id="update_form_modal" tabindex="-1" aria-labelledby="register_form" aria-hidden="true">
+	<div class="modal_container">
+		<button type="button" id="close_login_modal" class="modal_close_btn_x" aria-label="Close" ><img class="x_button" src="/resources/image/x-button.png" alt="Close"></button>
+
+		<div class="modal_header">
+			<h2>회원정보 수정</h2>
+		</div>
+		<div class="modal_body mb-3">
+			<label class="form-label" style="width: 100%;"> 비밀번호를 입력 후 수정버튼을 눌러주세요.
+					<input class="modal_input mb-1" type="password" id="m_pw_confirm" name="m_Pw" placeholder="비밀번호를 입력해주세요." autocomplete="off">	
+			</label>		
+			<div style="text-align: center">
+				<button class="modal_main_btn" id="modal_confirm_password_update" style="width: 45%;">비밀번호 수정</button>
+				<button class="modal_main_btn" id="modal_confirm_information_update" style="width: 45%;">개인정보 수정</button>
+			</div>
+		</div>
+		
+	</div>
+	<div class="modal_layer"></div>
+</div> <!-- 회원정보 수정을 위한 비밀번호 확인 end -->
+
+
+<!-- 비밀번호 수정 -->
+<div class="modal" id="update_pwform_modal" tabindex="-1" aria-labelledby="register_form" aria-hidden="true">
+	<div class="modal_container">
+		<button type="button" id="close_login_modal" class="modal_close_btn_x" aria-label="Close" ><img class="x_button" src="/resources/image/x-button.png" alt="Close"></button>
+
+		<div class="modal_header">
+			<h2>회원 비밀번호 수정</h2>
+		</div>
+		<div class="modal_body mb-3">
+			<label class="form-label" style="width: 100%"> 기존의 비밀번호
+				<input class="modal_input mb-1" type="password" id="m_pw_old_update" name="m_Pw_Old" placeholder="기존의 비밀번호" autocomplete="off"> 		
+			</label>
+			<br><br>
+			<label class="form-label" style="width: 100%"> 수정할 비밀번호
+				<input class="modal_input mb-1" type="password" id="m_pw_update" name="m_Pw" placeholder="변경할 비밀번호, 영문자/숫자/특수문자 (8-20자)" autocomplete="off">
+				<input class="modal_input" type="password" id="m_pw_check_update" placeholder="비밀번호 확인">		
+			</label>			
+			<button class="modal_main_btn" id="modal_password_update">비밀번호 수정</button>
+		</div>
+		
+	</div>
+	<div class="modal_layer"></div>
+</div> <!-- 비밀번호 수정 end -->
+
+<!-- Member Information Update form Modal -->
+<div class="modal" id="update_informationform_modal" tabindex="-1" aria-labelledby="register_inform_form" aria-hidden="true">
 	<div class="modal_container">
 		<button type="button" id="close_login_modal" class="modal_close_btn_x" aria-label="Close" ><img class="x_button" src="/resources/image/x-button.png" alt="Close"></button>
 		<div class="modal_header">
@@ -381,48 +430,28 @@
 		<div class="modal_body mx-2">
 			<form id="memberUpdateForm">
 			
-				<!-- 아이디 / 비밀번호 -->
+				<!-- 아이디  -->
 			<div class="form-group mb-3"> 아이디 
-				<input class="modal_input mb-1" type="text" id="m_id_update" name="m_Id" placeholder="아이디, 영문자/숫자 (8-20자)" value="${mvo.m_Id}" disabled>
-			</div>
-			<div class="form-group mb-3"> 
-				<label class="form-label" style="width: 100%"> 비밀번호 <strong class="emphasis">(변경가능)</strong>
-					<input class="modal_input mb-1" type="password" id="m_pw_update" name="m_Pw" placeholder="변경할 비밀번호, 영문자/숫자/특수문자 (8-20자)" autocomplete="off">
-					<input class="modal_input" type="password" id="m_pw_check_update" placeholder="비밀번호 확인">		
-				</label>		
+				<input class="modal_input mb-1" type="text" id="m_id_update" name="m_Id" disabled>
 			</div>
 
 			<!-- 이름 -->
 			<div class="form-group mb-3">
 				<label class="form-label" style="width: 100%"> 이름 
-					<input class="modal_input mb-2" type="text" id="m_name_update" name="m_Name" placeholder="이름" value="${mvo.m_Name}" disabled>
+					<input class="modal_input mb-2" type="text" id="m_name_update" name="m_Name" disabled>
 				</label>
 			</div>
 
 			<!-- 성별 -->
 			<div class="form-group mb-3"> 성별<br>			
-				<c:choose>
-					<c:when test="${mvo.m_Gender == 'm'}">
-						<label class="form-label">	
-							<input type="radio" id="m_gender_update" name="m_Gender" value="m" checked="checked" disabled>
-							<span>남성</span>
-						</label> &nbsp;						
-						<label class="form-label">
-							<input type="radio" id="m_gender_update" name="m_Gender" value="f" disabled>
-							<span>여성</span>
-						</label>
-					</c:when>					
-					<c:when test="${mvo.m_Gender == 'f'}">
-						<label class="form-label">	
-							<input type="radio" id="m_gender_update" name="m_Gender" value="m" disabled>
-							<span>남성</span>
-						</label> &nbsp;						
-						<label class="form-label">
-							<input type="radio" id="m_gender_update" name="m_Gender" value="f" checked="checked" disabled>
-							<span>여성</span>
-						</label>
-					</c:when>
-				</c:choose>
+				<label class="form-label">	
+					<input type="radio" id="m_gender_update" name="m_Gender" value="m" disabled>
+					<span>남성</span>
+				</label> &nbsp;						
+				<label class="form-label">
+					<input type="radio" id="m_gender_update" name="m_Gender" value="f" disabled>
+					<span>여성</span>
+				</label>
 			</div>
 
 			<!-- 연락처 -->
@@ -442,15 +471,15 @@
 			<!-- 생년월일 -->
 			<div class="form-group mb-3">
 				<label class="form-label" style="width: 100%"> 생년월일 
-					<input class="modal_input" type="date" id="m_birth_update" name="m_Birth" value="${mvo.m_Birth}" disabled>
+					<input class="modal_input" type="date" id="m_birth_update" name="m_Birth" disabled>
 				</label>
 			</div>
-			<button class="modal_main_btn" type="button" onclick="updateMember()"> 회원정보 수정하기 </button>
+			<button class="modal_main_btn" type="button" id="member_information_update"> 회원정보 수정하기 </button>
 			</form>
 		</div>
 	</div>
 	<div class="modal_layer"></div>
-</div> <!-- Update inform Modal end -->
+</div> <!-- Member Information Update form Modal end -->
 <!-- Delete Modal -->
 <div class="modal" id="delete_form_modal" tabindex="-1" aria-labelledby="register_form" aria-hidden="true">
 	<div class="modal_container">
@@ -764,3 +793,101 @@
 	</div>
 	<div class="modal_layer"></div>
 </div><!-- footer 개인정보처리방침 Modal end -->
+<!-- 리뷰작성 -->
+<div class="modal" id="review_form_modal" tabindex="-1" aria-labelledby="review_form" aria-hidden="true">
+	<div class="modal_container" style="width: 700px; height: 600px;">
+		<button type="button" id="close_login_modal" class="modal_close_btn_x" aria-label="Close" ><img class="x_button" src="/resources/image/x-button.png" alt="Close"></button>
+		
+		<div class="modal_header">
+			<h2>리뷰 작성</h2>
+		</div>
+		
+		<div class="modal_body">
+			<form id="reviewInsertForm">		
+				<div>
+					예약번호 : <span id="b_no_rv"></span><br>
+					방ㅤ이름 : <span id="r_name_rv"></span><br>
+					사용날짜 : <span id="b_date_rv"></span><br>
+				</div>
+				
+				<div class="review_star_container" data-star="" data-text="최고">
+					<span>점수를 남겨주세요.</span><br>
+			        <span class="review_star_content">			        	
+	                    <input class="review_modify_star_content_value review_modify_star_btn_nonactive" type="button" value="1" data-text="나쁨"></input>
+	                    <input class="review_modify_star_content_value review_modify_star_btn_nonactive" type="button" value="2" data-text="별로"></input>
+	                    <input class="review_modify_star_content_value review_modify_star_btn_nonactive" type="button" value="3" data-text="보통"></input>
+	                    <input class="review_modify_star_content_value review_modify_star_btn_nonactive" type="button" value="4" data-text="좋음"></input>
+	                    <input class="review_modify_star_content_value review_modify_star_btn_nonactive" type="button" value="5" data-text="최고"></input>	                    
+					</span>
+					<span class="review_modify_star_content_value_text"></span>
+					<input type="hidden" id="rv_grade_insert" name="rv_Grade" >
+			    </div>						
+				<textarea class="rv_content_area" id="rv_content_insert" name="rv_Content" ></textarea> 										
+			</form>
+			
+			<div class="form_bottom">
+				<button class="common_btn" id="review_insert_btn" >등록</button>
+			</div>			
+		</div>
+		
+	</div> 
+	<div class="modal_layer"></div>
+	
+	<script>
+	$(document).ready(function() {
+	    $('#rv_content_insert').summernote(setting_review);
+	});
+	</script>
+	
+</div> <!-- 리뷰작성 end -->
+
+
+
+<!-- 리뷰수정 -->
+<div class="modal" id="review_modify_form_modal" tabindex="-1" aria-labelledby="review_form" aria-hidden="true">
+	<div class="modal_container" style="width: 700px; height: 600px;">
+		<button type="button" id="close_login_modal" class="modal_close_btn_x" aria-label="Close" ><img class="x_button" src="/resources/image/x-button.png" alt="Close"></button>
+		
+		<div class="modal_header">
+			<h2>리뷰 수정</h2>
+		</div>
+		
+		<div class="modal_body">
+			<form id="reviewUpdateForm">		
+				<div>
+					예약번호 : <span id="b_no_rv_update"></span><br>
+					방ㅤ이름 : <span id="r_name_rv_update"></span><br>
+					사용날짜 : <span id="b_date_rv_update"></span><br>
+				</div>
+				
+				<div class="review_star_container" data-star="" data-text="최고">
+					<span>점수를 남겨주세요.</span><br>
+			        <span class="review_star_content">			        	
+	                    <input class="review_modify_star_content_value review_modify_star_btn_nonactive" id="star_value_1" type="button" value="1" data-text="나쁨"></input>
+	                    <input class="review_modify_star_content_value review_modify_star_btn_nonactive" id="star_value_2" type="button" value="2" data-text="별로"></input>
+	                    <input class="review_modify_star_content_value review_modify_star_btn_nonactive" id="star_value_3" type="button" value="3" data-text="보통"></input>
+	                    <input class="review_modify_star_content_value review_modify_star_btn_nonactive" id="star_value_4" type="button" value="4" data-text="좋음"></input>
+	                    <input class="review_modify_star_content_value review_modify_star_btn_nonactive" id="star_value_5" type="button" value="5" data-text="최고"></input>	                    
+					</span>
+					<span class="review_modify_star_content_value_text"></span>
+					<input type="hidden" id="rv_grade_update" name="rv_Grade" >
+			    </div>						
+				<textarea class="rv_content_area" id="rv_content_update" name="rv_Content" ></textarea> 										
+			</form>
+			
+			<div class="form_bottom">
+				<button class="common_btn" id="review_update_btn" >리뷰수정</button>
+				<button class="common_btn" id="review_delete_btn" >리뷰삭제</button>
+			</div>			
+		</div>
+		
+	</div> 
+	<div class="modal_layer"></div>
+	
+	<script>
+		$(document).ready(function() {
+			$('#rv_content_update').summernote(setting_review);
+		});
+	</script>
+	
+</div> <!-- 리뷰작성 end -->

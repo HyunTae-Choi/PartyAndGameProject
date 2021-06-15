@@ -25,7 +25,7 @@
 							<td>${question.q_No}</td>
 							<td class="question_title" style="text-align: left;"><a href="${contextPath}/admin/service/question/view?question_no=${question.q_No}">${question.q_Title}</a></td>
 							<td>${question.memberVO.m_Name}<span style="padding-left: 5px; color: #626262">(${question.m_Id})</span></td>
-							<td><fmt:formatDate value="${question.q_Date}"/></td>
+							<td><fmt:formatDate value="${question.q_Date}" pattern="yyyy-MM-dd"/></td>
 							
 							<c:if test="${question.q_Reply_Check =='답변대기'}">
 								<td style="color: red;">${question.q_Reply_Check}</td>
@@ -56,7 +56,7 @@
 						
 						<%-- section이 2 이상일 경우, pre표시 --%>
 						<c:if test="${pvo.section >= 2 && pageNum == (pvo.section*10-9)}">
-							<li><a href="${contextPath}/admin/service/question?page=${(pvo.section-1)*10}"><</a></li>
+							<li><a href="${contextPath}/admin/service/question?page=${(pvo.section-1)*10}">&lt;</a></li>
 						</c:if>
 													
 						<c:choose>
@@ -73,7 +73,7 @@
 				
 						<%-- next표시 --%>
 						<c:if test="${pvo.maxSection > pvo.section && pageNum == pvo.section*10}">
-							<li><a href="${contextPath}/admin/service/question?page=${pvo.section*10+1}">></a>
+							<li><a href="${contextPath}/admin/service/question?page=${pvo.section*10+1}">&gt;</a>
 						</c:if>					
 					</c:forEach>
 				</ul>

@@ -30,34 +30,41 @@
 			var reserv_date = $(this).parents("tr").attr("data-reservdate");
 			var date_difference_timestamp = (new Date(reserv_date).getTime() - new Date(today_date).getTime()) / 1000;
 			var date_difference = date_difference_timestamp / (3600*24);
-			if(date_difference <= 0) {
-				alert("예약일이 지났습니다.");
-			} else {
-				var b_no = $(this).parents("tr").attr("data-reservnum");
-				$("#b_no").val(b_no);
-				$.ajax({
-					url : "/booking/bookingReservComplete",  
-					type : "post",            
-					data : {b_no : $("#b_no").val()},
-					dataType : "text",
-					error : function() { 
-						alert('시스템 오류 입니다.');
-					}, 
-					success : function(resultData) { 
-						if(resultData == 'success') { 
-							alert("예약번호 : " + $("#b_no").val() + "\n파티룸 예약완료");
-							location.reload();
-						} else {
-							alert("실패");
+			if (!confirm("예약번호 : " + $("#b_no").val() + "\n파티룸 예약완료 하시겠습니까?")) {
+	            return;
+	        } else {
+	        	if(date_difference <= 0) {
+					alert("예약일이 지났습니다.");
+				} else {
+					var b_no = $(this).parents("tr").attr("data-reservnum");
+					$("#b_no").val(b_no);
+					$.ajax({
+						url : "/booking/bookingReservComplete",  
+						type : "post",            
+						data : {b_no : $("#b_no").val()},
+						dataType : "text",
+						error : function() { 
+							alert('시스템 오류 입니다.');
+						}, 
+						success : function(resultData) { 
+							if(resultData == 'success') { 
+								alert("예약번호 : " + $("#b_no").val() + "\n파티룸 예약완료");
+								location.reload();
+							} else {
+								alert("실패");
+							}
 						}
-					}
-				});
-			}
+					});
+				}
+	        }
 		});
 		$(".reserv_cancel_btn").click(function() {
 			var b_no = $(this).parents("tr").attr("data-reservnum");
 			$("#b_no").val(b_no);
-			$.ajax({
+			if (!confirm("예약번호 : " + $("#b_no").val() + "\n파티룸 예약취소 하시겠습니까?")) {
+	            return;
+	        } else {
+	        	$.ajax({
 				url : "/booking/bookingDelete",  
 				type : "post",            
 				data : {b_no : $("#b_no").val()},
@@ -74,6 +81,8 @@
 					}
 				}
 			});
+	        }
+			
 		});
 	});
 </script>
@@ -108,14 +117,14 @@
 				<th width="107px;">예약번호</th>
 				<th width="130px;">파티룸 명</th>
 				<th width="120px;">아이디</th>
-				<th>이름</th>
+				<th width="38px;">이름</th>
 				<th width="100px;">전화번호</th>
-				<th>예약등록일</th>
-				<th>예약날짜</th>
-				<th>시간</th>
-				<th>인원</th>
-				<th>금액</th>
-				<th>예약상황</th>
+				<th width="76px;">예약등록일</th>
+				<th width="76px;">예약날짜</th>
+				<th width="38px;">시간</th>
+				<th width="25px;">인원</th>
+				<th width="65px;">금액</th>
+				<th width="50px;">예약상황</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -150,7 +159,7 @@
 				</c:when>
 				<c:otherwise>
 					<tr>
-						<td colspan="8">입금대기 리스트가 없습니다.</td>
+						<td colspan="11">입금대기 리스트가 없습니다.</td>
 					</tr>
 				</c:otherwise>
 			</c:choose>

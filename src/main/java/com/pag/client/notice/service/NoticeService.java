@@ -19,6 +19,8 @@ public interface NoticeService {
 
 	public void noticeHitCountUpdate(int n_No);
 
+	public int noticeUnavailableUpdate(int n_No);
+
 	
 
 }

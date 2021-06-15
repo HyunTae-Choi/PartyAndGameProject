@@ -18,7 +18,7 @@
 	<link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
 	<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
 	<link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;500;700&display=swap" rel="stylesheet">
-	<link href="image/party_icon.gif" rel="shortcut icon" type="image/x-icon">
+	<link href="/resources/image/party_icon.gif" rel="shortcut icon" type="image/x-icon">
 	<link rel="stylesheet" type="text/css" href="/resources/css/reset.css">
 	<link rel="stylesheet" type="text/css" href="/resources/css/subheader.css">
 	

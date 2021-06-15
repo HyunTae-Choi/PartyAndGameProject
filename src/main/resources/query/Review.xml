@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.pag.client.review.dao.ReviewDao">
+	
+	<resultMap type="member" id="member">
+		<result column="m_name" property="m_Name" />
+	</resultMap>
+	
+	<!-- property는 변수명과 일치 -->
+	<resultMap type="review" id="reviewMap">
+		<result column="rv_no" property="rv_No" />
+		<result column="rv_grade" property="rv_Grade" />
+		<result column="rv_content" property="rv_Content" />
+		<result column="rv_date" property="rv_Date" />
+		<result column="b_no" property="b_No" />
+		<result column="m_id" property="m_Id" />
+		<result column="r_no" property="r_No" />
+		<collection property="memberVO" resultMap="member" />
+	</resultMap>
+	
+	<!--  룸의 리뷰 리스트 출력 -->
+	<select id="roomReviewListSelect" parameterType="hashmap" resultMap="reviewMap">
+		/* Rooms - ReviewList */
+		SELECT *
+		FROM ( 
+		    select rownum as RNum, list.*
+		    from (
+		        select rv.rv_no, rv.rv_grade, rv.rv_content, rv.rv_date, rv.b_no, rv.m_id, rv.r_no, (substr(m.m_name,1,1) || '*' || substr(m.m_name,-1)) as m_name
+				from review_tbl rv join member_tbl m
+				on rv.m_id = m.m_id
+				where rv.rv_Availabled = '유효' and r_no = #{r_No}
+				order by rv_grade desc, rv_no desc) list
+		        )
+		where RNUM between (#{page}-1)*#{lineNumber}+1 and #{page}*#{lineNumber}		
+	</select>
+	
+	
+	<!--  리뷰 입력 출력 -->
+	<insert id="reviewInsert" parameterType="review" >
+		insert into review_tbl(rv_no, rv_grade, rv_content, b_no, m_id, r_no)
+		values(REVIEW_TBL_SEQ.nextval, #{rv_Grade}, #{rv_Content}, #{b_No}, #{m_Id}, #{r_No})
+	</insert>
+	
+	<!-- 기존 리뷰 데이터 호출 -->
+	<select id="reviewUpdataDataSelect" parameterType="review" resultType="review">
+		/* Rooms - ReviewList */
+		select rv_grade, rv_content
+		from review_tbl
+		where r_no = #{r_No} and m_id = #{m_Id} and b_no = #{b_No} and rv_no = #{rv_No}
+	</select>
+	
+	<!-- 리뷰 수정 -->
+	<update id="reviewUpdate" parameterType="review">
+		update review_tbl
+		set rv_grade = #{rv_Grade}, rv_content = #{rv_Content}, rv_date = sysdate 
+		where r_no = #{r_No} and m_id = #{m_Id} and b_no = #{b_No} and rv_no = #{rv_No}
+	</update>
+	
+	<!-- 리뷰 - 회원 비활성화로 업데이트 -->
+	<update id="reviewDisableUpdate" parameterType="review">
+		update review_tbl
+		set rv_availabled = '회원비활성'
+		where r_no = #{r_No} and m_id = #{m_Id} and b_no = #{b_No} and rv_no = #{rv_No}
+	</update>
+	
+	<!-- 리뷰 - 관리자 비활성화로 업데이트 -->
+	<update id="adminReviewDisableUpdate" parameterType="review">
+		update review_tbl
+		set rv_availabled = '관리자비활성'
+		where r_no = #{r_No} and b_no = #{b_No} and rv_no = #{rv_No}
+	</update>
+	
+	<!-- 룸별 리뷰 갯수 조회 -->
+	<select id="reivewSectionPageCnt" parameterType="String" resultType="int">
+		SELECT NVL(count(RNUM), 0) 
+		FROM 
+			(SELECT list.*, ROWNUM AS RNUM 
+				FROM (
+						select *
+						from review_tbl 					
+	                    where rv_availabled = '유효' 
+		                    <if test="r_no != null and r_no != ''">
+		                    	and r_no = #{r_no}
+		                    </if>	                    
+						order by rv_no asc
+					) list
+			)
+	</select>
+	
+</mapper>
+

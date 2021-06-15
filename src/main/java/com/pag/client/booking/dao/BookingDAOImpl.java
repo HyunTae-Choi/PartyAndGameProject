@@ -183,4 +183,11 @@ public class BookingDAOImpl implements BookingDAO {
 	public List<StatisticVO> adminBookingNumMonthStatisticListSelect() {
 		return session.selectList("adminBookingNumMonthStatisticListSelect");
 	}
+
+	// 파티룸 예약자 확인
+	@Override
+	public int roomsBookingCheck(int r_no) {
+		return (Integer) session.selectOne("roomsBookingCheck", r_no);
+	}
+	
 }

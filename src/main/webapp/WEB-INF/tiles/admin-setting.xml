@@ -20,6 +20,11 @@
 		<put-attribute name="content" value="/WEB-INF/views/adminpage/member/memberList.jsp" />	
 	</definition>
 	
+	<!-- adminPage Manage - 파티룸관리 -->
+	<definition name="admin/manage/partyroom/*" extends="adminManageLayout">
+		<put-attribute name="content" value="/WEB-INF/views/adminpage/partyroom/{1}.jsp" />	
+	</definition>
+	
 	<!-- adminPage Manage - 통계-->
 	<definition name="admin/manage/statistic" extends="adminManageLayout">
 		<put-attribute name="content" value="/WEB-INF/views/adminpage/statistic/statisticView.jsp" />	

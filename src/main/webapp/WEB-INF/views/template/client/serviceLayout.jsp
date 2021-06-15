@@ -13,21 +13,20 @@
 <meta charset="UTF-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link href="/resources/image/party_icon.gif" rel="shortcut icon"
-	type="image/x-icon">
+
 <title><tiles:getAsString name="title" /></title>
 
 <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;500;700&display=swap" rel="stylesheet">
-<link href="image/party_icon.gif" rel="shortcut icon" type="image/x-icon">
+<link href="/resources/image/party_icon.gif" rel="shortcut icon" type="image/x-icon">
 <link rel="stylesheet" type="text/css" href="/resources/css/reset.css">
 <link rel="stylesheet" type="text/css" href="/resources/css/subheader.css">
 <link rel="stylesheet" type="text/css" href="/resources/css/mainLayout.css">
 <link rel="stylesheet" type="text/css" href="/resources/css/footer.css">
 <link rel="stylesheet" type="text/css" href="/resources/css/log.css">
-<link rel="stylesheet" type="text/css" href="/resources/css/service_noticediv.css">
+<link rel="stylesheet" type="text/css" href="/resources/css/adminpage_noticediv.css">
 <link rel="stylesheet" type="text/css" href="/resources/css/common_list_writeform.css">
 <link rel="stylesheet" type="text/css" href="/resources/css/paging.css">
 

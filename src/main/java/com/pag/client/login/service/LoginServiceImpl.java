@@ -70,6 +70,8 @@ public class LoginServiceImpl implements LoginService {
 		if (vo != null) {
 			if (vo.getM_Availabled() == 0) {
 				result = "leave";
+			} else if(vo.getM_Availabled() == -1) {
+				result = "disable";
 			} else {
 				result = vo.getM_Id();
 			}
@@ -95,7 +97,8 @@ public class LoginServiceImpl implements LoginService {
 		if (vo != null) {
 			if (vo.getM_Availabled() == 0) { // 탈퇴한 계정
 				result = "leave";
-
+			} else if(vo.getM_Availabled() == -1) {
+				result = "disable";
 			} else if (vo.getM_Availabled() == 1) { // 탈퇴하지 않은 일반 계정
 				try {
 					/* == 랜덤 패스워드 생성 == */
@@ -178,7 +181,4 @@ public class LoginServiceImpl implements LoginService {
 
 		return result;
 	}
-
-	
-
 }

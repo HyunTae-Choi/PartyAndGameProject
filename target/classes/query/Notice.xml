@@ -32,13 +32,11 @@
 		where recNum between (#{page}-1)*10+1 and #{page}*10			
 	</select>
 	
-	
 	<!--  공지사항 보기 --> 
 	<select id="noticeDetailSelect" parameterType="int" resultType="notice">			
 		<include refid="noticeCommon"></include>
 		 and n_no = #{n_No}				
 	</select>
-	
 	
 	<!--  공지사항 글쓰기 --> 
 	<insert id="noticeInsert" parameterType="notice">			
@@ -50,14 +48,21 @@
 	<update id="noticeUpdate" parameterType="notice">			
 		update notice_tbl 
 		set n_title = #{n_Title}, n_content= #{n_Content}
-		where n_no = #{n_No}			
+		where n_no = #{n_No} and n_availabled = 1	
 	</update>
 	
 	<!--  공지사항 글 조회수 업데이트 --> 
 	<update id="noticeHitCountUpdate" parameterType="int">			
 		update notice_tbl 
 		set n_hit = n_hit + 1
-		where n_no = #{n_No}			
+		where n_no = #{n_No} and n_availabled = 1	
+	</update>
+	
+	<!--  공지사항 글 비활성화 업데이트 --> 
+	<update id="noticeUnavailableUpdate" parameterType="int">			
+		update notice_tbl 
+		set n_availabled = 0
+		where n_no = #{n_No}		
 	</update>
 	
 </mapper>

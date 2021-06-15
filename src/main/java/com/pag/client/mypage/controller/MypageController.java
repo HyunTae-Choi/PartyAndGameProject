@@ -21,85 +21,55 @@ import com.pag.common.vo.PageVO;
 
 @Controller
 public class MypageController {
-	private Logger log = LoggerFactory.getLogger(MypageController.class);
-	
-	@Autowired
-	private MemberService memberService;
+private Logger log = LoggerFactory.getLogger(MypageController.class);
 	
 	@Autowired
 	private BookingService bookingService;
 	
+	@Autowired
+	private MemberService memberService;
+	
 	@RequestMapping(value = "/mypage/myinfo")
 	public ModelAndView mypageMyInfo(HttpSession session) {	
-		log.info("맵핑 /mypage, MypageController 호출");
-		
-		LoginVO loginSession = null;
-
-		ModelAndView mav = new ModelAndView();
-		
+		log.info("맵핑 /mypage, MypageController 호출");		
+			
 		// 세션이에 저장된 login값 호출, 해당 값이 null이면 mypage로 못감
-		if((loginSession = (LoginVO) session.getAttribute("loginSession")) != null) {
-			
-			/* == 마이페이지를 호출하면서, 회원정보 변경을 위해 회원정보를 불러온다. == */			
-			System.out.println("회원 정보 변경 진행 아이디(호출) : " + loginSession.getM_Id());
-			
-			MemberVO mvo = new MemberVO();
-			mvo.setM_Id(loginSession.getM_Id());
-			// 회원 정보 수정용
-			MemberVO vo = memberService.memberSelect(mvo);
-			mav.addObject("mvo", vo);			
-			mav.setViewName("mypage/info/myinfo");
-			/* == 마이페이지를 호출하면서, 회원정보 변경을 위해 회원정보를 불러온다. end == */
-			
-			return mav;
-		}  else {
-			mav.setViewName("redirect:/");
-			return mav;
+		LoginVO loginSession = null;
+		if((loginSession = (LoginVO) session.getAttribute("loginSession")) == null) {
+			return new ModelAndView("redirect:/");	
 		}
 		
+		MemberVO mvo = new MemberVO();
+		mvo.setM_Id(loginSession.getM_Id());
+		mvo = memberService.memberSelect(mvo);
+		
+		ModelAndView mav = new ModelAndView();
+		mav.addObject("mvo", mvo);	
+		mav.setViewName("mypage/info/myinfo");
+		
+		return mav;
 	}
 	
 	@RequestMapping(value = "/mypage/booking")
 	public ModelAndView mypageBooking(HttpSession session, HttpServletRequest request) {	
 		log.info("맵핑 /mypage/booking, MypageController 호출");
 		
-		LoginVO loginSession = null;
-
-		ModelAndView mav = new ModelAndView();
-		
 		// 세션이에 저장된 login값 호출, 해당 값이 null이면 mypage로 못감
-		if((loginSession = (LoginVO) session.getAttribute("loginSession")) != null) {
-			
-			/* == 마이페이지를 호출하면서, 회원정보 변경을 위해 회원정보를 불러온다. == */			
-			System.out.println("회원 정보 변경 진행 아이디(호출) : " + loginSession.getM_Id());
-			
-			MemberVO mvo = new MemberVO();
-			mvo.setM_Id(loginSession.getM_Id());
-			
-			// 회원 정보 수정용
-			MemberVO vo = memberService.memberSelect(mvo);
-			mav.addObject("mvo", vo);
-			
-			PageVO pageVO = bookingService.memberReservListCnt(request.getParameter("page"), loginSession.getM_Id());
-			BookingVO bookingVO = new BookingVO();
-			bookingVO.setPage(pageVO.getPage());
-			List<BookingVO> memberReservList = bookingService.memberReservList(loginSession.getM_Id());
-			
-			mav.addObject("pageVO", pageVO);
-			mav.addObject("memberReservList", memberReservList);
-			
-			mav.setViewName("mypage/booking/bookingList");
-			/* == 마이페이지를 호출하면서, 회원정보 변경을 위해 회원정보를 불러온다. end == */
-			
-			return mav;
-		}  else {
-			mav.setViewName("redirect:/");
-			return mav;
-		}
+		LoginVO loginSession = null;
+		if((loginSession = (LoginVO) session.getAttribute("loginSession")) == null) {	
+			return new ModelAndView("redirect:/");			
+		}  
+		
+		PageVO pageVO = bookingService.memberReservListCnt(request.getParameter("page"), loginSession.getM_Id());
+		BookingVO bookingVO = new BookingVO();
+		bookingVO.setPage(pageVO.getPage());
+		List<BookingVO> memberReservList = bookingService.memberReservList(loginSession.getM_Id());
+		
+		ModelAndView mav = new ModelAndView();
+		mav.addObject("pageVO", pageVO);
+		mav.addObject("memberReservList", memberReservList);			
+		mav.setViewName("mypage/booking/bookingList");						
+		return mav;
 		
 	}
-	
-
-		
-	
 }

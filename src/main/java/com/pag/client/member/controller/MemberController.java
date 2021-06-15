@@ -1,5 +1,8 @@
 package com.pag.client.member.controller;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
@@ -12,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.pag.client.login.service.LoginService;
 import com.pag.client.login.vo.LoginVO;
 import com.pag.client.member.service.MemberService;
 import com.pag.client.member.vo.MemberVO;
@@ -23,6 +27,9 @@ public class MemberController {
 	
 	@Autowired
 	private MemberService memberService;
+	
+	@Autowired
+	private LoginService loginService;
 	
 	// 회원가입 처리
 	@RequestMapping(value = "/join", method = RequestMethod.POST)
@@ -55,44 +62,108 @@ public class MemberController {
 		return mav;
 	}
 	
+	// 회원정보 변경을 위한 pw확인
+	@ResponseBody
+	@RequestMapping(value = "/pwConfirm")
+	public Map<String, String> memberPwConfirm(@ModelAttribute LoginVO lvo, HttpSession session){
+		log.info("맵핑 member/pwConfirm, MemberController, memberPwConfirm method 호출 성공");
+		
+		Map<String, String> returnMap = new HashMap<String, String>();
+		
+		// 로그아웃된 상태면 진행 불가
+		LoginVO loginSession = (LoginVO)session.getAttribute("loginSession");
+		if(loginSession == null) {
+			System.out.println("로그아웃된 상태입니다.");
+			returnMap.put("result", "error");
+			return returnMap;
+		} else if (!loginSession.getM_Id().equals(lvo.getM_Id())) {
+			System.out.println("로그인에 문제가 발생했습니다.");
+			returnMap.put("result", "error");
+			return returnMap;
+		}
+					
+		// pw확인, pw에 성공여부 메시지가 담겨서 반환됨. (success or fail)		
+		LoginVO result = loginService.loginSelect(lvo);
+		returnMap.put("result", result.getM_Pw());
+		
+		// 회원정보 변경을 위한 데이터 받기
+		MemberVO mvo = new MemberVO();
+		mvo.setM_Id(lvo.getM_Id());
+		mvo = memberService.memberSelect(mvo);
+		
+		returnMap.put("m_Id", mvo.getM_Id()); // 아이디
+		returnMap.put("m_Name", mvo.getM_Name()); // 이름
+		returnMap.put("m_Gender", mvo.getM_Gender()); // 성별
+		returnMap.put("m_Phone", mvo.getM_Phone()); // 핸드폰 번호
+		returnMap.put("m_Email", mvo.getM_Email()); // 이메일
+		returnMap.put("m_Birth", mvo.getM_Birth()); // 생년월일
+		
+		
+		return returnMap;
+	}
+	
+	// 비밀번호 수정
+	@ResponseBody
+	@RequestMapping(value = "/pwUpdate")
+	public String memberPwUpdate(@ModelAttribute MemberVO mvo, HttpSession session){
+		log.info("맵핑 member/pwUpdate, MemberController, memberPwUpdate method 호출 성공");
+
+		// 로그아웃된 상태면 진행 불가
+		LoginVO loginSession = (LoginVO)session.getAttribute("loginSession");
+		if(loginSession == null) {
+			System.out.println("로그아웃된 상태입니다.");
+			return "error";
+		} else if (!loginSession.getM_Id().equals(mvo.getM_Id())) {
+			System.out.println("로그인에 문제가 발생했습니다.");
+			return "error";
+		}		
+		
+		// 기존 비밀번호 확인 (success or fail)
+		LoginVO lvo = new LoginVO();
+		lvo.setM_Id(loginSession.getM_Id());
+		lvo.setM_Pw(mvo.getM_Pw_Old());		
+		lvo = loginService.loginSelect(lvo);
+		
+		if("fail".equals(lvo.getM_Pw())) {
+			return "fail_pw_old";
+		} else if(("success".equals(lvo.getM_Pw())) && mvo.getM_Pw().equals(mvo.getM_Pw_Old())) {
+			return "overlap_pw";
+		} else {
+			// 비밀번호 업데이트
+			if((memberService.memberPwUpdate(mvo)) == 1) {
+				return "pw_update_success";
+			} else {
+				return "pw_update_fail";
+			}
+		}
+	}
 	
 	// 회원 정보 변경 처리
+	@ResponseBody
 	@RequestMapping(value = "/update", method = RequestMethod.POST)
-	public ModelAndView memberUpdate(@ModelAttribute MemberVO mvo, HttpSession session) {
+	public String memberUpdate(@ModelAttribute MemberVO mvo, HttpSession session) {
 		log.info("member/update, post방식으로 memberUpdate 호출 성공");
 
-		ModelAndView mav = new ModelAndView();
-		
 		// 세션에 저장된 로그인세션 호출
 		LoginVO loginSession = (LoginVO)session.getAttribute("loginSession");
 		
 		// 로그아웃된 상태면 변경 불가
 		if(loginSession == null) {
 			System.out.println("로그아웃된 상태입니다.");
-			mav.setViewName("redirect:/");
-			return mav;
+			return "error";
 		} 
 		
 		mvo.setM_Id(loginSession.getM_Id()); // id는 disabled되어서 받아오지 못하므로, 세션에 저장된 아이디를 호출하여 저장
 		System.out.println("회원정보 변경 내용");
 		System.out.println("아이디 : " + mvo.getM_Id());
-		System.out.println("비밀번호 : " + mvo.getM_Pw());
 		System.out.println("전화번호 : " + mvo.getM_Phone());
 		System.out.println("이메일 : " + mvo.getM_Email());
 		
-		int result = memberService.memberUpdate(mvo);
+		int result = 0;
+		result = memberService.memberUpdate(mvo);
 		
-		if(result == 1) {
-			System.out.println("회원정보 변경 성공");
-			
-			mav.setViewName("redirect:/mypage/myinfo");
-		} else {
-			System.out.println("회원정보 변경 실패");
-			mav.setViewName("redirect:/mypage/myinfo");
-		}
-		
-		return mav;
-	}
+		return Integer.toString(result);
+	}	
 	
 	// 아이디 체크 (중복여부), ajax로 처리
 	@ResponseBody
@@ -161,3 +232,4 @@ public class MemberController {
 	
 }
 
+	

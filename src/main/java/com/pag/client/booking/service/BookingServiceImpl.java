@@ -506,4 +506,12 @@ public class BookingServiceImpl implements BookingService {
 	public List<StatisticVO> adminBookingNumMonthStatisticListSelect() {
 		return bookingDAO.adminBookingNumMonthStatisticListSelect();
 	}
+	
+	// 파티룸 예약자 확인
+	@Override
+	public int roomsBookingCheck(int r_no) {
+		int result = 0;
+		result = bookingDAO.roomsBookingCheck(r_no);
+		return result;
+	}
 }

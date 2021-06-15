@@ -8,6 +8,11 @@
 		<result column="r_name" property="r_name" />
 	</resultMap>
 	
+	<resultMap type="review" id="review">
+		<result column="rv_no" property="rv_No" />
+		<result column="rv_availabled" property="rv_Availabled" />
+	</resultMap>
+	
 	<resultMap type="booking" id="booking">
 		<result column="b_no" property="b_no" />
 		<result column="b_regdate" property="b_regdate" />
@@ -23,6 +28,7 @@
 		<result column="b_memberstatus" property="b_memberstatus" />
 		<result column="r_no" property="r_no" />
 		<collection property="roomsVO" resultMap="rooms" />
+		<collection property="reviewVO" resultMap="review" />
 	</resultMap>
 	
 	<!-- 상품 예약 여부 확인 -->
@@ -232,13 +238,19 @@
 		    b.u_email, 
 		    b.u_phone,
 		    b.r_no,
-		    r.r_name 
+		    r.r_name,
+		    rv.rv_no,
+		    rv.rv_availabled
 		from 
 		    booking_tbl b
 		join
 			room_tbl r
 		on
 			b.r_no = r.r_no
+		left join 
+			review_tbl rv 
+		on 
+			b.b_no = rv.b_no
 		where
 		    b.m_id = #{m_id} and
 		    (b.b_status = '입금대기' or b.b_status = '예약완료' or b.b_status = '환불요청' or b.b_status = '환불완료' or b.b_status = '대여중' or b.b_status = '대여완료')
@@ -432,7 +444,7 @@
 		from(
 		    select to_char(to_date(b_date, 'YYYY-MM-DD'),'YYMM') as st_month, b_price
 		    from booking_tbl
-		    where b_status ='예약완료')
+		    where b_status ='대여완료')
 		where st_month like '21%'
 		group by st_month
 	</select>
@@ -443,9 +455,18 @@
 		from(
 		    select to_char(to_date(b_date, 'YYYY-MM-DD'),'YYMM') as st_month, b_price
 		    from booking_tbl
-		    where b_status ='예약완료')
+		    where b_status ='대여완료')
 		where st_month like '21%'
 		group by st_month
 	</select>
+	
+	<!-- 파티룸 예약자 확인 -->
+	<select id="roomsBookingCheck" parameterType="int" resultType="int">
+		/* Booking - roomsBookingCheck */
+		SELECT count(*)
+		FROM booking_tbl
+		WHERE r_no = #{r_no} AND (b_status = '예약완료' or b_status = '환불요청' or b_status = '입금대기')
+	</select>
+	
 </mapper>
 

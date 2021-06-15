@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.pag.client.member.vo.MemberVO;
+import com.pag.client.review.vo.ReviewVO;
 import com.pag.common.vo.PageVO;
 import com.pag.common.vo.StatisticVO;
 
@@ -33,6 +34,12 @@ public class MemberDaoImpl implements MemberDao {
 	public int memberInsert(MemberVO mvo) { 
 		return session.insert("memberInsert", mvo);
 	}
+	
+	// 회원 비밀 번호 변경 update 기능 사용 - DB 연결
+	@Override
+	public int memberPwUpdate(MemberVO mvo) {
+		return session.update("memberPwUpdate", mvo);
+	}	
 	
 	// 회원 정보 변경, Update 기능 사용 - DB연결
 	@Override
@@ -82,8 +89,13 @@ public class MemberDaoImpl implements MemberDao {
 	public List<StatisticVO> adminMemberJoinMonthStatisticListSelect() {
 		return session.selectList("adminMemberJoinMonthStatisticListSelect");
 	}
-	
 
-	
+	// 리뷰 작성 후 마일리지 지급
+	@Override
+	public int memberReviewMileageUpdate(ReviewVO rvo) {
+		return session.update("memberReviewMileageUpdate", rvo);
+	}
+
+
 
 }

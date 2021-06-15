@@ -8,7 +8,7 @@
 
 <div class="member_table_div">
 	<%-- memberList Table--%>
-	<div class="membet_table_top">
+	<div class="member_table_top">
 		<span style="margin-right: 10px;">회원 수: ${pvo.totalCnt}명</span>
 		<select onchange="memberTableChange(this)" id="memberListDropDown">
 			<option value="total">전체회원</option>
@@ -16,7 +16,7 @@
 			<option value="disable">탈퇴/비활성 회원</option>
 		</select>
 	</div>
-	<table class="memberListTable" >
+	<table class="memberListTable" style="font-size: 13px;">
 		<caption>회원 리스트</caption>
 			<tr>
 				<th>회원<br>번호</th>
@@ -82,7 +82,7 @@
 						
 						<%-- section이 2 이상일 경우, pre표시 --%>
 						<c:if test="${pvo.section >= 2 && pageNum == (pvo.section*10-9)}">
-							<li><a href="${contextPath}/${adminMemberTablePath}=${(pvo.section-1)*10}"><</a></li>
+							<li><a href="${contextPath}/${adminMemberTablePath}=${(pvo.section-1)*10}">&lt;</a></li>
 						</c:if>
 													
 						<c:choose>
@@ -99,7 +99,7 @@
 				
 						<%-- next표시 --%>
 						<c:if test="${pvo.maxSection > pvo.section && pageNum == pvo.section*10}">
-							<li><a href="${contextPath}/${adminMemberTablePath}=${pvo.section*10+1}">></a>
+							<li><a href="${contextPath}/${adminMemberTablePath}=${pvo.section*10+1}">&gt;</a>
 						</c:if>					
 					</c:forEach>	
 				</ul>
@@ -114,11 +114,3 @@ $(function(){
 });
 
 </script>
-
-	
-
-
-
-
-		
-

@@ -12,7 +12,7 @@
 	</div>
 	<div id="info_div_2">
 		<p>마일리지</p>
-		<span><fmt:formatNumber value="${loginSession.m_Mileage}"  groupingUsed="true" />마일리지</span>
+		<span><fmt:formatNumber value="${mvo.m_Mileage}"  groupingUsed="true" />마일리지</span>
 	</div>
 </div>
 

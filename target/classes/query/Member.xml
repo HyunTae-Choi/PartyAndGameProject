@@ -6,7 +6,7 @@
 	
 	<!-- 회원정보 조회 -->
 	<select id="memberSelect" parameterType="member" resultType="member">
-		select m_id, m_name, m_birth, m_gender, m_email, m_phone, m_pw, m_availabled
+		select m_id, m_name, m_birth, m_gender, m_email, m_phone, m_pw, m_mileage, m_availabled
 		from member_tbl 
 		where 
 			<if test="m_Id != null and m_Id != ''" >
@@ -33,20 +33,21 @@
 		values(#{m_Id}, #{m_Pw}, #{m_Number}, #{m_Name}, #{m_Birth}, #{m_Gender}, #{m_Email}, #{m_Email_Marketing}, #{m_Phone})
 	</insert>
 	
+	<!-- 회원 비밀번호 변경 -->
+	<update id="memberPwUpdate" parameterType="member">
+		update member_tbl set
+		m_pw = #{m_Pw}				
+		where m_id = #{m_Id}
+	</update>
+	
 	<!-- 회원 정보 수정 -->
 	<update id="memberUpdate" parameterType="member">
 		update member_tbl set
-			<if test="m_Pw != null and m_Pw != ''" >
-				m_pw = #{m_Pw}				
-			</if>
 			<if test="m_Phone != null and m_Phone != ''">
-				<if test="m_Pw != null and m_Pw != ''">
-					, 
-				</if>
 				m_phone = #{m_Phone}
 			</if> 
 			<if test="m_Email != null and m_Email != ''">
-				<if test="(m_Phone != null and m_Phone != '') or (m_Pw != null and m_Pw != '') ">
+				<if test="m_Phone != null and m_Phone != '' ">
 					, 
 				</if>
 				m_email = #{m_Email} 
@@ -125,6 +126,7 @@
 	<select id="adminMemberGenderStatisticListSelect" resultType="statistic">
 		select m_gender, count(*) as st_count
 		from member_tbl 
+		where m_availabled = '1'
 		group by m_gender
 	</select>
 	
@@ -133,9 +135,22 @@
 		select substr(st_month,3) as st_month, m_gender, count(*) st_count
 		from (
 		    select to_char(m_date, 'YYMM') as st_month, m_gender
-		    from member_tbl )
+		    from member_tbl 
+		    where m_availabled = '1')
 		where st_month like '21%'
 		group by st_month, m_gender
 	</select>
+	
+	<!-- 마일리지 추가 -->
+	<update id="memberReviewMileageUpdate" parameterType="review">
+		update member_tbl
+		set m_Mileage = m_Mileage + (
+									select (b_price / 10)
+								    from booking_tbl b join review_tbl rv 
+								    on b.b_no = rv.b_no 
+								    where rv.b_no = #{b_No} and rv.m_id = #{m_Id}
+								    )
+		where m_id =#{m_Id}
+	</update>
 	
 </mapper>

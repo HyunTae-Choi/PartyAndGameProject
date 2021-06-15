@@ -1,0 +1,34 @@
+/* main_content-booking_table_div */
+#main_content #partyroom_table_div {
+	width: 100%;
+	height: 88%;
+}
+#main_content #partyroom_table_div table {
+	margin-top: 46px;
+	margin-left: 60px;
+	border-collapse: collapse;
+}
+#main_content #partyroom_table_div table {
+	border-top: 1px solid #c7c7c7;
+	border-bottom: 1px solid #c7c7c7;
+}
+#main_content #partyroom_table_div table th {
+	border-bottom: 1px solid #e3e3e3;
+	background-color: #f7f7f7; 
+}
+#main_content #partyroom_table_div table td {
+	border-bottom: 1px solid #e3e3e3;
+}
+
+#main_content #partyroom_table_div #partyroom_insert_btn, #main_content #partyroom_table_div #partyroom_insert_action_btn, #main_content #partyroom_table_div #partyroom_Update_action_btn {
+	float: right;
+	font-size: 16px; 
+	font-weight: 700;
+	margin-left: 60px;
+	margin-top: 5px;
+	width: 55px;
+	height: 35px;
+	border: 1px solid #e3e3e3;
+	border-radius: 5px;
+	background: #e3e3e3;;
+}

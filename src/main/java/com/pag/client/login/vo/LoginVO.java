@@ -7,6 +7,9 @@ public class LoginVO {
 	private String m_Pw; // 회원 비밀번호
 	private String m_Email; // 회원 이메일
 	private String m_Name; // 회원 이름
+	private String m_Phone; // 회원 전화번호
+	private int m_Mileage; // 회원 마일리지
+
 	private int m_Availabled; // 회원 탈퇴유무, DEFAULT 1, 1: 유효, 0: 탈퇴, -1: 비활성화 
 
 	// getter and setter
@@ -41,6 +44,22 @@ public class LoginVO {
 	public void setM_Name(String m_Name) {
 		this.m_Name = m_Name;
 	}
+	
+	public String getM_Phone() {
+		return m_Phone;
+	}
+
+	public void setM_Phone(String m_Phone) {
+		this.m_Phone = m_Phone;
+	}
+
+	public int getM_Mileage() {
+		return m_Mileage;
+	}
+
+	public void setM_Mileage(int m_Mileage) {
+		this.m_Mileage = m_Mileage;
+	}
 
 	public int getM_Availabled() {
 		return m_Availabled;
@@ -52,8 +71,8 @@ public class LoginVO {
 
 	@Override
 	public String toString() {
-		return "LoginVO [m_Id=" + m_Id + ", m_Pw=" + m_Pw + ", m_Email=" + m_Email + ", m_Name=" + m_Name
-				+ ", m_Gender=" + ", m_Availabled=" + m_Availabled + "]";
+		return "LoginVO [m_Id=" + m_Id + ", m_Pw=" + m_Pw + ", m_Email=" + m_Email + ", m_Name=" + m_Name + ", m_Phone="
+				+ m_Phone + ", m_Mileage=" + m_Mileage + ", m_Availabled=" + m_Availabled + "]";
 	}
-
+	
 }
