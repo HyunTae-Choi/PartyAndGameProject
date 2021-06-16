@@ -71,7 +71,6 @@
 	
 	<script src="/resources/js/room.js"></script>
 	<script src="/resources/js/modal.js"></script>
-	
 	<script>
 		$(function() {
 			function numberWithCommas(x) {
@@ -256,6 +255,9 @@
 	        url.replace(/[?&]{1}([^=&#]+)=([^&#]*)/g, function(s, k, v) { result[k] = decodeURIComponent(v); });
 	        return result;
 	    }
+		$(window).scroll(function() {
+			$('#header').css({left: 0 - $(this).scrollLeft()});
+		});
 	</script>
 </head>
 <body>

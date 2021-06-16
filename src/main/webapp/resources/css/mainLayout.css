@@ -1,14 +1,14 @@
 
 /* img-slide */
 #imgslide {
-	width: 100%;
+	min-width: 1260px;
 	height: 850px;
 	overflow: hidden;
 }
 #imgslide ul {
 	width:calc(100% * 3);
 	display:flex;
-	animation:slide 9s infinite;
+	animation:slide 12s infinite;
 }
 #imgslide li {
 	width:calc(100% / 3);
@@ -16,11 +16,11 @@
 }
 @keyframes slide {
 	0% {margin-left:0;} /* 0 ~ 10  : 정지 */
-	10% {margin-left:0;} /* 10 ~ 25 : 변이 */
-	25% {margin-left:-100%;} /* 25 ~ 35 : 정지 */
-	35% {margin-left:-100%;} /* 35 ~ 50 : 변이 */
-	50% {margin-left:-200%;}
-	60% {margin-left:-200%;}
+	25% {margin-left:0;} /* 10 ~ 25 : 변이 */
+	35% {margin-left:-100%;} /* 25 ~ 35 : 정지 */
+	55% {margin-left:-100%;} /* 35 ~ 50 : 변이 */
+	65% {margin-left:-200%;}
+	85% {margin-left:-200%;}
 	100% {margin-left:0;}
 }
 #textbox {

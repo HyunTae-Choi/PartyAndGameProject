@@ -33,7 +33,18 @@
 	<link rel="stylesheet" type="text/css" href="/resources/css/footer.css">
 	<link rel="stylesheet" type="text/css" href="/resources/css/log.css">
 	
+	<!-- 글쓰기 에디터 css-->
+	<link rel="stylesheet" href="/resources/summernote/summernote-lite.css">
+	
+	<!-- j쿼리 js-->
 	<script src="http://code.jquery.com/jquery-latest.js"></script>
+	
+	<!-- 글쓰기 에디터 js-->
+	<script src="/resources/summernote/summernote-lite.js"></script>
+	<script src="/resources/summernote/lang/summernote-ko-KR.js"></script>
+	<script src="/resources/js/writeform.js"></script>
+	
+	<script src="/resources/js/room.js"></script>
 	<script src="/resources/js/modal.js"></script>
 	<script>
 		$(function(){
@@ -51,6 +62,9 @@
 					$("#reserv_confirm_form").submit();
 				}
 			});
+		});
+		$(window).scroll(function() {
+			$('#header').css({left: 0 - $(this).scrollLeft()});
 		});
 	</script>
 </head>

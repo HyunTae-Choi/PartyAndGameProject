@@ -29,7 +29,11 @@
 	<script src="http://code.jquery.com/jquery-latest.js"></script>
 	<script src="/resources/js/main.js"></script>
 	<script src="/resources/js/modal.js"></script>
-
+	<script>
+		$(window).scroll(function() {
+			$('#header').css({left: 0 - $(this).scrollLeft()});
+		});
+	</script>
   </head>
 
   <body>

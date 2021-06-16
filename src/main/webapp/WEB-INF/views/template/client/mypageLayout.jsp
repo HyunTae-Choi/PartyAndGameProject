@@ -42,6 +42,13 @@
 	<script src="/resources/js/mypage.js"></script>
 	<script src="/resources/js/question.js"></script>
 	<script src="/resources/js/modal.js"></script>
+	
+	<script>
+		$(window).scroll(function() {
+			$('#header').css({left: 0 - $(this).scrollLeft()});
+		});
+	</script>
+	
 </head>
 
 <body>
