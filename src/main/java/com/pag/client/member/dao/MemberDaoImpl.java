@@ -6,6 +6,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.pag.client.booking.vo.BookingVO;
 import com.pag.client.member.vo.MemberVO;
 import com.pag.client.review.vo.ReviewVO;
 import com.pag.common.vo.PageVO;
@@ -94,6 +95,11 @@ public class MemberDaoImpl implements MemberDao {
 	@Override
 	public int memberReviewMileageUpdate(ReviewVO rvo) {
 		return session.update("memberReviewMileageUpdate", rvo);
+	}
+
+	@Override
+	public int memberUseMileageUpdate(BookingVO bookingVO) {
+		return session.update("memberUseMileageUpdate", bookingVO);
 	}
 
 

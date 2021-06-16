@@ -12,6 +12,7 @@ public class BookingVO extends PageVO {
 	private String b_time; // 예약 시간대
 	private int b_number; // 예약 인원
 	private int b_price; // 예약 금액
+	private int b_usemileage; // 예약 시 사용 마일리지
 	private String b_status; // 예약 상태
 	private String m_id; // 회원 아이디
 	private String u_name; // 예약자 명
@@ -58,6 +59,12 @@ public class BookingVO extends PageVO {
 	}
 	public void setB_price(int b_price) {
 		this.b_price = b_price;
+	}
+	public int getB_usemileage() {
+		return b_usemileage;
+	}
+	public void setB_usemileage(int b_usemileage) {
+		this.b_usemileage = b_usemileage;
 	}
 	public String getB_status() {
 		return b_status;

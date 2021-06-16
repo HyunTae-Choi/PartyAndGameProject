@@ -7,6 +7,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.pag.client.booking.vo.BookingVO;
 import com.pag.client.member.dao.MemberDao;
 import com.pag.client.member.vo.MemberVO;
 import com.pag.client.review.vo.ReviewVO;
@@ -175,6 +176,11 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public int memberReviewMileageUpdate(ReviewVO rvo) {
 		return memberDao.memberReviewMileageUpdate(rvo);
+	}
+
+	@Override
+	public int memberUseMileageUpdate(BookingVO bookingVO) {
+		return memberDao.memberUseMileageUpdate(bookingVO);
 	}
 
 

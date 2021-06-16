@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.pag.client.booking.service.BookingService;
 import com.pag.client.booking.vo.BookingVO;
 import com.pag.client.login.vo.LoginVO;
+import com.pag.client.member.service.MemberService;
+import com.pag.client.member.vo.MemberVO;
 
 @Controller
 @RequestMapping(value="/booking")
@@ -25,6 +27,9 @@ public class BookingController {
 	
 	@Autowired
 	private BookingService bookingService;
+	
+	@Autowired
+	private MemberService memberService;
 	
 	// 조회한 파티룸이 이미 예약된 상품인지 조회
 	@ResponseBody
@@ -97,14 +102,15 @@ public class BookingController {
 	// 회원 예약 등록 컨트롤러
 	@ResponseBody
 	@RequestMapping(value="/bookingMember.do", method=RequestMethod.POST, produces = "text/plain; charset=UTF-8")
-	public String bookingMember(@ModelAttribute BookingVO bookingVO) {
+	public String bookingMember(@ModelAttribute BookingVO bookingVO, @ModelAttribute MemberVO memberVO) {
 		log.info("bookingMember 호출 성공");
 		String resultString = "";
 		
 		int result = bookingService.bookingMember(bookingVO);
+		int mileage_result = memberService.memberUseMileageUpdate(bookingVO);
 		
 		// result값이 1이면 예약 등록 성공
-		if(result == 1) {
+		if(result == 1 && mileage_result == 1) {
 			resultString = "success";
 		} else { // result값이 1이 아니면 예약 등록 실패
 			resultString = "fail";

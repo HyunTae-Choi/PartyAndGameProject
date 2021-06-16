@@ -153,4 +153,11 @@
 		where m_id =#{m_Id}
 	</update>
 	
+	<!-- 사용한 마일리지 차감 -->
+	<update id="memberUseMileageUpdate" parameterType="booking">
+		update member_tbl
+		set m_Mileage = m_Mileage - #{b_usemileage}
+		where m_id =#{m_id}
+	</update>
+	
 </mapper>

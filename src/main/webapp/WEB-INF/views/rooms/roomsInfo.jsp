@@ -712,7 +712,7 @@
 											<span class="star-rating">
 												<span style="width:${reviewVO.rv_Grade/5*100}%;"></span>
 											</span>													
-										<span style="color: #bfbfbf"><fmt:formatDate value="${reviewVO.rv_Date}"/></span>																				
+										<span style="color: black; font-size: 15px;"><fmt:formatDate value="${reviewVO.rv_Date}" pattern="yyyy-MM-dd"/></span>																				
 									</div>
 									
 									<div id="review_content" style="width: 600px; min-height: 50px; margin-bottom: 10px; display: table;">

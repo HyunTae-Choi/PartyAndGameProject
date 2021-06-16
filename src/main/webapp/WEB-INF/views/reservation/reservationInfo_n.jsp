@@ -227,6 +227,7 @@
 								<input type="hidden" name="b_time" id="b_time" value="">
 								<input type="hidden" name="b_number" id="b_number" value="">
 								<input type="hidden" name="b_price" id="b_price" value="">
+								<input type="hidden" name="b_usemileage" id="b_usemileage" value="">
 								<input type="hidden" name="u_name" id="u_name" value="">
 								<input type="hidden" name="u_email" id="u_email" value="">
 								<input type="hidden" name="u_phone" id="u_phone" value="">
@@ -280,6 +281,7 @@
 														$("#b_time").val(reserv_time);
 														$("#b_number").val(reserv_totalPeople);
 														$("#b_price").val(reserv_totalPrice);
+														$("#b_mileage").val(0);
 														$("#u_name").val(reserv_name);
 														$("#u_email").val(reserv_email);
 														$("#u_phone").val(reserv_phone);

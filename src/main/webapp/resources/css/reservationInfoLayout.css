@@ -98,7 +98,7 @@
 	float: right;
 }
 
-/* reservation_right_box - reservation_payment_info_box */
+/* 비회원 reservation_right_box - reservation_payment_info_box */
 #reservation_right_box #reservation_payment_info_box {
 	background: #fff;
 	height: 180px; 
@@ -158,7 +158,13 @@
 	margin-bottom: 4px; 
 	color: #999;
 }
-
+/* 회원 reservation_right_box - m_reservation_payment_info_box */
+#reservation_right_box #m_reservation_payment_info_box {
+	background: #fff;
+	height: 260px; 
+	width: 326px; 
+	margin-top: 20px;
+}
 /* reservation_payment */
 #reservation_payment {
 	background: #fff; 

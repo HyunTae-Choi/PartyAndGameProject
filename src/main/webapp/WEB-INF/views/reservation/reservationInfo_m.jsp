@@ -48,7 +48,35 @@
 	<script src="/resources/js/modal.js"></script>
 	<script>
 		$(window).scroll(function() {
-			$('#header').css({left: 0 - $(this).scrollLeft()});
+			$("#header").css({left: 0 - $(this).scrollLeft()});
+		});
+		function numberWithCommas(x) {
+		  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+		}
+		function inputNumberFormat(x) {
+		    x.value = comma(uncomma(x.value));
+		}
+		
+		function comma(str) {
+		    str = String(str);
+		    return str.replace(/(\d)(?=(?:\d{3})+(?!\d))/g, '$1,');
+		}
+		
+		function uncomma(str) {
+		    str = String(str);
+		    return str.replace(/[^\d]+/g, '');
+		}
+		$(function(){
+			$("#use_mileage").keyup(function() {
+				if(Number(uncomma($('#use_mileage').val())) > ${mvo.m_Mileage }){
+					$("#use_mileage").val("0");
+					alert("사용가능한 마일리지보다 작게 작성하세요.");
+					$("#totalprice").html(numberWithCommas(<%= request.getParameter("reserv_totalPrice_m") %>) + '원');
+				} else {
+					var tp = <%= request.getParameter("reserv_totalPrice_m") %> - Number(uncomma($('#use_mileage').val()));
+					$("#totalprice").html(numberWithCommas(tp) + '원');
+				}
+			});
 		});
 	</script>
 </head>
@@ -109,11 +137,11 @@
 								<h6 style="font-size: 16px; padding-bottom: 10px;">예약자 정보</h6>
 								<div>
 									<span>예약자 이름　　 : </span>
-									<input type="text" id="nameInput" name="nameInput" value="${loginSession.m_Name }" readonly="readonly"><br>
+									<input type="text" id="nameInput" name="nameInput" value="${loginSession.m_Name }" readonly="readonly" size="30"><br>
 									<span>예약자 이메일　 : </span>
-									<input type="email" id="emailInput" name="emailInput" value="${loginSession.m_Email }" readonly="readonly"><br>
+									<input type="email" id="emailInput" name="emailInput" value="${loginSession.m_Email }" readonly="readonly" size="30"><br>
 									<span>예약자 전화번호 : </span>
-									<input type="text" id="phoneInput" name="phoneInput" value="${loginSession.m_Phone }" readonly="readonly">
+									<input type="text" id="phoneInput" name="phoneInput" value="${loginSession.m_Phone }" readonly="readonly" size="30">
 								</div>
 							</div>
 						</div>
@@ -168,7 +196,7 @@
 						</div>
 					</div>
 					<div id="reservation_right_box">
-						<div id="reservation_payment_info_box">
+						<div id="m_reservation_payment_info_box">
 							<div style="padding: 24px;">
 								<h6 style="font-size: 16px; padding-bottom: 10px;">최종 결제금액</h6>
 								<div>
@@ -177,12 +205,20 @@
 											<div id="reservation_payment_info_left">
 												<span>상품가격</span><br>
 												<span>인원 추가금액</span><br>
-												<span>회원 할인금액</span>
+												<span>회원 할인금액</span><br><br>
+												<span>사용가능 마일리지</span><br>
+												<span>사용할 마일리지</span>
 											</div>
 											<div id="reservation_payment_info_right">
 												<span style="color: #000;"><%= request.getParameter("reserv_basePrice") %>원</span><br>
 												<span style="color: #000;"><%= request.getParameter("reserv_addPrice") %>원</span><br>
-												<span style="color: #000;">-<fmt:formatNumber value='<%= request.getParameter("reserv_memberSale") %>'  groupingUsed='true' />원</span>
+												<span style="color: #000;">-<fmt:formatNumber value='<%= request.getParameter("reserv_memberSale") %>'  groupingUsed='true' />원</span><br><br>
+												<span style="color: #000;"><fmt:formatNumber value='${mvo.m_Mileage }'  groupingUsed='true' />원</span><br>
+												<span style="color: #000;">
+													<input type="text" id="use_mileage" name="use_mileage" value="0" onfocus="this.value=''"
+														   style="text-align: right; border: none;" size="6" onkeyup="inputNumberFormat(this)" 
+														   oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">원
+												</span>
 											</div>
 										</div>
 										<div id="reservation_payment_info_row_2">
@@ -190,7 +226,7 @@
 												<span style="color: #000;">총 결제금액</span>
 											</div>
 											<div id="reservation_payment_info_right">
-												<span style="font-size: 14px; margin-bottom: 4px; color: #ffb300; font-weight: 700;">
+												<span style="font-size: 14px; margin-bottom: 4px; color: #ffb300; font-weight: 700;" id="totalprice">
 													<fmt:formatNumber value='<%= request.getParameter("reserv_totalPrice_m") %>'  groupingUsed='true' />원
 												</span>
 											</div>
@@ -229,6 +265,7 @@
 								<input type="hidden" name="b_time" id="b_time" value="">
 								<input type="hidden" name="b_number" id="b_number" value="">
 								<input type="hidden" name="b_price" id="b_price" value="">
+								<input type="hidden" name="b_usemileage" id="b_usemileage" value="">
 								<input type="hidden" name="m_id" id="m_id" value="${loginSession.m_Id }">
 								<input type="hidden" name="u_name" id="u_name" value="${loginSession.m_Name }">
 								<input type="hidden" name="u_email" id="u_email" value="${loginSession.m_Email }">
@@ -244,7 +281,7 @@
 										var reserv_timestamp = "<%= request.getParameter("reserv_timestamp") %>";
 										var reserv_time = "<%= request.getParameter("reserv_time") %>";
 										var reserv_totalPeople = <%= request.getParameter("reserv_totalPeople") %>;
-										var reserv_totalPrice = <%= request.getParameter("reserv_totalPrice_m") %>;
+										var reserv_totalPrice = <%= request.getParameter("reserv_totalPrice_m") %>- Number(uncomma($('#use_mileage').val()));
 										var reserv_roomNum = <%= request.getParameter("reserv_roomNum") %>;
 										$("#b_no").val(reserv_no);
 										$("#b_date").val(reserv_date);
@@ -252,6 +289,11 @@
 										$("#b_time").val(reserv_time);
 										$("#b_number").val(reserv_totalPeople);
 										$("#b_price").val(reserv_totalPrice);
+										if($("#use_mileage").val() == "" || $("#use_mileage").val() == null) {
+											$("#b_usemileage").val(0);	
+										} else {
+											$("#b_usemileage").val(Number(uncomma($('#use_mileage').val())));
+										}										
 										$("#r_no").val(reserv_roomNum);
 										$.ajax({
 											url : "/booking/bookingMember.do",  

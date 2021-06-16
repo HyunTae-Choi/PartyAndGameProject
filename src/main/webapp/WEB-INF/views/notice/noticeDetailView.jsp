@@ -11,7 +11,7 @@
 		<h1 class="detail_title">${nvo.n_Title}</h1>
 		<div class="detail_subhead">
 			<span class="subhead_detail_writer">${nvo.n_Writer}</span>
-			<span class="subhead_detail_date"><fmt:formatDate value="${nvo.n_Date}"/></span>
+			<span class="subhead_detail_date"><fmt:formatDate value="${nvo.n_Date}" pattern="yyyy-MM-dd"/></span>
 			<span class="subhead_detail_right">조회 수 ${nvo.n_Hit}</span>
 		</div>
 	</div>
