@@ -92,7 +92,7 @@
 			            left join 
 			                (select m_id, count(*) as reservedNum
 			                from booking_tbl
-			                where b_status ='예약완료'
+			                where (b_status ='예약완료' or b_status ='대여중' or b_status ='대여완료')
 			                group by m_id) b
 			        on m.m_id = b.m_id
 			        	<choose>

@@ -50,6 +50,7 @@ public class MemberController {
 			loginResult.setM_Id(mvo.getM_Id());
 			loginResult.setM_Email(mvo.getM_Email());
 			loginResult.setM_Name(mvo.getM_Name());
+			loginResult.setM_Phone(mvo.getM_Phone());
 			session.setAttribute("loginSession", loginResult);
 			
 			mav.setViewName("redirect:/");
