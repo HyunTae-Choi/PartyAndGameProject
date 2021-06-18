@@ -7,6 +7,12 @@
 <%@ page trimDirectiveWhitespaces="true" %>
 <c:set var="contextPath" value="${pageContext.request.contextPath}"/>
 
+<style>
+	#question_btn {
+		border-bottom: 2px solid #ffb300;
+	}
+</style>
+
 <div id="question_table_div">
 
 	

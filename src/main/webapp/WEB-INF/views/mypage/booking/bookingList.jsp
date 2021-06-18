@@ -6,6 +6,12 @@
 
 <%@ page trimDirectiveWhitespaces="true" %>
 
+<style>
+	#booking_btn {
+		border-bottom: 2px solid #ffb300;
+	}
+</style>
+
 <c:set var="today" value="<%=new java.util.Date()%>"/>
 
 <script>

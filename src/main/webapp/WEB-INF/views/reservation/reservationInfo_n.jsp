@@ -281,7 +281,7 @@
 														$("#b_time").val(reserv_time);
 														$("#b_number").val(reserv_totalPeople);
 														$("#b_price").val(reserv_totalPrice);
-														$("#b_mileage").val(0);
+														$("#b_usemileage").val(0);
 														$("#u_name").val(reserv_name);
 														$("#u_email").val(reserv_email);
 														$("#u_phone").val(reserv_phone);

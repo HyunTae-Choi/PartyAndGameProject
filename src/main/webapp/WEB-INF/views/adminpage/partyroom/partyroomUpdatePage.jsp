@@ -7,7 +7,7 @@
 <%@ page trimDirectiveWhitespaces="true" %>
 
 <div id="partyroom_table_div">
-	<h1 style="margin: 50px 0 0 90px; font-size: 18px;">파티룸 추가</h1>
+	<h1 style="margin: 50px 0 0 90px; font-size: 18px;">파티룸 수정</h1>
 	<div style="margin: 10px 0 0 90px; border-bottom: 1px solid #e3e3e3; border-top: 1px solid #e3e3e3;">
 		<form id="partyroom_Update_form" name="partyroom_Update_form" enctype="multipart/form-data">
 			<div style="border-bottom: 1px solid #e3e3e3; height: 43px;">

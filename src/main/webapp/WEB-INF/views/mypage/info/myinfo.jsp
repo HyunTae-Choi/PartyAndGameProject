@@ -6,6 +6,12 @@
 
 <%@ page trimDirectiveWhitespaces="true" %>
 
+<style>
+	#info_btn {
+		border-bottom: 2px solid #ffb300;
+	}
+</style>
+
 <div id="info_div">
 	<div id="info_div_1">
 		<p><span style="font-weight: 700;" id="login_m_id">${loginSession.m_Name}</span> 님 안녕하세요.</p>

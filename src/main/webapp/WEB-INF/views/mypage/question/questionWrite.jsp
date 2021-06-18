@@ -6,6 +6,11 @@
 
 <%@ page trimDirectiveWhitespaces="true" %>
 
+<style>
+	#question_btn {
+		border-bottom: 2px solid #ffb300;
+	}
+</style>
 
 <div class="question_div">
 	<div style="text-align: center; margin-bottom: 20px;">

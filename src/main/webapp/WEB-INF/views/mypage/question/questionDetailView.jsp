@@ -6,6 +6,12 @@
 
 <%@ page trimDirectiveWhitespaces="true" %>
 
+<style>
+	#question_btn {
+		border-bottom: 2px solid #ffb300;
+	}
+</style>
+
 <script type="text/javascript">
 $(function() {
 	$('#test_dd').click(function(){
