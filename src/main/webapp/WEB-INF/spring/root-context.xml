@@ -22,7 +22,7 @@
 		<property name="port" value="587" />
 		<property name="defaultEncoding" value="utf-8"/>
 		<property name="username" value="progtest.future@gmail.com" />
-		<property name="password" value="go151515!" />
+		<property name="password" value="test191919!" />
 	
 		<!-- email 요청시는 SMTP -->
 		<property name="javaMailProperties">
